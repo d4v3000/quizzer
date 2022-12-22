@@ -3,10 +3,8 @@ import { GoogleOutlined } from "@ant-design/icons";
 import { getProviders, signIn } from "next-auth/react";
 
 function Login({ providers }: any) {
-	console.log(providers);
-
 	return (
-		<div className="flex h-screen w-screen items-center justify-center bg-gradient-to-b from-zinc-800 to-zinc-900 pb-40 font-semibold">
+		<div className="flex h-screen w-screen items-center bg-black text-zinc-300 justify-center bg-gradient-to-b from-zinc-800 to-zinc-900 pb-40 font-semibold">
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col items-center gap-3 pb-4">
 					<div>Logo</div>

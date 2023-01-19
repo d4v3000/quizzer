@@ -1,4 +1,5 @@
 import Main from "@components/editQuiz/Main";
+import SideBar from "@components/editQuiz/SideBar";
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
@@ -52,7 +53,7 @@ function Edit() {
           <Background className="relative flex w-1/6 flex-col items-center">
             <p>{quizName}</p>
             <Cog8ToothIcon className="absolute top-2 right-2 h-6 w-6" />
-            <p>Sidebar</p>
+            <SideBar />
           </Background>
           <Background className="flex w-full justify-center">
             <Main setQuizName={setQuizName} quizName={quizName} />

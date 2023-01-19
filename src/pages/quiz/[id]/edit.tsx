@@ -3,6 +3,7 @@ import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import Main from "../../../components/editQuiz/Main";
 import Background from "../../../components/ui/Background";
 import { Button } from "../../../components/ui/Button";
 import { trpc } from "../../../utils/trpc";
@@ -24,11 +25,15 @@ function Edit() {
     <div className="flex h-[calc(100vh-57px)] flex-col bg-zinc-900 text-gray-200">
       <div className="flex h-full flex-col px-10 py-4">
         <div className="flex w-full justify-between">
-          <Button intent="secondary" size="large">
+          <Button
+            intent="secondary"
+            size="large"
+            onClick={() => router.push("/quiz")}
+          >
             <ArrowLongLeftIcon className="h-6 w-6" />
             Back
           </Button>
-          <div className="flex gap-10">
+          <div className="flex gap-6">
             <Button intent="secondary" size="large">
               Save
             </Button>
@@ -48,12 +53,9 @@ function Edit() {
             <Cog8ToothIcon className="absolute top-2 right-2 h-6 w-6" />
             <p>Sidebar</p>
           </Background>
-          <Background className="w-full">
-            <p>Main</p>
+          <Background className="flex w-full justify-center">
+            <Main />
           </Background>
-          {/* <Background className="w-1/6 rounded-lg p-10">
-            <p>Sidebar</p>
-          </Background> */}
         </div>
       </div>
     </div>

@@ -2,14 +2,17 @@ import Main from "@components/editQuiz/Main";
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
-import { Button } from "@ui/Button";
+import Button from "@ui/Button";
 import { trpc } from "@utils/trpc";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 function Edit() {
   const router = useRouter();
 
   const quiz = trpc.quiz.getQuiz.useQuery({ id: router.query.id as string });
+
+  const [quizName, setQuizName] = useState(quiz.data?.title);
 
   if (quiz.isLoading) {
     return <div>Loading...</div>;
@@ -47,12 +50,12 @@ function Edit() {
         </div>
         <div className="flex h-full w-full flex-grow gap-6 pt-4">
           <Background className="relative flex w-1/6 flex-col items-center">
-            <p>Untitled Quiz</p>
+            <p>{quizName}</p>
             <Cog8ToothIcon className="absolute top-2 right-2 h-6 w-6" />
             <p>Sidebar</p>
           </Background>
           <Background className="flex w-full justify-center">
-            <Main />
+            <Main setQuizName={setQuizName} quizName={quizName} />
           </Background>
         </div>
       </div>

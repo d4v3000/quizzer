@@ -1,4 +1,4 @@
-import { Button } from "@ui/Button";
+import Button from "@ui/Button";
 import { trpc } from "@utils/trpc";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";

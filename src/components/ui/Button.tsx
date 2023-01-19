@@ -10,6 +10,7 @@ const button = cva("button", {
         "rounded-md",
       ],
       secondary: ["flex items-center border border-zinc-500 uppercase"],
+      danger: ["flex items-center justify-center bg-red-500 uppercase"],
     },
     size: {
       small: ["text-sm py-1.5 px-3 mr-4 my-3"],

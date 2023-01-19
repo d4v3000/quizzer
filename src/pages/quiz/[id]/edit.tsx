@@ -6,14 +6,22 @@ import Background from "@ui/Background";
 import Button from "@ui/Button";
 import { trpc } from "@utils/trpc";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Edit() {
   const router = useRouter();
 
   const quiz = trpc.quiz.getQuiz.useQuery({ id: router.query.id as string });
 
-  const [quizName, setQuizName] = useState(quiz.data?.title);
+  const [quizName, setQuizName] = useState("");
+  const [numTeams, setNumTeams] = useState(0);
+
+  useEffect(() => {
+    if (quiz.data) {
+      setQuizName(quiz.data.title);
+      setNumTeams(quiz.data.numberTeams);
+    }
+  }, [quiz.data]);
 
   if (quiz.isLoading) {
     return <div>Loading...</div>;
@@ -51,12 +59,17 @@ function Edit() {
         </div>
         <div className="flex h-full w-full flex-grow gap-6 pt-4">
           <Background className="relative flex w-1/6 flex-col items-center">
-            <p>{quizName}</p>
-            <Cog8ToothIcon className="absolute top-2 right-2 h-6 w-6" />
-            <SideBar />
+            <p className="text-xl font-semibold">{quizName}</p>
+            <Cog8ToothIcon className="absolute top-3 right-2 h-6 w-6" />
+            <SideBar numTeams={numTeams} />
           </Background>
           <Background className="flex w-full justify-center">
-            <Main setQuizName={setQuizName} quizName={quizName} />
+            <Main
+              setQuizName={setQuizName}
+              quizName={quizName}
+              setNumTeams={setNumTeams}
+              numTeams={numTeams}
+            />
           </Background>
         </div>
       </div>

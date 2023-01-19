@@ -1,8 +1,7 @@
+import { Button } from "@ui/Button";
+import { trpc } from "@utils/trpc";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
-import { trpc } from "../utils/trpc";
-import { Button } from "./ui/Button";
 
 function NavBar() {
   const { data: session } = useSession();

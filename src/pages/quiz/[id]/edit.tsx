@@ -1,12 +1,10 @@
+import Main from "@components/editQuiz/Main";
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
-import { useSession } from "next-auth/react";
+import Background from "@ui/Background";
+import { Button } from "@ui/Button";
+import { trpc } from "@utils/trpc";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import Main from "../../../components/editQuiz/Main";
-import Background from "../../../components/ui/Background";
-import { Button } from "../../../components/ui/Button";
-import { trpc } from "../../../utils/trpc";
 
 function Edit() {
   const router = useRouter();

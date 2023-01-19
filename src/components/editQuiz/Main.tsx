@@ -1,5 +1,3 @@
-import React from "react";
-
 function Main() {
   return (
     <div className="flex w-2/4 flex-col items-center p-10">

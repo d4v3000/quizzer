@@ -13,7 +13,9 @@ const button = cva("button", {
       danger: ["flex items-center justify-center bg-red-500 uppercase"],
     },
     size: {
-      small: ["text-sm py-1.5 px-3 mr-4 my-3"],
+      small: [
+        "text-sm py-1.5 px-3 mr-4 my-3 rounded-3xl font-bold hover:scale-[1.03]",
+      ],
       medium: ["text-base py-2 px-4"],
       large: [
         "px-8 py-2",

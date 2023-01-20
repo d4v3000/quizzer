@@ -12,6 +12,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import TypeBox from "./TypeBox";
 import { useTransition, animated, config } from "@react-spring/web";
+import IconTypes from "./IconTypes";
 
 interface IProps {
   numTeams: number | undefined;
@@ -26,6 +27,20 @@ const SideBar: FC<IProps> = ({ numTeams }) => {
     config: config.stiff,
   });
 
+  const options = [
+    {
+      type: "question",
+      name: "Question",
+    },
+    {
+      type: "location",
+      name: "Location",
+    },
+    {
+      type: "guessing",
+      name: "Guessing",
+    },
+  ];
   return (
     <div className="flex h-full w-full flex-col justify-between">
       <div className="flex w-full p-2">
@@ -52,7 +67,7 @@ const SideBar: FC<IProps> = ({ numTeams }) => {
                 <Dialog.Overlay
                   forceMount
                   asChild
-                  className="fixed inset-0 bg-black bg-opacity-20"
+                  className="fixed inset-0 bg-black bg-opacity-40"
                 >
                   <animated.div
                     style={{
@@ -74,18 +89,12 @@ const SideBar: FC<IProps> = ({ numTeams }) => {
                         Choose Round Type
                       </p>
                       <div className="flex gap-4">
-                        <TypeBox>
-                          <MapPinIcon className="h-6 w-6" />
-                          <p className="text-lg font-bold">Location</p>
-                        </TypeBox>
-                        <TypeBox>
-                          <ChatBubbleLeftRightIcon className="h-6 w-6" />
-                          <p className="text-lg font-bold">Question</p>
-                        </TypeBox>
-                        <TypeBox>
-                          <QuestionMarkCircleIcon className="h-6 w-6" />
-                          <p className="text-lg font-bold">Guessing</p>
-                        </TypeBox>
+                        {options.map((option) => (
+                          <TypeBox key={option.type}>
+                            <IconTypes type={option.type} />
+                            <p className="text-lg font-bold">{option.name}</p>
+                          </TypeBox>
+                        ))}
                       </div>
                     </div>
                   </animated.div>

@@ -19,14 +19,12 @@ import {
   restrictToParentElement,
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
+import { useQuizStore } from "@utils/zustand/quizStore";
 
-interface IProps {
-  numTeams: number | undefined;
-}
-
-const SideBar: FC<IProps> = ({ numTeams }) => {
+const SideBar: FC = () => {
   const [open, setOpen] = useState(false);
   const [questions, setQuestions] = useState<IQuestion[]>([]);
+  const numTeams = useQuizStore((state) => state.numTeams);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;

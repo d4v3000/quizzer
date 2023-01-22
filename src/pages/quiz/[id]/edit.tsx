@@ -5,6 +5,7 @@ import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
 import { trpc } from "@utils/trpc";
+import { useQuizStore } from "@utils/zustand/quizStore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -13,8 +14,10 @@ function Edit() {
 
   const quiz = trpc.quiz.getQuiz.useQuery({ id: router.query.id as string });
 
-  const [quizName, setQuizName] = useState("");
-  const [numTeams, setNumTeams] = useState(0);
+  const quizName = useQuizStore((state) => state.name);
+  const setQuizName = useQuizStore((state) => state.setName);
+  const numTeams = useQuizStore((state) => state.numTeams);
+  const setNumTeams = useQuizStore((state) => state.setNumTeams);
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
@@ -62,16 +65,11 @@ function Edit() {
           <div className="flex h-full w-full flex-col items-center justify-between">
             <p className="text-xl font-semibold">{quizName}</p>
             <Cog8ToothIcon className="absolute top-3 right-2 h-6 w-6" />
-            <SideBar numTeams={numTeams} />
+            <SideBar />
           </div>
         </Background>
         <Background className="flex w-full justify-center">
-          <Main
-            setQuizName={setQuizName}
-            quizName={quizName}
-            setNumTeams={setNumTeams}
-            numTeams={numTeams}
-          />
+          <Main />
         </Background>
       </div>
     </div>

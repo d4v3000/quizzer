@@ -37,7 +37,9 @@ const ScrollElement: FC<IProps> = ({ title, type, i, setQuestions }) => {
       style={style}
     >
       <TrashIcon
-        className={`h-7 w-7 cursor-pointer ${hovered ? "" : "invisible"}`}
+        className={`h-7 w-7 cursor-pointer stroke-2 ${
+          hovered ? "" : "invisible"
+        }`}
         onClick={() => setOpen(true)}
       />
       <div className="flex w-full items-center justify-between gap-2 rounded-md border-2 border-zinc-500 px-2 py-1">
@@ -47,7 +49,9 @@ const ScrollElement: FC<IProps> = ({ title, type, i, setQuestions }) => {
         <IconTypes type={type} />
       </div>
       <Bars3Icon
-        className={`h-7 w-7 cursor-pointer ${hovered ? "" : "invisible"}`}
+        className={`h-7 w-7 cursor-pointer stroke-2 ${
+          hovered ? "" : "invisible"
+        }`}
         {...attributes}
         {...listeners}
       />

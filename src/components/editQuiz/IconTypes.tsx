@@ -12,11 +12,11 @@ interface IProps {
 const IconTypes: FC<IProps> = ({ type }) => {
   switch (type) {
     case "question":
-      return <ChatBubbleLeftRightIcon className="h-6 w-6" />;
+      return <ChatBubbleLeftRightIcon className="h-6 w-6 stroke-2" />;
     case "location":
-      return <MapPinIcon className="h-6 w-6" />;
+      return <MapPinIcon className="h-6 w-6 stroke-2" />;
     case "guessing":
-      return <QuestionMarkCircleIcon className="h-6 w-6" />;
+      return <QuestionMarkCircleIcon className="h-6 w-6 stroke-2" />;
     default:
       return <></>;
   }

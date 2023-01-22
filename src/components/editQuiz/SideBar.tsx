@@ -3,7 +3,7 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import Button from "@ui/Button";
-import { isUndefined } from "lodash";
+import { isUndefined, toNumber } from "lodash";
 import { FC, useState } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import SelectionModal from "./SelectionModal";
@@ -23,15 +23,20 @@ import { useQuizStore } from "@utils/zustand/quizStore";
 
 const SideBar: FC = () => {
   const [open, setOpen] = useState(false);
-  const [questions, setQuestions] = useState<IQuestion[]>([]);
   const numTeams = useQuizStore((state) => state.numTeams);
+  const questions = useQuizStore((state) => state.questions);
+  const setQuestions = useQuizStore((state) => state.setQuestions);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (active.id !== over?.id) {
-      setQuestions((items) => {
-        return arrayMove(items, Number(active.id) - 1, Number(over?.id) - 1);
-      });
+      setQuestions(
+        arrayMove<IQuestion>(
+          questions,
+          toNumber(active.id) - 1,
+          toNumber(over?.id) - 1
+        )
+      );
     }
   };
 
@@ -67,7 +72,6 @@ const SideBar: FC = () => {
                     title={question.title}
                     type={question.type}
                     i={i}
-                    setQuestions={setQuestions}
                     key={i}
                   />
                 ))}
@@ -87,12 +91,7 @@ const SideBar: FC = () => {
         <Button intent="secondary" size="small" onClick={() => setOpen(true)}>
           Add Round
         </Button>
-        <SelectionModal
-          open={open}
-          setOpen={setOpen}
-          setQuestions={setQuestions}
-          questions={questions}
-        />
+        <SelectionModal open={open} setOpen={setOpen} />
       </div>
     </>
   );

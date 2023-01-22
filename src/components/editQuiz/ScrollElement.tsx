@@ -10,10 +10,9 @@ interface IProps {
   title: string;
   type: string;
   i: number;
-  setQuestions: Dispatch<SetStateAction<IQuestion[]>>;
 }
 
-const ScrollElement: FC<IProps> = ({ title, type, i, setQuestions }) => {
+const ScrollElement: FC<IProps> = ({ title, type, i }) => {
   const [hovered, setHovered] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -55,12 +54,7 @@ const ScrollElement: FC<IProps> = ({ title, type, i, setQuestions }) => {
         {...attributes}
         {...listeners}
       />
-      <DeleteModal
-        open={open}
-        setOpen={setOpen}
-        setQuestions={setQuestions}
-        index={i - 1}
-      />
+      <DeleteModal open={open} setOpen={setOpen} index={i} />
     </div>
   );
 };

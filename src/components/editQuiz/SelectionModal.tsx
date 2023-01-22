@@ -5,15 +5,14 @@ import IconTypes from "./IconTypes";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Dispatch, FC, SetStateAction } from "react";
 import { IQuestion } from "../../models/question";
+import { useQuizStore } from "@utils/zustand/quizStore";
 
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  setQuestions: Dispatch<SetStateAction<IQuestion[]>>;
-  questions: IQuestion[];
 }
 
-const SelectionModal: FC<IProps> = ({ open, setOpen, setQuestions }) => {
+const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
   const transitions = useTransition(open, {
     from: { opacity: 0, scale: 0 },
     enter: { opacity: 1, scale: 1, y: "-50%", x: "-50%" },
@@ -21,8 +20,11 @@ const SelectionModal: FC<IProps> = ({ open, setOpen, setQuestions }) => {
     config: config.stiff,
   });
 
+  const questions = useQuizStore((state) => state.questions);
+  const setQuestions = useQuizStore((state) => state.setQuestions);
+
   const handleClick = (type: string) => {
-    setQuestions((prev) => [...prev, { type, title: "" }]);
+    setQuestions([...questions, { type, title: "" }]);
     setOpen(false);
   };
 

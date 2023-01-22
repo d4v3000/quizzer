@@ -1,18 +1,17 @@
 import { useTransition, animated, config } from "@react-spring/web";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import Button from "@ui/Button";
-import { IQuestion } from "../../models/question";
+import { useQuizStore } from "@utils/zustand/quizStore";
 
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  setQuestions: Dispatch<SetStateAction<IQuestion[]>>;
   index: number;
 }
 
-const DeleteModal: FC<IProps> = ({ open, setOpen, setQuestions, index }) => {
+const DeleteModal: FC<IProps> = ({ open, setOpen, index }) => {
   const transitions = useTransition(open, {
     from: { opacity: 0, scale: 0 },
     enter: { opacity: 1, scale: 1, y: "-50%", x: "-50%" },
@@ -20,10 +19,11 @@ const DeleteModal: FC<IProps> = ({ open, setOpen, setQuestions, index }) => {
     config: config.stiff,
   });
 
+  const questions = useQuizStore((state) => state.questions);
+  const setQuestions = useQuizStore((state) => state.setQuestions);
+
   const handleClick = () => {
-    setQuestions((prev) => {
-      return prev.filter((_, i) => i !== index);
-    });
+    setQuestions(questions.filter((_, i) => i !== index));
     setOpen(false);
   };
 

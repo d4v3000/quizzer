@@ -15,7 +15,10 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+  restrictToParentElement,
+  restrictToVerticalAxis,
+} from "@dnd-kit/modifiers";
 
 interface IProps {
   numTeams: number | undefined;
@@ -54,7 +57,7 @@ const SideBar: FC<IProps> = ({ numTeams }) => {
           <DndContext
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
-            modifiers={[restrictToVerticalAxis]}
+            modifiers={[restrictToVerticalAxis, restrictToParentElement]}
           >
             <div className="flex flex-col gap-1">
               <SortableContext

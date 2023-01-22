@@ -1,10 +1,22 @@
+import { useQuizStore } from "@utils/zustand/quizStore";
 import { FC } from "react";
+import EditQuestion from "./editQuestion";
 import Settings from "./Settings";
 
-const Main: FC = () => {
+interface IProps {
+  isSettingsOpen: boolean;
+}
+
+const Main: FC<IProps> = ({ isSettingsOpen }) => {
+  const currentQuestion = useQuizStore((state) => state.currentQuestion);
+
   return (
     <div className="flex w-2/4 flex-col items-center justify-between p-10">
-      <Settings />
+      {isSettingsOpen && currentQuestion === -1 ? (
+        <Settings />
+      ) : (
+        <EditQuestion />
+      )}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import DeleteModal from "./DeleteModal";
 import IconTypes from "./IconTypes";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useQuizStore } from "@utils/zustand/quizStore";
 
 interface IProps {
   title: string;
@@ -15,6 +16,8 @@ interface IProps {
 const ScrollElement: FC<IProps> = ({ title, type, i }) => {
   const [hovered, setHovered] = useState(false);
   const [open, setOpen] = useState(false);
+  const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
+  const currentQuestion = useQuizStore((state) => state.currentQuestion);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -41,11 +44,20 @@ const ScrollElement: FC<IProps> = ({ title, type, i }) => {
         }`}
         onClick={() => setOpen(true)}
       />
-      <div className="flex w-full items-center justify-between gap-2 rounded-md border-2 border-zinc-500 px-2 py-1">
-        <p>
-          {`${i + 1}. `} {title}
-        </p>
-        <IconTypes type={type} />
+      <div
+        className={`${
+          currentQuestion === i
+            ? "bg-gradient-to-r from-indigo-600 to-violet-700"
+            : "bg-zinc-500"
+        } w-full cursor-pointer rounded-md p-[3px]`}
+        onClick={() => setCurrentQuestion(i)}
+      >
+        <div className="flex h-full w-full items-center justify-between gap-2 bg-zinc-900 p-1">
+          <p>
+            {`${i + 1}. `} {title}
+          </p>
+          <IconTypes type={type} />
+        </div>
       </div>
       <Bars3Icon
         className={`h-7 w-7 cursor-pointer stroke-2 ${

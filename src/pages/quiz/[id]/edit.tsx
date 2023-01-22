@@ -16,9 +16,14 @@ function Edit() {
 
   const quizName = useQuizStore((state) => state.name);
   const setQuizName = useQuizStore((state) => state.setName);
-  const numTeams = useQuizStore((state) => state.numTeams);
   const setNumTeams = useQuizStore((state) => state.setNumTeams);
-  const [questions, setQuestions] = useState([]);
+  const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(true);
+
+  const handleSettingsClicked = () => {
+    setIsSettingsOpen(true);
+    setCurrentQuestion(-1);
+  };
 
   useEffect(() => {
     if (quiz.data) {
@@ -64,12 +69,15 @@ function Edit() {
         <Background className="relative flex h-full w-1/5 justify-center">
           <div className="flex h-full w-full flex-col items-center justify-between">
             <p className="text-xl font-semibold">{quizName}</p>
-            <Cog8ToothIcon className="absolute top-3 right-2 h-6 w-6" />
+            <Cog8ToothIcon
+              className="absolute top-3 right-2 h-6 w-6 cursor-pointer"
+              onClick={handleSettingsClicked}
+            />
             <SideBar />
           </div>
         </Background>
         <Background className="flex w-full justify-center">
-          <Main />
+          <Main isSettingsOpen={isSettingsOpen} />
         </Background>
       </div>
     </div>

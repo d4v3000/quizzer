@@ -8,6 +8,8 @@ interface IProps {
   setName: (name: string) => void;
   setNumTeams: (numTeams: number) => void;
   setQuestions: (questions: IQuestion[]) => void;
+  currentQuestion: number;
+  setCurrentQuestion: (currentQuestion: number) => void;
 }
 
 export const useQuizStore = create<IProps>((set) => ({
@@ -17,4 +19,6 @@ export const useQuizStore = create<IProps>((set) => ({
   setName: (name: string) => set({ name }),
   setNumTeams: (numTeams: number) => set({ numTeams }),
   setQuestions: (questions: IQuestion[]) => set({ questions }),
+  currentQuestion: -1,
+  setCurrentQuestion: (currentQuestion: number) => set({ currentQuestion }),
 }));

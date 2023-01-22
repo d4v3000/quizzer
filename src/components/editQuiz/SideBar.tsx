@@ -41,6 +41,7 @@ const SideBar: FC<IProps> = ({ numTeams }) => {
                 title={question.title}
                 type={question.type}
                 i={i + 1}
+                setQuestions={setQuestions}
               />
             ))}
           </div>

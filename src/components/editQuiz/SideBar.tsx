@@ -9,6 +9,13 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import SelectionModal from "./SelectionModal";
 import ScrollElement from "./ScrollElement";
 import { IQuestion } from "../../models/question";
+import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 interface IProps {
   numTeams: number | undefined;
@@ -17,6 +24,15 @@ interface IProps {
 const SideBar: FC<IProps> = ({ numTeams }) => {
   const [open, setOpen] = useState(false);
   const [questions, setQuestions] = useState<IQuestion[]>([]);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (active.id !== over?.id) {
+      setQuestions((items) => {
+        return arrayMove(items, Number(active.id) - 1, Number(over?.id) - 1);
+      });
+    }
+  };
 
   return (
     <>
@@ -35,16 +51,28 @@ const SideBar: FC<IProps> = ({ numTeams }) => {
         type="auto"
       >
         <ScrollArea.Viewport className="h-full w-full">
-          <div className="flex flex-col gap-1">
-            {questions.map((question, i) => (
-              <ScrollElement
-                title={question.title}
-                type={question.type}
-                i={i + 1}
-                setQuestions={setQuestions}
-              />
-            ))}
-          </div>
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis]}
+          >
+            <div className="flex flex-col gap-1">
+              <SortableContext
+                items={questions.map((question, i) => i + 1)}
+                strategy={verticalListSortingStrategy}
+              >
+                {questions.map((question, i) => (
+                  <ScrollElement
+                    title={question.title}
+                    type={question.type}
+                    i={i}
+                    setQuestions={setQuestions}
+                    key={i}
+                  />
+                ))}
+              </SortableContext>
+            </div>
+          </DndContext>
         </ScrollArea.Viewport>
         <ScrollArea.Scrollbar
           orientation="vertical"

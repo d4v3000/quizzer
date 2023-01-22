@@ -15,6 +15,7 @@ function Edit() {
 
   const [quizName, setQuizName] = useState("");
   const [numTeams, setNumTeams] = useState(0);
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     if (quiz.data) {
@@ -32,46 +33,46 @@ function Edit() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-57px)] flex-col bg-zinc-900 text-gray-200">
-      <div className="flex h-full flex-col px-10 py-4">
-        <div className="flex w-full justify-between">
-          <Button
-            intent="secondary"
-            size="large"
-            onClick={() => router.push("/quiz")}
-          >
-            <ArrowLongLeftIcon className="h-6 w-6" />
-            Back
+    <div className="flex h-screen flex-col px-10 py-4 text-gray-200">
+      <div className="flex w-full justify-between">
+        <Button
+          intent="secondary"
+          size="large"
+          onClick={() => router.push("/quiz")}
+        >
+          <ArrowLongLeftIcon className="h-6 w-6" />
+          Back
+        </Button>
+        <div className="flex gap-6">
+          <Button intent="secondary" size="large">
+            Save
           </Button>
-          <div className="flex gap-6">
-            <Button intent="secondary" size="large">
-              Save
-            </Button>
 
-            <Button intent="secondary" size="large">
-              Preview
-            </Button>
+          <Button intent="secondary" size="large">
+            Preview
+          </Button>
 
-            <Button intent="primary" size="large">
-              Start Quiz
-            </Button>
-          </div>
+          <Button intent="primary" size="large">
+            Start Quiz
+          </Button>
         </div>
-        <div className="flex h-full w-full flex-grow gap-6 pt-4">
-          <Background className="relative flex w-1/6 flex-col items-center">
+      </div>
+      <div className="flex h-5/6 w-full flex-grow gap-6 pt-4">
+        <Background className="relative flex h-full w-1/5 justify-center">
+          <div className="flex h-full w-full flex-col items-center justify-between">
             <p className="text-xl font-semibold">{quizName}</p>
             <Cog8ToothIcon className="absolute top-3 right-2 h-6 w-6" />
             <SideBar numTeams={numTeams} />
-          </Background>
-          <Background className="flex w-full justify-center">
-            <Main
-              setQuizName={setQuizName}
-              quizName={quizName}
-              setNumTeams={setNumTeams}
-              numTeams={numTeams}
-            />
-          </Background>
-        </div>
+          </div>
+        </Background>
+        <Background className="flex w-full justify-center">
+          <Main
+            setQuizName={setQuizName}
+            quizName={quizName}
+            setNumTeams={setNumTeams}
+            numTeams={numTeams}
+          />
+        </Background>
       </div>
     </div>
   );

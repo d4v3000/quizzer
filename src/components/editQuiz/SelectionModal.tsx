@@ -3,20 +3,28 @@ import * as Dialog from "@radix-ui/react-dialog";
 import TypeBox from "./TypeBox";
 import IconTypes from "./IconTypes";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
+import { IQuestion } from "../../models/question";
 
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  setQuestions: Dispatch<SetStateAction<IQuestion[]>>;
+  questions: IQuestion[];
 }
 
-const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
+const SelectionModal: FC<IProps> = ({ open, setOpen, setQuestions }) => {
   const transitions = useTransition(open, {
     from: { opacity: 0, scale: 0 },
     enter: { opacity: 1, scale: 1, y: "-50%", x: "-50%" },
     leave: { opacity: 0, scale: 0 },
     config: config.stiff,
   });
+
+  const handleClick = (type: string) => {
+    setQuestions((prev) => [...prev, { type, title: "" }]);
+    setOpen(false);
+  };
 
   const options = [
     {
@@ -64,7 +72,10 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
                   </p>
                   <div className="flex gap-4">
                     {options.map((option) => (
-                      <TypeBox key={option.type}>
+                      <TypeBox
+                        key={option.type}
+                        onClick={() => handleClick(option.type)}
+                      >
                         <IconTypes type={option.type} />
                         <p className="text-lg font-bold">{option.name}</p>
                       </TypeBox>

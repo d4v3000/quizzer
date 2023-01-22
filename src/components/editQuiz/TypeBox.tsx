@@ -1,12 +1,15 @@
-import { FC, ReactNode } from "react";
+import { FC, HTMLAttributes, ReactNode } from "react";
 
-interface IProps {
+interface IProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-const TypeBox: FC<IProps> = ({ children }) => {
+const TypeBox: FC<IProps> = ({ children, ...props }) => {
   return (
-    <div className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-black p-4 shadow-md shadow-zinc-900 hover:scale-[1.03]">
+    <div
+      {...props}
+      className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-black p-4 shadow-md shadow-zinc-900 hover:scale-[1.03]"
+    >
       {children}
     </div>
   );

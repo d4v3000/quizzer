@@ -20,7 +20,7 @@ const ScrollElement: FC<IProps> = ({ title, type, i }) => {
       <TrashIcon
         className={`h-7 w-7 cursor-pointer ${hovered ? "" : "invisible"}`}
       />
-      <div className="flex w-full items-center justify-between gap-2 rounded-md border-2 border-zinc-300 px-2 py-1">
+      <div className="flex w-full items-center justify-between gap-2 rounded-md border-2 border-zinc-500 px-2 py-1">
         <p>
           {`${i}. `} {title}
         </p>

@@ -6,10 +6,9 @@ import Button from "@ui/Button";
 import { isUndefined } from "lodash";
 import { FC, useState } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-
 import SelectionModal from "./SelectionModal";
-import IconTypes from "./IconTypes";
 import ScrollElement from "./ScrollElement";
+import { IQuestion } from "../../models/question";
 
 interface IProps {
   numTeams: number | undefined;
@@ -17,34 +16,7 @@ interface IProps {
 
 const SideBar: FC<IProps> = ({ numTeams }) => {
   const [open, setOpen] = useState(false);
-  const [question, setQuestions] = useState([
-    { type: "question", title: "A" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "B" },
-    { type: "question", title: "A" },
-    { type: "question", title: "A" },
-    { type: "question", title: "A" },
-    { type: "question", title: "A" },
-    { type: "question", title: "A" },
-    { type: "question", title: "A" },
-    { type: "question", title: "A" },
-    { type: "question", title: "A" },
-  ]);
+  const [questions, setQuestions] = useState<IQuestion[]>([]);
 
   return (
     <>
@@ -55,7 +27,7 @@ const SideBar: FC<IProps> = ({ numTeams }) => {
         </div>
         <div className="flex w-full items-center justify-end gap-2">
           <ArrowPathRoundedSquareIcon className="h-6 w-6" />
-          <p>2 Rounds</p>
+          <p>{`${questions.length} Rounds`}</p>
         </div>
       </div>
       <ScrollArea.Root
@@ -64,8 +36,12 @@ const SideBar: FC<IProps> = ({ numTeams }) => {
       >
         <ScrollArea.Viewport className="h-full w-full">
           <div className="flex flex-col gap-1">
-            {question.map((q, i) => (
-              <ScrollElement title={q.title} type={q.type} i={i + 1} />
+            {questions.map((question, i) => (
+              <ScrollElement
+                title={question.title}
+                type={question.type}
+                i={i + 1}
+              />
             ))}
           </div>
         </ScrollArea.Viewport>
@@ -81,7 +57,12 @@ const SideBar: FC<IProps> = ({ numTeams }) => {
         <Button intent="secondary" size="small" onClick={() => setOpen(true)}>
           Add Round
         </Button>
-        <SelectionModal open={open} setOpen={setOpen} />
+        <SelectionModal
+          open={open}
+          setOpen={setOpen}
+          setQuestions={setQuestions}
+          questions={questions}
+        />
       </div>
     </>
   );

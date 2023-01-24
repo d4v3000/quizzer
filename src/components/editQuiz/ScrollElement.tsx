@@ -53,7 +53,7 @@ const ScrollElement: FC<IProps> = ({ title, type, i }) => {
         onClick={() => setCurrentQuestion(i)}
       >
         <div className="flex h-full w-full items-center justify-between gap-2 bg-zinc-900 p-1">
-          <p>
+          <p className="w-full truncate">
             {`${i + 1}. `} {title}
           </p>
           <IconTypes type={type} />

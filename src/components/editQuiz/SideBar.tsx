@@ -26,6 +26,7 @@ const SideBar: FC = () => {
   const numTeams = useQuizStore((state) => state.numTeams);
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
+  const currentQuestion = useQuizStore((state) => state.currentQuestion);
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -38,7 +39,9 @@ const SideBar: FC = () => {
           toNumber(over?.id) - 1
         )
       );
-      setCurrentQuestion(toNumber(over?.id) - 1);
+      if (currentQuestion === toNumber(active.id) - 1) {
+        setCurrentQuestion(toNumber(over?.id) - 1);
+      }
     }
   };
 

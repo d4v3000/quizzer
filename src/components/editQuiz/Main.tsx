@@ -1,6 +1,6 @@
 import { useQuizStore } from "@utils/zustand/quizStore";
 import { FC } from "react";
-import EditQuestion from "./editQuestion";
+import EditQuestion from "./EditQuestion";
 import Settings from "./Settings";
 
 interface IProps {

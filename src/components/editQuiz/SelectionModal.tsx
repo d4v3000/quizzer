@@ -22,9 +22,11 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
 
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
+  const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
 
   const handleClick = (type: string) => {
     setQuestions([...questions, { type, title: "" }]);
+    setCurrentQuestion(questions.length);
     setOpen(false);
   };
 

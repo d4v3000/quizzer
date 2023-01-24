@@ -38,7 +38,7 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
       sourceUrl: "",
     };
     if (type === "guessing") {
-      (newQuestion as IGuessingAnswer).answer = 0;
+      (newQuestion as IGuessingAnswer).answer = undefined;
     } else if (type === "location") {
       (newQuestion as ILocationAnswer).answer = {
         x: 0,

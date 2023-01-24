@@ -14,7 +14,7 @@ export interface IQuestionAnswer extends IQuestion {
 }
 
 export interface IGuessingAnswer extends IQuestion {
-  answer: number;
+  answer: string | undefined;
 }
 
 export interface ILocationAnswer extends IQuestion {

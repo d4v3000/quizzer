@@ -21,9 +21,12 @@ const DeleteModal: FC<IProps> = ({ open, setOpen, index }) => {
 
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
+  const currentQuestion = useQuizStore((state) => state.currentQuestion);
+  const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
 
   const handleClick = () => {
     setQuestions(questions.filter((_, i) => i !== index));
+    setCurrentQuestion(currentQuestion - 1);
     setOpen(false);
   };
 

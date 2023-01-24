@@ -16,7 +16,7 @@ const button = cva("button", {
       small: [
         "text-sm py-1.5 px-3 mr-4 my-3 rounded-3xl font-bold hover:scale-[1.03]",
       ],
-      medium: ["text-base py-2 px-4"],
+      medium: ["text-base py-2 px-4 rounded-md font-bold"],
       large: [
         "px-8 py-2",
         "rounded-3xl",

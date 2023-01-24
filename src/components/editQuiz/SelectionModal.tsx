@@ -4,8 +4,14 @@ import TypeBox from "./TypeBox";
 import IconTypes from "./IconTypes";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Dispatch, FC, SetStateAction } from "react";
-import { IQuestion } from "../../models/question";
+import {
+  IGuessingAnswer,
+  ILocationAnswer,
+  IQuestion,
+  IQuestionAnswer,
+} from "../../models/question";
 import { useQuizStore } from "@utils/zustand/quizStore";
+import { title } from "process";
 
 interface IProps {
   open: boolean;
@@ -25,7 +31,31 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
 
   const handleClick = (type: string) => {
-    setQuestions([...questions, { type, title: "" }]);
+    let newQuestion: IQuestion = {
+      type,
+      title: "",
+      imgUrl: "",
+      sourceUrl: "",
+    };
+    if (type === "guessing") {
+      (newQuestion as IGuessingAnswer).answer = 0;
+    } else if (type === "location") {
+      (newQuestion as ILocationAnswer).answer = {
+        x: 0,
+        y: 0,
+      };
+    } else if (type === "question") {
+      (newQuestion as IQuestionAnswer).answers = [
+        { id: "A", title: "", correct: true },
+        { id: "B", title: "", correct: false },
+        { id: "C", title: "", correct: false },
+        { id: "D", title: "", correct: false },
+      ];
+    }
+    setQuestions([
+      ...questions,
+      newQuestion as IGuessingAnswer | ILocationAnswer | IQuestionAnswer,
+    ]);
     setCurrentQuestion(questions.length);
     setOpen(false);
   };

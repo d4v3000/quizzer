@@ -1,13 +1,20 @@
 import { create } from "zustand";
-import { IQuestion } from "../../models/question";
+import {
+  IGuessingAnswer,
+  ILocationAnswer,
+  IQuestion,
+  IQuestionAnswer,
+} from "../../models/question";
 
 interface IProps {
   name: string;
   numTeams: number;
-  questions: IQuestion[];
+  questions: (IQuestionAnswer | IGuessingAnswer | ILocationAnswer)[];
   setName: (name: string) => void;
   setNumTeams: (numTeams: number) => void;
-  setQuestions: (questions: IQuestion[]) => void;
+  setQuestions: (
+    questions: (IQuestionAnswer | IGuessingAnswer | ILocationAnswer)[]
+  ) => void;
   currentQuestion: number;
   setCurrentQuestion: (currentQuestion: number) => void;
 }
@@ -18,7 +25,9 @@ export const useQuizStore = create<IProps>((set) => ({
   questions: [],
   setName: (name: string) => set({ name }),
   setNumTeams: (numTeams: number) => set({ numTeams }),
-  setQuestions: (questions: IQuestion[]) => set({ questions }),
+  setQuestions: (
+    questions: (IQuestionAnswer | IGuessingAnswer | ILocationAnswer)[]
+  ) => set({ questions }),
   currentQuestion: -1,
   setCurrentQuestion: (currentQuestion: number) => set({ currentQuestion }),
 }));

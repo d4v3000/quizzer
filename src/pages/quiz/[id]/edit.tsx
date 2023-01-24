@@ -66,13 +66,18 @@ function Edit() {
         </div>
       </div>
       <div className="flex h-5/6 w-full flex-grow gap-6 pt-4">
-        <Background className="relative flex h-full w-1/5 justify-center">
+        <Background className="relative flex h-full w-1/5 justify-center overflow-hidden">
           <div className="flex h-full w-full flex-col items-center justify-between">
-            <p className="text-xl font-semibold">{quizName}</p>
-            <Cog8ToothIcon
-              className="absolute top-3 right-2 h-6 w-6 cursor-pointer"
-              onClick={handleSettingsClicked}
-            />
+            <div className="flex w-full items-center">
+              <p className="w-full truncate text-center text-xl font-semibold">
+                {quizName}
+              </p>
+
+              <Cog8ToothIcon
+                className=" h-6 w-6 cursor-pointer"
+                onClick={handleSettingsClicked}
+              />
+            </div>
             <SideBar />
           </div>
         </Background>

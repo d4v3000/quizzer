@@ -1,14 +1,21 @@
 import Button from "@ui/Button";
+import LoadingSpinner from "@ui/LoadingSpinner";
 import { trpc } from "@utils/trpc";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function NavBar() {
   const { data: session } = useSession();
   const createQuiz = trpc.quiz.createQuiz.useMutation();
+  const router = useRouter();
+
+  if (createQuiz.data) {
+    router.push(`/quiz/${createQuiz.data.id}/edit`);
+  }
 
   return (
-    <nav className="sticky top-0 w-full bg-black">
+    <nav className="sticky top-0 w-full bg-zinc-900">
       <div className="mx-auto flex w-3/5 justify-between font-semibold text-zinc-400">
         <p className="flex items-center p-3">Logo</p>
 
@@ -33,14 +40,23 @@ function NavBar() {
                 Quiz
               </span>
             </Link>
-            <button onClick={() => createQuiz.mutate()}>Create Quiz</button>
+            <button
+              onClick={() => createQuiz.mutate()}
+              disabled={createQuiz.status === "loading"}
+            >
+              {createQuiz.status === "loading" ? (
+                <LoadingSpinner />
+              ) : (
+                "Create Quiz"
+              )}
+            </button>
             <Button onClick={() => signOut()} intent="primary" size="small">
               Sign out
             </Button>
           </div>
         )}
       </div>
-      <hr className="border-zinc-800" />
+      <hr className="border-zinc-700" />
     </nav>
   );
 }

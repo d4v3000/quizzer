@@ -94,7 +94,7 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
             <Dialog.Content
               forceMount
               asChild
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-zinc-700 px-16 py-8"
+              className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-md bg-zinc-700 px-16 py-8"
             >
               <animated.div style={styles}>
                 <div className="flex flex-col items-center gap-3">

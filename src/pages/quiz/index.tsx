@@ -1,3 +1,5 @@
+import NavBar from "@components/NavBar";
+import QuizCard from "@components/quizView/QuizCard";
 import Link from "next/link";
 import React from "react";
 import { trpc } from "../../utils/trpc";
@@ -6,13 +8,14 @@ function Quiz() {
   const getQuizzes = trpc.quiz.getUserQuizzes.useQuery();
 
   return (
-    <div className="flex h-[calc(100vh-57px)] flex-col bg-zinc-900 text-gray-200">
-      {getQuizzes.data?.map((quiz) => (
-        <Link key={quiz.id} href={`/quiz/${quiz.id}/edit`}>
-          <div className="flex h-full flex-col px-10 py-4">{quiz.title}</div>
-        </Link>
-      ))}
-    </div>
+    <>
+      <NavBar />
+      <div className="mx-auto grid w-3/5 gap-6 bg-zinc-900 py-10 text-gray-200 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {getQuizzes.data?.map((quiz) => (
+          <QuizCard quiz={quiz} />
+        ))}
+      </div>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import { router, publicProcedure, protectedProcedure } from "../trpc";
+import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const quizRouter = router({
@@ -23,9 +23,16 @@ export const quizRouter = router({
       })
     )
     .query(({ ctx, input }) => {
-      return ctx.prisma.quiz.findUnique({
+      return ctx.prisma.quiz.findFirst({
         where: {
-          id: input.id,
+          AND: [
+            {
+              authorId: ctx.session.user.id,
+            },
+            {
+              id: input.id,
+            },
+          ],
         },
       });
     }),

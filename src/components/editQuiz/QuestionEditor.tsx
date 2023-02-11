@@ -21,6 +21,7 @@ const QuestionEditor = () => {
               <input
                 type="radio"
                 checked={answer.correct}
+                className="cursor-pointer accent-violet-700"
                 onClick={() => {
                   const newQuestions = [...questions];
                   (
@@ -48,7 +49,7 @@ const QuestionEditor = () => {
         )}
       </div>
       <div className="mt-2 flex justify-center gap-2">
-        <input type="radio" checked={true} />
+        <input type="radio" className="accent-violet-700" checked={true} />
         <p>{" = Correct Answer"}</p>
       </div>
     </>

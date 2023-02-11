@@ -5,11 +5,13 @@ const button = cva("button", {
     intent: {
       primary: [
         "from-indigo-600 to-violet-700 bg-gradient-to-r",
-        "flex items-center",
+        "flex items-center justify-center",
         "text-white",
         "rounded-md",
       ],
-      secondary: ["flex items-center border border-zinc-500 uppercase"],
+      secondary: [
+        "flex items-center justify-center text-white border border-zinc-500 uppercase",
+      ],
       danger: ["flex items-center justify-center bg-red-500 uppercase"],
     },
     size: {

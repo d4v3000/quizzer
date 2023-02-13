@@ -2,7 +2,7 @@ import NavBar from "@components/NavBar";
 import Button from "@ui/Button";
 import Input from "@ui/Input";
 import Label from "@ui/Label";
-import LoadingSpinner from "@ui/LoadingSpinner";
+import { LoadingSpinner } from "@ui/Loader";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";

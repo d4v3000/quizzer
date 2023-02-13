@@ -4,7 +4,7 @@ import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
-import LoadingSpinner from "@ui/LoadingSpinner";
+import { LoadingSpinner } from "@ui/Loader";
 import { trpc } from "@utils/trpc";
 import { useQuizStore } from "@utils/zustand/quizStore";
 import { useRouter } from "next/router";

@@ -49,7 +49,12 @@ const QuestionEditor = () => {
         )}
       </div>
       <div className="mt-2 flex justify-center gap-2">
-        <input type="radio" className="accent-violet-700" checked={true} />
+        <input
+          type="radio"
+          className="accent-violet-700"
+          checked={true}
+          readOnly={true}
+        />
         <p>{" = Correct Answer"}</p>
       </div>
     </>

@@ -70,15 +70,14 @@ model Quiz {
   authorId      String
   numberTeams  Int @default(2)
   questions     Question[]
-  MapQuestion   MapQuestion[]
-  GuessQuestion GuessQuestion[]
 }
 
 model Question {
   id        String   @id @default(cuid())
   title     String
-  authorId  String
   quizId    String
+  imgUrl    String?
+  type      String
   answers  Answer[]
   quiz      Quiz     @relation(fields: [quizId], references: [id])
 
@@ -87,34 +86,17 @@ model Question {
 
 model Answer {
   id        String   @id @default(cuid())
-  name String
+  title     String?
+  placeholder   String?
   questionId String
-  isCorrect Boolean
+  isCorrect Boolean?
+  x     Int?
+  y     Int?
   question Question @relation(fields: [questionId], references: [id])
 
   @@index([questionId])
 }
 
-model MapQuestion {
-  id        String   @id @default(cuid())
-  title     String
-  authorId  String
-  quizId    String
-  quiz      Quiz     @relation(fields: [quizId], references: [id])
-
-  @@index([quizId])
-}
-
-model GuessQuestion {
-  id        String   @id @default(cuid())
-  title     String
-  authorId  String
-  quizId    String
-  correctAnswer Decimal
-  quiz      Quiz     @relation(fields: [quizId], references: [id])
-
-  @@index([quizId])
-}
 
 enum QuestionTypes {
   Question

@@ -2,7 +2,6 @@ export interface IQuestion {
   title: string;
   type: string;
   imgUrl?: string;
-  sourceUrl?: string;
 }
 
 export interface IQuestionAnswer extends IQuestion {
@@ -14,12 +13,12 @@ export interface IQuestionAnswer extends IQuestion {
 }
 
 export interface IGuessingAnswer extends IQuestion {
-  answer: string | undefined;
+  answers: (string | undefined)[];
 }
 
 export interface ILocationAnswer extends IQuestion {
-  answer: {
+  answers: {
     x: number;
     y: number;
-  };
+  }[];
 }

@@ -12,7 +12,7 @@ import Select from "@ui/Select";
 
 const FilterBar = () => {
   const [sortByFilter, setSortByFilter] = useState("Created At");
-  const [isAsc, setIsAsc] = useState(true);
+  const [isDesc, setIsDessc] = useState(true);
   const [currentView, setCurrentView] = useState<"grid" | "list">("grid");
   const [itemsPerPage, SetItemsPerPage] = useState("20");
   const [numOfCols, setNumOfCols] = useState<number[]>([3]);
@@ -24,13 +24,13 @@ const FilterBar = () => {
         <Select
           value={sortByFilter}
           onValueChange={setSortByFilter}
-          items={["Created At", "Teams", "Questions"]}
+          items={["Created At", "Teams", "Questions", "Name"]}
         />
         <div
-          onClick={() => setIsAsc(!isAsc)}
+          onClick={() => setIsDessc(!isDesc)}
           className="flex h-full cursor-pointer items-center justify-center rounded-md p-2 hover:bg-zinc-700"
         >
-          {isAsc ? (
+          {isDesc ? (
             <ChevronDownIcon className="h-6 w-6" />
           ) : (
             <ChevronUpIcon className="h-6 w-6" />

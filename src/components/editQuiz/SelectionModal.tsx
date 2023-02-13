@@ -35,15 +35,16 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
       type,
       title: "",
       imgUrl: "",
-      sourceUrl: "",
     };
     if (type === "guessing") {
-      (newQuestion as IGuessingAnswer).answer = undefined;
+      (newQuestion as IGuessingAnswer).answers = [undefined];
     } else if (type === "location") {
-      (newQuestion as ILocationAnswer).answer = {
-        x: 0,
-        y: 0,
-      };
+      (newQuestion as ILocationAnswer).answers = [
+        {
+          x: 0,
+          y: 0,
+        },
+      ];
     } else if (type === "question") {
       (newQuestion as IQuestionAnswer).answers = [
         { id: "A", title: "", correct: true },

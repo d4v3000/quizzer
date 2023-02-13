@@ -4,6 +4,7 @@ import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
+import LoadingSpinner from "@ui/LoadingSpinner";
 import { trpc } from "@utils/trpc";
 import { useQuizStore } from "@utils/zustand/quizStore";
 import { useRouter } from "next/router";
@@ -13,16 +14,27 @@ function Edit() {
   const router = useRouter();
 
   const quiz = trpc.quiz.getQuiz.useQuery({ id: router.query.id as string });
+  const editQuiz = trpc.quiz.editQuiz.useMutation();
 
   const quizName = useQuizStore((state) => state.name);
+  const numTeams = useQuizStore((state) => state.numTeams);
   const setQuizName = useQuizStore((state) => state.setName);
   const setNumTeams = useQuizStore((state) => state.setNumTeams);
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
   const [isSettingsOpen, setIsSettingsOpen] = useState(true);
+  const questions = useQuizStore((state) => state.questions);
 
   const handleSettingsClicked = () => {
     setIsSettingsOpen(true);
     setCurrentQuestion(-1);
+  };
+
+  const handleSave = () => {
+    editQuiz.mutate({
+      id: router.query.id as string,
+      title: quizName,
+      numberTeams: numTeams,
+    });
   };
 
   useEffect(() => {
@@ -52,8 +64,8 @@ function Edit() {
           Back
         </Button>
         <div className="flex gap-6">
-          <Button intent="secondary" size="large">
-            Save
+          <Button intent="secondary" size="large" onClick={handleSave}>
+            {editQuiz.isLoading ? <LoadingSpinner /> : "Save"}
           </Button>
 
           <Button intent="secondary" size="large">

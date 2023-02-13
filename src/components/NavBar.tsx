@@ -2,6 +2,7 @@ import Button from "@ui/Button";
 import { LoadingSpinner } from "@ui/Loader";
 import { trpc } from "@utils/trpc";
 import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -17,7 +18,20 @@ function NavBar() {
   return (
     <nav className="sticky top-0 w-full bg-zinc-900">
       <div className="mx-auto flex w-3/5 justify-between font-semibold text-zinc-400">
-        <p className="flex items-center p-3">Logo</p>
+        <div
+          className="flex cursor-pointer items-center"
+          onClick={() => router.push("/")}
+        >
+          <div className="relative h-full w-10">
+            <Image
+              src="/quizzerLogo.svg"
+              alt="Quizzer Logo"
+              className="p-2"
+              fill
+            />
+          </div>
+          <p className="text-3xl text-white">Quizzer</p>
+        </div>
         <div className="flex gap-4">
           {status === "loading" ? (
             <div className="flex animate-pulse gap-3">

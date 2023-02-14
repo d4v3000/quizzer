@@ -8,7 +8,6 @@ import { trpc } from "../../utils/trpc";
 function Quiz() {
   const getQuizzes = trpc.quiz.getUserQuizzes.useQuery();
   const loadingCards = [...Array(9).keys()];
-
   useEffect(() => {
     getQuizzes.refetch();
   }, []);
@@ -21,7 +20,7 @@ function Quiz() {
         <div
           className={`grid gap-6 text-gray-200 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}
         >
-          {getQuizzes.isLoading
+          {getQuizzes.isLoading || getQuizzes.isFetching
             ? loadingCards.map((card) => <LoadingCard key={card} />)
             : getQuizzes.data?.map((quiz) => <QuizCard quiz={quiz} />)}
         </div>

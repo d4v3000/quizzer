@@ -15,6 +15,7 @@ export const quizRouter = router({
         orderDir: z.enum(["desc", "asc"]),
         skip: z.number(),
         take: z.number(),
+        search: z.string(),
       })
     )
     .query(({ ctx, input }) => {
@@ -27,6 +28,9 @@ export const quizRouter = router({
       return ctx.prisma.quiz.findMany({
         where: {
           authorId: ctx.session.user.id,
+          title: {
+            contains: input.search,
+          },
         },
         include: {
           questions: {

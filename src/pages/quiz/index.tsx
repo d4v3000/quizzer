@@ -10,11 +10,14 @@ function Quiz() {
     "createdAt" | "updatedAt" | "questions" | "title" | "numberTeams"
   >("createdAt");
   const [orderDir, setOrderDir] = useState<"desc" | "asc">("desc");
+  const [search, setSearch] = useState("");
+
   const getQuizzes = trpc.quiz.getUserQuizzes.useQuery({
     orderBy: orderBy,
     orderDir: orderDir,
     skip: 5,
     take: 9,
+    search: search,
   });
   const loadingCards = [...Array(9).keys()];
   useEffect(() => {
@@ -30,6 +33,7 @@ function Quiz() {
           setOrderBy={setOrderBy}
           orderDir={orderDir}
           setOrderDir={setOrderDir}
+          setSearch={setSearch}
         />
         <div
           className={`grid gap-6 text-gray-200 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}

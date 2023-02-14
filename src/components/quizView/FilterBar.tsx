@@ -7,14 +7,16 @@ import {
   ListBulletIcon,
   Squares2X2Icon,
 } from "@heroicons/react/24/outline";
-import { FC, useState } from "react";
+import { Dispatch, FC, useEffect, useMemo, useState } from "react";
 import Select from "@ui/Select";
+import { debounce } from "lodash";
 
 interface IProps {
   orderBy: string;
   setOrderBy: any;
   orderDir: string;
   setOrderDir: any;
+  setSearch: Dispatch<React.SetStateAction<string>>;
 }
 
 const FilterBar: FC<IProps> = ({
@@ -22,14 +24,34 @@ const FilterBar: FC<IProps> = ({
   setOrderBy,
   orderDir,
   setOrderDir,
+  setSearch,
 }) => {
   const [currentView, setCurrentView] = useState<"grid" | "list">("grid");
   const [itemsPerPage, SetItemsPerPage] = useState("9");
   const [numOfCols, setNumOfCols] = useState<number[]>([3]);
 
+  const changeHandler = (event: any) => {
+    setSearch(event.target.value);
+  };
+
+  const debouncedChangeHandler = useMemo(
+    () => debounce(changeHandler, 400),
+    []
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedChangeHandler.cancel();
+    };
+  }, []);
+
   return (
     <div className="flex w-full gap-4">
-      <Input className="w-1/5" placeholder="Search..." />
+      <Input
+        onChange={debouncedChangeHandler}
+        className="w-1/5"
+        placeholder="Search..."
+      />
       <div className="flex items-center gap-1 rounded-md bg-zinc-800 text-zinc-200">
         <Select
           value={orderBy}

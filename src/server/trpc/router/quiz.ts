@@ -59,24 +59,22 @@ export const quizRouter = router({
         id: z.string(),
         title: z.string(),
         numberTeams: z.number(),
-        questions: z
-          .array(
-            z.object({
-              title: z.string(),
-              imgUrl: z.string().optional(),
-              type: z.string(),
-              answers: z.array(
-                z.object({
-                  title: z.string().optional(),
-                  placeholder: z.string().optional(),
-                  isCorrect: z.boolean().optional(),
-                  x: z.number().optional(),
-                  y: z.number().optional(),
-                })
-              ),
-            })
-          )
-          .optional(),
+        questions: z.array(
+          z.object({
+            title: z.string(),
+            imgUrl: z.string().optional(),
+            type: z.enum(["question", "location", "guessing"]),
+            answers: z.array(
+              z.object({
+                title: z.string().optional(),
+                placeholder: z.string().optional(),
+                isCorrect: z.boolean().optional(),
+                x: z.number().optional(),
+                y: z.number().optional(),
+              })
+            ),
+          })
+        ),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -87,6 +85,17 @@ export const quizRouter = router({
         data: {
           title: input.title,
           numberTeams: input.numberTeams,
+          questions: {
+            deleteMany: {},
+            create: input.questions.map((question) => ({
+              title: question.title,
+              imgUrl: question.imgUrl,
+              type: question.type,
+              answers: {
+                create: question.answers,
+              },
+            })),
+          },
         },
       });
     }),

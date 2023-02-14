@@ -23,6 +23,7 @@ function Edit() {
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
   const [isSettingsOpen, setIsSettingsOpen] = useState(true);
   const questions = useQuizStore((state) => state.questions);
+  const setQuestions = useQuizStore((state) => state.setQuestions);
 
   const handleSettingsClicked = () => {
     setIsSettingsOpen(true);
@@ -34,17 +35,26 @@ function Edit() {
       id: router.query.id as string,
       title: quizName,
       numberTeams: numTeams,
+      questions: questions,
     });
   };
+
+  useEffect(() => {
+    quiz.refetch();
+    if (questions.length > 0) {
+      setCurrentQuestion(0);
+    }
+  }, []);
 
   useEffect(() => {
     if (quiz.data) {
       setQuizName(quiz.data.title);
       setNumTeams(quiz.data.numberTeams);
+      setQuestions(quiz.data.questions);
     }
   }, [quiz.data]);
 
-  if (quiz.isLoading) {
+  if (quiz.isLoading || quiz.isFetching) {
     return <div>Loading...</div>;
   }
 

@@ -1,24 +1,14 @@
 export interface IQuestion {
   title: string;
-  type: string;
+  type: "question" | "location" | "guessing";
   imgUrl?: string;
+  answers: IAnswer[];
 }
 
-export interface IQuestionAnswer extends IQuestion {
-  answers: {
-    id: string;
-    title: string;
-    correct: boolean;
-  }[];
-}
-
-export interface IGuessingAnswer extends IQuestion {
-  answers: (string | undefined)[];
-}
-
-export interface ILocationAnswer extends IQuestion {
-  answers: {
-    x: number;
-    y: number;
-  }[];
+export interface IAnswer {
+  title?: string;
+  placeholder?: string;
+  isCorrect?: boolean;
+  x?: number;
+  y?: number;
 }

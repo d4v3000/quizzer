@@ -76,30 +76,30 @@ model Question {
   id        String   @id @default(cuid())
   title     String
   quizId    String
-  imgUrl    String?
-  type      String
+  imgUrl    String @default("")
+  type      QuestionTypes
   answers  Answer[]
-  quiz      Quiz     @relation(fields: [quizId], references: [id])
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
   @@index([quizId])
 }
 
 model Answer {
   id        String   @id @default(cuid())
-  title     String?
-  placeholder   String?
+  title     String @default("")
+  placeholder   String @default("")
   questionId String
-  isCorrect Boolean?
-  x     Int?
-  y     Int?
-  question Question @relation(fields: [questionId], references: [id])
+  isCorrect Boolean @default(false)
+  x     Int @default(0)
+  y     Int @default(0)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([questionId])
 }
 
 
 enum QuestionTypes {
-  Question
-  MapQuestion
-  GuessQuestion
+  question
+  location
+  guessing
 }

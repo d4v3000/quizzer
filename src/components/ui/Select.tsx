@@ -4,12 +4,13 @@ import { FC, ReactNode } from "react";
 interface IProps {
   value: string;
   onValueChange: (value: string) => void;
-  items: string[];
+  items: IItem[];
   icon?: ReactNode;
 }
 
-interface ItemProps {
+interface IItem {
   value: string;
+  text: string;
 }
 
 const Select: FC<IProps> = ({ value, onValueChange, items, icon }) => {
@@ -17,7 +18,9 @@ const Select: FC<IProps> = ({ value, onValueChange, items, icon }) => {
     <RadixSelect.Root value={value} onValueChange={onValueChange}>
       <RadixSelect.Trigger className="h-full w-28 rounded-md p-2 hover:bg-zinc-700">
         <div className="flex items-center justify-center gap-4">
-          <RadixSelect.Value aria-label={value}>{value}</RadixSelect.Value>
+          <RadixSelect.Value aria-label={value}>
+            {items.find((item) => item.value === value)?.text}
+          </RadixSelect.Value>
           {icon && <RadixSelect.Icon>{icon}</RadixSelect.Icon>}
         </div>
       </RadixSelect.Trigger>
@@ -29,7 +32,11 @@ const Select: FC<IProps> = ({ value, onValueChange, items, icon }) => {
         >
           <RadixSelect.Viewport>
             {items.map((item, i) => (
-              <SelectItem value={item} key={"selectItem_" + i} />
+              <SelectItem
+                value={item.value}
+                text={item.text}
+                key={"selectItem_" + i}
+              />
             ))}
           </RadixSelect.Viewport>
         </RadixSelect.Content>
@@ -38,13 +45,13 @@ const Select: FC<IProps> = ({ value, onValueChange, items, icon }) => {
   );
 };
 
-const SelectItem: FC<ItemProps> = ({ value }) => {
+const SelectItem: FC<IItem> = ({ value, text }) => {
   return (
     <RadixSelect.Item
       value={value}
       className="cursor-pointer rounded-md p-2 hover:bg-zinc-700"
     >
-      <RadixSelect.ItemText>{value}</RadixSelect.ItemText>
+      <RadixSelect.ItemText>{text}</RadixSelect.ItemText>
     </RadixSelect.Item>
   );
 };

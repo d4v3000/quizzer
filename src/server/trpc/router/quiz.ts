@@ -2,23 +2,47 @@ import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const quizRouter = router({
-  getUserQuizzes: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.quiz.findMany({
-      where: {
-        authorId: ctx.session.user.id,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        questions: {
-          include: {
-            answers: true,
+  getUserQuizzes: protectedProcedure
+    .input(
+      z.object({
+        orderBy: z.enum([
+          "title",
+          "createdAt",
+          "questions",
+          "numberTeams",
+          "updatedAt",
+        ]),
+        orderDir: z.enum(["desc", "asc"]),
+        skip: z.number(),
+        take: z.number(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      let orderByObject: any = {};
+      orderByObject[input.orderBy] =
+        input.orderBy === "questions"
+          ? { _count: input.orderDir }
+          : input.orderDir;
+      let orderBySet = [orderByObject];
+      return ctx.prisma.quiz.findMany({
+        where: {
+          authorId: ctx.session.user.id,
+        },
+        include: {
+          questions: {
+            include: {
+              answers: true,
+            },
+          },
+          _count: {
+            select: {
+              questions: true,
+            },
           },
         },
-      },
-    });
-  }),
+        orderBy: orderBySet,
+      });
+    }),
   createQuiz: protectedProcedure.mutation(({ ctx }) => {
     return ctx.prisma.quiz.create({
       data: {

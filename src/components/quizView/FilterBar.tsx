@@ -7,14 +7,24 @@ import {
   ListBulletIcon,
   Squares2X2Icon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { FC, useState } from "react";
 import Select from "@ui/Select";
 
-const FilterBar = () => {
-  const [sortByFilter, setSortByFilter] = useState("Created At");
-  const [isDesc, setIsDessc] = useState(true);
+interface IProps {
+  orderBy: string;
+  setOrderBy: any;
+  orderDir: string;
+  setOrderDir: any;
+}
+
+const FilterBar: FC<IProps> = ({
+  orderBy,
+  setOrderBy,
+  orderDir,
+  setOrderDir,
+}) => {
   const [currentView, setCurrentView] = useState<"grid" | "list">("grid");
-  const [itemsPerPage, SetItemsPerPage] = useState("20");
+  const [itemsPerPage, SetItemsPerPage] = useState("9");
   const [numOfCols, setNumOfCols] = useState<number[]>([3]);
 
   return (
@@ -22,15 +32,21 @@ const FilterBar = () => {
       <Input className="w-1/5" placeholder="Search..." />
       <div className="flex items-center gap-1 rounded-md bg-zinc-800 text-zinc-200">
         <Select
-          value={sortByFilter}
-          onValueChange={setSortByFilter}
-          items={["Created At", "Teams", "Questions", "Name"]}
+          value={orderBy}
+          onValueChange={setOrderBy}
+          items={[
+            { value: "createdAt", text: "Created At" },
+            { value: "numberTeams", text: "Teams" },
+            { value: "title", text: "Title" },
+            { value: "updatedAt", text: "Updated At" },
+            { value: "questions", text: "Questions" },
+          ]}
         />
         <div
-          onClick={() => setIsDessc(!isDesc)}
+          onClick={() => setOrderDir(orderDir === "desc" ? "asc" : "desc")}
           className="flex h-full cursor-pointer items-center justify-center rounded-md p-2 hover:bg-zinc-700"
         >
-          {isDesc ? (
+          {orderDir === "desc" ? (
             <ChevronDownIcon className="h-6 w-6" />
           ) : (
             <ChevronUpIcon className="h-6 w-6" />
@@ -41,7 +57,11 @@ const FilterBar = () => {
         <Select
           value={itemsPerPage}
           onValueChange={SetItemsPerPage}
-          items={["20", "30", "40"]}
+          items={[
+            { value: "9", text: "9" },
+            { value: "18", text: "18" },
+            { value: "27", text: "27" },
+          ]}
           icon={<ChevronUpDownIcon className="h-4 w-4" />}
         />
       </div>

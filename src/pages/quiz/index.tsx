@@ -2,11 +2,20 @@ import NavBar from "@components/NavBar";
 import FilterBar from "@components/quizView/FilterBar";
 import QuizCard from "@components/quizView/QuizCard";
 import { LoadingCard } from "@ui/Loader";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
 
 function Quiz() {
-  const getQuizzes = trpc.quiz.getUserQuizzes.useQuery();
+  const [orderBy, setOrderBy] = useState<
+    "createdAt" | "updatedAt" | "questions" | "title" | "numberTeams"
+  >("createdAt");
+  const [orderDir, setOrderDir] = useState<"desc" | "asc">("desc");
+  const getQuizzes = trpc.quiz.getUserQuizzes.useQuery({
+    orderBy: orderBy,
+    orderDir: orderDir,
+    skip: 5,
+    take: 9,
+  });
   const loadingCards = [...Array(9).keys()];
   useEffect(() => {
     getQuizzes.refetch();
@@ -16,7 +25,12 @@ function Quiz() {
     <>
       <NavBar />
       <div className="mx-auto flex w-3/5 flex-col gap-8 py-10">
-        <FilterBar />
+        <FilterBar
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          orderDir={orderDir}
+          setOrderDir={setOrderDir}
+        />
         <div
           className={`grid gap-6 text-gray-200 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}
         >

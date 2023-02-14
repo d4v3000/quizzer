@@ -4,14 +4,8 @@ import TypeBox from "./TypeBox";
 import IconTypes from "./IconTypes";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Dispatch, FC, SetStateAction } from "react";
-import {
-  IGuessingAnswer,
-  ILocationAnswer,
-  IQuestion,
-  IQuestionAnswer,
-} from "../../models/question";
+import { IQuestion } from "../../models/question";
 import { useQuizStore } from "@utils/zustand/quizStore";
-import { title } from "process";
 
 interface IProps {
   open: boolean;
@@ -30,33 +24,31 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
   const setQuestions = useQuizStore((state) => state.setQuestions);
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
 
-  const handleClick = (type: string) => {
+  const handleClick = (type: "guessing" | "location" | "question") => {
     let newQuestion: IQuestion = {
       type,
       title: "",
       imgUrl: "",
+      answers: [],
     };
     if (type === "guessing") {
-      (newQuestion as IGuessingAnswer).answers = [undefined];
+      newQuestion.answers = [];
     } else if (type === "location") {
-      (newQuestion as ILocationAnswer).answers = [
+      newQuestion.answers = [
         {
           x: 0,
           y: 0,
         },
       ];
     } else if (type === "question") {
-      (newQuestion as IQuestionAnswer).answers = [
-        { id: "A", title: "", correct: true },
-        { id: "B", title: "", correct: false },
-        { id: "C", title: "", correct: false },
-        { id: "D", title: "", correct: false },
+      newQuestion.answers = [
+        { placeholder: "A", title: "", isCorrect: true },
+        { placeholder: "B", title: "", isCorrect: false },
+        { placeholder: "C", title: "", isCorrect: false },
+        { placeholder: "D", title: "", isCorrect: false },
       ];
     }
-    setQuestions([
-      ...questions,
-      newQuestion as IGuessingAnswer | ILocationAnswer | IQuestionAnswer,
-    ]);
+    setQuestions([...questions, newQuestion]);
     setCurrentQuestion(questions.length);
     setOpen(false);
   };
@@ -109,7 +101,11 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
                     {options.map((option) => (
                       <TypeBox
                         key={option.type}
-                        onClick={() => handleClick(option.type)}
+                        onClick={() =>
+                          handleClick(
+                            option.type as "guessing" | "location" | "question"
+                          )
+                        }
                       >
                         <IconTypes type={option.type} />
                         <p className="text-lg font-bold">{option.name}</p>

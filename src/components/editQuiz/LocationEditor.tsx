@@ -1,7 +1,6 @@
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import { useQuizStore } from "@utils/zustand/quizStore";
 import { FC, MouseEvent, ReactNode, useState } from "react";
-import { ILocationAnswer } from "../../models/question";
 
 interface IProps {
   children: ReactNode;
@@ -17,8 +16,8 @@ const LocationEditor: FC<IProps> = ({ children }) => {
     const localX = e.clientX - rect.left;
     const localY = e.clientY - rect.top;
     const newQuestions = [...questions];
-    (questions[currentQuestion] as ILocationAnswer).answer.x = localX;
-    (questions[currentQuestion] as ILocationAnswer).answer.y = localY;
+    questions[currentQuestion]!.answers[0]!.x = localX;
+    questions[currentQuestion]!.answers[0]!.y = localY;
     useQuizStore.setState({ questions: newQuestions });
     setMakerPos({ x: localX, y: localY });
   };

@@ -1,6 +1,5 @@
 import Input from "@ui/Input";
 import { useQuizStore } from "@utils/zustand/quizStore";
-import { IQuestionAnswer } from "../../models/question";
 
 const QuestionEditor = () => {
   const questions = useQuizStore((state) => state.questions);
@@ -15,38 +14,33 @@ const QuestionEditor = () => {
         <hr className="border-1 w-full border-zinc-400" />
       </div>
       <div className="grid grid-cols-2 grid-rows-2 gap-4">
-        {(questions[currentQuestion] as IQuestionAnswer).answers.map(
-          (answer, i) => (
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                checked={answer.correct}
-                className="cursor-pointer accent-violet-700"
-                onClick={() => {
-                  const newQuestions = [...questions];
-                  (
-                    questions[currentQuestion] as IQuestionAnswer
-                  ).answers.forEach((answer) => (answer.correct = false));
-                  (questions[currentQuestion] as IQuestionAnswer).answers[
-                    i
-                  ]!.correct = true;
-                  useQuizStore.setState({ questions: newQuestions });
-                }}
-              />
-              <Input
-                placeholder={answer.id}
-                value={answer.title}
-                onChange={(e) => {
-                  const newQuestions = [...questions];
-                  (questions[currentQuestion] as IQuestionAnswer).answers[
-                    i
-                  ]!.title = e.target.value;
-                  useQuizStore.setState({ questions: newQuestions });
-                }}
-              />
-            </div>
-          )
-        )}
+        {questions[currentQuestion]!.answers.map((answer, i) => (
+          <div className="flex items-center gap-2">
+            <input
+              type="radio"
+              checked={answer.isCorrect}
+              className="cursor-pointer accent-violet-700"
+              onClick={() => {
+                const newQuestions = [...questions];
+
+                questions[currentQuestion]!.answers.forEach(
+                  (answer) => (answer.isCorrect = false)
+                );
+                questions[currentQuestion]!.answers[i]!.isCorrect = true;
+                useQuizStore.setState({ questions: newQuestions });
+              }}
+            />
+            <Input
+              placeholder={answer.placeholder}
+              value={answer.title}
+              onChange={(e) => {
+                const newQuestions = [...questions];
+                questions[currentQuestion]!.answers[i]!.title = e.target.value;
+                useQuizStore.setState({ questions: newQuestions });
+              }}
+            />
+          </div>
+        ))}
       </div>
       <div className="mt-2 flex justify-center gap-2">
         <input

@@ -8,11 +8,6 @@ import { FC, useState } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import SelectionModal from "./SelectionModal";
 import ScrollElement from "./ScrollElement";
-import {
-  IGuessingAnswer,
-  ILocationAnswer,
-  IQuestionAnswer,
-} from "../../models/question";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -24,6 +19,7 @@ import {
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
 import { useQuizStore } from "@utils/zustand/quizStore";
+import { IQuestion } from "../../models/question";
 
 const SideBar: FC = () => {
   const [open, setOpen] = useState(false);
@@ -37,7 +33,7 @@ const SideBar: FC = () => {
     const { active, over } = event;
     if (active.id !== over?.id) {
       setQuestions(
-        arrayMove<IQuestionAnswer | IGuessingAnswer | ILocationAnswer>(
+        arrayMove<IQuestion>(
           questions,
           toNumber(active.id) - 1,
           toNumber(over?.id) - 1

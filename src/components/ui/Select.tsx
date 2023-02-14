@@ -16,7 +16,7 @@ interface IItem {
 const Select: FC<IProps> = ({ value, onValueChange, items, icon }) => {
   return (
     <RadixSelect.Root value={value} onValueChange={onValueChange}>
-      <RadixSelect.Trigger className="h-full w-28 rounded-md p-2 hover:bg-zinc-700">
+      <RadixSelect.Trigger className="h-full w-28 rounded-md p-2 hover:bg-zinc-700 focus:outline-0">
         <div className="flex items-center justify-center gap-4">
           <RadixSelect.Value aria-label={value}>
             {items.find((item) => item.value === value)?.text}
@@ -49,7 +49,7 @@ const SelectItem: FC<IItem> = ({ value, text }) => {
   return (
     <RadixSelect.Item
       value={value}
-      className="cursor-pointer rounded-md p-2 hover:bg-zinc-700"
+      className="cursor-pointer rounded-md p-2 hover:bg-zinc-700 focus:outline-0"
     >
       <RadixSelect.ItemText>{text}</RadixSelect.ItemText>
     </RadixSelect.Item>

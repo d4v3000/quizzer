@@ -35,9 +35,9 @@ function NavBar() {
         <div className="flex gap-4">
           {status === "loading" ? (
             <div className="flex animate-pulse gap-3">
-              <div className="my-3 ml-4 w-16 rounded-md bg-zinc-600 p-1"></div>
-              <div className="my-3 w-16 rounded-md bg-zinc-600 p-1"></div>
-              <div className="my-3 mr-4 w-16 rounded-md bg-zinc-600 p-1"></div>
+              <div className="my-3 ml-4 w-16 rounded-md bg-zinc-600 px-3 py-3.5"></div>
+              <div className="my-3 w-16 rounded-md bg-zinc-600 px-3 py-1.5"></div>
+              <div className="my-3 mr-4 w-16 rounded-md bg-zinc-600 px-3 py-1.5"></div>
             </div>
           ) : (
             <>

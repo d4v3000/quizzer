@@ -1,6 +1,7 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import Button from "@ui/Button";
 import Input from "@ui/Input";
+import Label from "@ui/Label";
 import { useQuizStore } from "@utils/zustand/quizStore";
 import { useEffect, useState } from "react";
 import GuessingEditor from "./GuessingEditor";
@@ -36,12 +37,7 @@ const EditQuestion = () => {
 
   return (
     <div className="flex w-full flex-col">
-      <div className="flex w-full items-center gap-2 py-2">
-        <p className="min-w-fit pr-2 text-sm font-semibold uppercase italic text-zinc-400">
-          Question
-        </p>
-        <hr className="border-1 w-full border-zinc-400" />
-      </div>
+      <Label text="Question" />
       <Input
         placeholder="Name of the question"
         onChange={(e) => handleNameChange(e)}
@@ -49,12 +45,8 @@ const EditQuestion = () => {
       />
       {!showImg && (
         <>
-          <div className="flex w-full items-center gap-2 py-2">
-            <p className="min-w-fit pr-2 text-sm font-semibold uppercase italic text-zinc-400">
-              Image
-            </p>
-            <hr className="border-1 w-full border-zinc-400" />
-          </div>
+          <Label text="Image" />
+
           <div className="flex gap-2">
             <Input
               placeholder="Link to image"

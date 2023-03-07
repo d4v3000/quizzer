@@ -19,7 +19,7 @@ const EditQuestion = () => {
     questions[currentQuestion]?.imgUrl !== ""
       ? setShowImg(true)
       : setShowImg(false);
-  }, [currentQuestion]);
+  }, [currentQuestion, questions]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuestions = [...questions];

@@ -46,7 +46,9 @@ function Quiz() {
         >
           {getQuizzes.isLoading || getQuizzes.isFetching
             ? loadingCards.map((card) => <LoadingCard key={card} />)
-            : getQuizzes.data?.map((quiz) => <QuizCard quiz={quiz} />)}
+            : getQuizzes.data?.map((quiz, i) => (
+                <QuizCard key={`quiz_${i}`} quiz={quiz} />
+              ))}
         </div>
       </div>
     </>

@@ -11,7 +11,7 @@ const QuestionEditor = () => {
       <Label text="Answers" />
       <div className="grid grid-cols-2 grid-rows-2 gap-4">
         {questions[currentQuestion]!.answers.map((answer, i) => (
-          <div className="flex items-center gap-2">
+          <div key={`radio_${i}`} className="flex items-center gap-2">
             <input
               type="radio"
               checked={answer.isCorrect}

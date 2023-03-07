@@ -5,6 +5,7 @@ import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
 import { LoadingSpinner } from "@ui/Loader";
+import Modal from "@ui/Modal";
 import { trpc } from "@utils/trpc";
 import { useQuizStore } from "@utils/zustand/quizStore";
 import { useRouter } from "next/router";
@@ -24,6 +25,7 @@ function Edit() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(true);
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSettingsClicked = () => {
     setIsSettingsOpen(true);
@@ -78,11 +80,18 @@ function Edit() {
             {editQuiz.isLoading ? <LoadingSpinner /> : "Save"}
           </Button>
 
-          <Button intent="primary" size="large">
+          <Button
+            intent="primary"
+            size="large"
+            onClick={() => setIsModalOpen(true)}
+          >
             Start Quiz
           </Button>
         </div>
       </div>
+      <Modal open={isModalOpen} setOpen={setIsModalOpen}>
+        <p className="text-4xl">Coming soon</p>
+      </Modal>
       <div className="flex h-5/6 w-full flex-grow gap-6 pt-4">
         <Background className="relative flex h-full w-1/5 justify-center overflow-hidden">
           <div className="flex h-full w-full flex-col items-center justify-between">

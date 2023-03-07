@@ -3,13 +3,16 @@ import Button from "@ui/Button";
 import Input from "@ui/Input";
 import Label from "@ui/Label";
 import { LoadingSpinner } from "@ui/Loader";
+import Modal from "@ui/Modal";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -30,7 +33,11 @@ const Home: NextPage = () => {
               <Label text="Enter invitation code" />
               <div className="flex gap-2 pt-2">
                 <Input placeholder="Invitation Code" className="py-4" />
-                <Button intent="secondary" className="w-1/4 hover:scale-[1.03]">
+                <Button
+                  intent="secondary"
+                  className="w-1/4 hover:scale-[1.03]"
+                  onClick={() => setIsModalOpen(true)}
+                >
                   Join Lobby
                 </Button>
               </div>
@@ -42,7 +49,7 @@ const Home: NextPage = () => {
                   <div className="group relative mt-2">
                     <div className="absolute -inset-0.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-700 opacity-60 blur transition duration-1000 group-hover:opacity-90 group-hover:duration-200"></div>
                     <button
-                      onClick={() => router.push("/play")}
+                      onClick={() => setIsModalOpen(true)}
                       className="relative flex w-full items-center justify-center rounded-lg bg-zinc-900 py-4 font-semibold leading-none text-white"
                     >
                       Create Room
@@ -66,6 +73,9 @@ const Home: NextPage = () => {
             </div>
           </div>
         )}
+        <Modal open={isModalOpen} setOpen={setIsModalOpen}>
+          <p className="text-4xl text-gray-200">Coming soon</p>
+        </Modal>
       </main>
     </>
   );

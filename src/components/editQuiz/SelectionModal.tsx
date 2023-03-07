@@ -53,10 +53,11 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
       type: "location",
       name: "Location",
     },
-    {
-      type: "guessing",
-      name: "Guessing",
-    },
+    // Currently broken, uncomment after db schema changes
+    // {
+    //   type: "guessing",
+    //   name: "Guessing",
+    // },
   ];
 
   return (

@@ -11,6 +11,7 @@ function Quiz() {
   >("createdAt");
   const [orderDir, setOrderDir] = useState<"desc" | "asc">("desc");
   const [search, setSearch] = useState("");
+  const [numOfCols, setNumOfCols] = useState<number[]>([3]);
 
   const getQuizzes = trpc.quiz.getUserQuizzes.useQuery({
     orderBy: orderBy,
@@ -34,9 +35,14 @@ function Quiz() {
           orderDir={orderDir}
           setOrderDir={setOrderDir}
           setSearch={setSearch}
+          numOfCols={numOfCols}
+          setNumOfCols={setNumOfCols}
         />
         <div
-          className={`grid gap-6 text-gray-200 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}
+          style={{
+            gridTemplateColumns: `repeat(${numOfCols[0]! + 1}, minmax(0, 1fr))`,
+          }}
+          className={`grid gap-6 text-gray-200`}
         >
           {getQuizzes.isLoading || getQuizzes.isFetching
             ? loadingCards.map((card) => <LoadingCard key={card} />)

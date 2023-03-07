@@ -17,6 +17,8 @@ interface IProps {
   orderDir: string;
   setOrderDir: any;
   setSearch: Dispatch<React.SetStateAction<string>>;
+  numOfCols: number[];
+  setNumOfCols: Dispatch<React.SetStateAction<number[]>>;
 }
 
 const FilterBar: FC<IProps> = ({
@@ -25,10 +27,11 @@ const FilterBar: FC<IProps> = ({
   orderDir,
   setOrderDir,
   setSearch,
+  numOfCols,
+  setNumOfCols,
 }) => {
   const [currentView, setCurrentView] = useState<"grid" | "list">("grid");
   const [itemsPerPage, SetItemsPerPage] = useState("9");
-  const [numOfCols, setNumOfCols] = useState<number[]>([3]);
 
   const changeHandler = (event: any) => {
     setSearch(event.target.value);
@@ -108,7 +111,7 @@ const FilterBar: FC<IProps> = ({
       <div className="flex items-center justify-center">
         <Slider.Root
           value={numOfCols}
-          max={4}
+          max={3}
           step={1}
           onValueChange={setNumOfCols}
           className="relative flex h-5 w-40 items-center"

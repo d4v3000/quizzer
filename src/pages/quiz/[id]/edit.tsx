@@ -57,7 +57,11 @@ function Edit() {
   }, [quiz.data]);
 
   if (quiz.isLoading || quiz.isFetching) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex h-[calc(100vh-57px)] w-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (!quiz.data && !quiz.isLoading) {

@@ -59,7 +59,7 @@ function NavBar() {
                 <>
                   <Link href="/quiz">
                     <span className="my-3 ml-4 flex items-center p-1 text-indigo-400 hover:text-white">
-                      Quiz
+                      Your Quizzes
                     </span>
                   </Link>
                   <button

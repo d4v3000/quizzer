@@ -1,4 +1,4 @@
-import Main from "@components/editQuiz/Main";
+import MainContainer from "@components/editQuiz/MainContainer";
 import SideBar from "@components/editQuiz/SideBar";
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
@@ -104,7 +104,7 @@ function Edit() {
           </div>
         </Background>
         <Background className="flex w-full justify-center">
-          <Main isSettingsOpen={isSettingsOpen} />
+          <MainContainer isSettingsOpen={isSettingsOpen} />
         </Background>
       </div>
     </div>

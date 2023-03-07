@@ -7,7 +7,7 @@ interface IProps {
   isSettingsOpen: boolean;
 }
 
-const Main: FC<IProps> = ({ isSettingsOpen }) => {
+const MainContainer: FC<IProps> = ({ isSettingsOpen }) => {
   const currentQuestion = useQuizStore((state) => state.currentQuestion);
 
   return (
@@ -21,4 +21,4 @@ const Main: FC<IProps> = ({ isSettingsOpen }) => {
   );
 };
 
-export default Main;
+export default MainContainer;

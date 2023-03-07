@@ -19,12 +19,12 @@ export const quizRouter = router({
       })
     )
     .query(({ ctx, input }) => {
-      let orderByObject: any = {};
+      const orderByObject: any = {};
       orderByObject[input.orderBy] =
         input.orderBy === "questions"
           ? { _count: input.orderDir }
           : input.orderDir;
-      let orderBySet = [orderByObject];
+      const orderBySet = [orderByObject];
       return ctx.prisma.quiz.findMany({
         where: {
           authorId: ctx.session.user.id,

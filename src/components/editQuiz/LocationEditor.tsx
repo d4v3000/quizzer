@@ -12,7 +12,7 @@ const LocationEditor: FC<IProps> = ({ children }) => {
   const currentQuestion = useQuizStore((state) => state.currentQuestion);
 
   const handleMouseClick = (e: MouseEvent) => {
-    let rect = e.currentTarget.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     const localX = e.clientX - rect.left;
     const localY = e.clientY - rect.top;
     const newQuestions = [...questions];

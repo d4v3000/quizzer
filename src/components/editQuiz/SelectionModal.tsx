@@ -16,7 +16,7 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
 
   const handleClick = (type: "guessing" | "location" | "question") => {
-    let newQuestion: IQuestion = {
+    const newQuestion: IQuestion = {
       type,
       title: "",
       imgUrl: "",

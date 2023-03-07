@@ -78,10 +78,6 @@ function Edit() {
             {editQuiz.isLoading ? <LoadingSpinner /> : "Save"}
           </Button>
 
-          <Button intent="secondary" size="large">
-            Preview
-          </Button>
-
           <Button intent="primary" size="large">
             Start Quiz
           </Button>

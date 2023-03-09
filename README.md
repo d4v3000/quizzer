@@ -1,28 +1,42 @@
-# Create T3 App
+# Quizzer
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## What is Quizzer?
 
-## What's next? How do I make an app with this?
+Quizzer is a work in progress web app designed for people that always wanted to host their own quiz show and test their friends knowledge. Every other website i found that has a similar intention either doesn't allow for multiplayer, requires a degree just to understand how to create a quiz, or has very limited options for your questions. So i decided to try it out myself and focus on making the experience in creating a new quiz as easy as possible and making it fun. It is my first full stack app with the intention to challenge me and learn new technology that i never worked with before. I am no ui/ux designer so most of the design was heavily inspired by different websites that i like and will probably change once i have a vision of how i want the look of the site to be.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+You can try a live demo [here](https://quizzer-eight.vercel.app/).
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Technologies used
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Quizzer was created using the [t3-stack](https://create.t3.gg/) and other libraries that i found interesting and wanted to test out. I used [dnd-kit](https://dndkit.com/) to add a drag and drop functionality to let the user sort the questions of a quiz in an easy way. I also used some [radix ui](https://www.radix-ui.com/) components like the dialog and selection and styled them using [Tailwind CSS](https://tailwindcss.com/). I picked [zustand](https://github.com/pmndrs/zustand) as my state management tool because i already have some experience using contexts and redux and wanted to test new tools. 
 
-## Learn More
+The site is hosted using [Vercel](https://vercel.com/) and uses [Planetscale](https://planetscale.com/) as the database provider. 
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Currently implemented
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- Authentication using google
+- Creating/editing quizzes with 2 types of questions
+- Viewing all your created quizzes with different sorting options
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## What's coming next?
 
-## How do I deploy this?
+Things i want to implement before i think the mvp is ready:
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- Finishing the quizzes view page (adding pagination, list view)
+- Creating a nodejs server with socket.io for the multiplayer part
+- Changing the database model to be more expandable in the future
+- Quality of life improvements like tooltips and descriptions
+- Fixing current bugs
+
+Features planned after the mvp:
+
+- Adding music integration
+- Add mobile view
+- Adding webcam support and/or customizable characters
+- More question categories
+
+## Screenshots
+
+![Startpage](./src/assets/start.png)
+![Overview](./src/assets/overview.png)
+![Editor](./src/assets/editor.png)

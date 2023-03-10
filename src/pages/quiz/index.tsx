@@ -1,6 +1,6 @@
 import NavBar from "@components/NavBar";
-import FilterBar from "@components/quizView/FilterBar";
-import QuizCard from "@components/quizView/QuizCard";
+import FilterBar from "@components/viewQuizzes/FilterBar";
+import QuizCard from "@components/viewQuizzes/QuizCard";
 import { LoadingCard } from "@ui/Loader";
 import React, { useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";

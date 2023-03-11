@@ -19,6 +19,8 @@ interface IProps {
   setSearch: Dispatch<React.SetStateAction<string>>;
   numOfCols: number[];
   setNumOfCols: Dispatch<React.SetStateAction<number[]>>;
+  itemsPerPage: string;
+  setItemsPerPage: Dispatch<React.SetStateAction<string>>;
 }
 
 const FilterBar: FC<IProps> = ({
@@ -29,9 +31,10 @@ const FilterBar: FC<IProps> = ({
   setSearch,
   numOfCols,
   setNumOfCols,
+  itemsPerPage,
+  setItemsPerPage,
 }) => {
   const [currentView, setCurrentView] = useState<"grid" | "list">("grid");
-  const [itemsPerPage, SetItemsPerPage] = useState("9");
 
   const changeHandler = (event: any) => {
     setSearch(event.target.value);
@@ -81,7 +84,7 @@ const FilterBar: FC<IProps> = ({
       <div className="flex items-center gap-1 rounded-md bg-zinc-800 text-zinc-200">
         <Select
           value={itemsPerPage}
-          onValueChange={SetItemsPerPage}
+          onValueChange={setItemsPerPage}
           items={[
             { value: "9", text: "9" },
             { value: "18", text: "18" },

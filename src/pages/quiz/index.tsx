@@ -13,6 +13,7 @@ function Quiz() {
   const [orderDir, setOrderDir] = useState<"desc" | "asc">("desc");
   const [search, setSearch] = useState("");
   const [numOfCols, setNumOfCols] = useState<number[]>([3]);
+  const [itemsPerPage, setItemsPerPage] = useState("9");
 
   const getQuizzes = trpc.quiz.getUserQuizzes.useQuery({
     orderBy: orderBy,
@@ -39,6 +40,8 @@ function Quiz() {
             setSearch={setSearch}
             numOfCols={numOfCols}
             setNumOfCols={setNumOfCols}
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
           />
           <div
             style={{
@@ -55,7 +58,7 @@ function Quiz() {
                 ))}
           </div>
         </div>
-        <Pagination />
+        <Pagination itemsPerPage={+itemsPerPage} />
       </div>
     </>
   );

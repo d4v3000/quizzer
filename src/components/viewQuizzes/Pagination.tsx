@@ -2,29 +2,62 @@ import {
   ArrowLongLeftIcon,
   ArrowLongRightIcon,
 } from "@heroicons/react/20/solid";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
+import { usePagination } from "../../hooks/usePagination";
 
-const Pagination = () => {
-  const items = [
-    { text: "1", active: true },
-    { text: "2", active: false },
-    { text: "3", active: false },
-  ];
+interface IProps {
+  itemsPerPage: number;
+}
+
+const Pagination: FC<IProps> = ({ itemsPerPage }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pageinationRange = usePagination({
+    currentPage: currentPage,
+    pageSize: itemsPerPage,
+    totalCount: 100,
+  });
+
   return (
     <div className="flex justify-center">
       <nav className="w-full">
         <ul className="list-style-none flex w-full justify-between">
-          <PaginationNavigator isPrev={true} active={false} />
+          <PaginationNavigator
+            isPrev={true}
+            active={currentPage > 1}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
           <div className="flex gap-2">
-            {items.map((item, i) => (
-              <PaginationItem
-                active={item.active}
-                text={item.text}
-                key={`pagination_${i}`}
-              />
-            ))}
+            {pageinationRange?.map((pageNumber) => {
+              if (pageNumber === -1) {
+                return (
+                  <li>
+                    <a
+                      className="
+                       relative block py-1.5 px-3 text-lg font-medium text-zinc-400"
+                    >
+                      . . .
+                    </a>
+                  </li>
+                );
+              }
+
+              return (
+                <PaginationItem
+                  active={pageNumber === currentPage}
+                  pageNumber={pageNumber}
+                  setCurrentPage={setCurrentPage}
+                />
+              );
+            })}
           </div>
-          <PaginationNavigator isPrev={false} active={true} />
+          <PaginationNavigator
+            isPrev={false}
+            active={currentPage < Math.ceil(100 / itemsPerPage)}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         </ul>
       </nav>
     </div>
@@ -32,21 +65,27 @@ const Pagination = () => {
 };
 
 interface ItemProps {
-  text: string;
+  pageNumber: number;
   active: boolean;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
 }
 
-const PaginationItem: FC<ItemProps> = ({ text, active }) => {
+const PaginationItem: FC<ItemProps> = ({
+  pageNumber,
+  active,
+  setCurrentPage,
+}) => {
   return (
     <li>
       <a
+        onClick={() => setCurrentPage(pageNumber)}
         className={`${
           active
             ? "border-t-2 border-indigo-600 text-indigo-600"
             : "cursor-pointer rounded-md bg-transparent text-zinc-400 hover:bg-zinc-800"
-        } relative block py-1.5 px-3 text-lg font-medium transition-all duration-300`}
+        } relative block py-1.5 px-3 text-lg font-medium`}
       >
-        {text}
+        {pageNumber}
       </a>
     </li>
   );
@@ -55,12 +94,22 @@ const PaginationItem: FC<ItemProps> = ({ text, active }) => {
 interface NavigatorProps {
   isPrev: boolean;
   active: boolean;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  currentPage: number;
 }
 
-const PaginationNavigator: FC<NavigatorProps> = ({ isPrev, active }) => {
+const PaginationNavigator: FC<NavigatorProps> = ({
+  isPrev,
+  active,
+  setCurrentPage,
+  currentPage,
+}) => {
   return (
     <li>
       <a
+        onClick={() =>
+          setCurrentPage(isPrev ? currentPage - 1 : currentPage + 1)
+        }
         className={`inline-flex ${
           active
             ? "cursor-pointer text-zinc-400"

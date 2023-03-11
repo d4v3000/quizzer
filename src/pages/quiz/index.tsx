@@ -1,5 +1,6 @@
 import NavBar from "@components/NavBar";
 import FilterBar from "@components/viewQuizzes/FilterBar";
+import Pagination from "@components/viewQuizzes/Pagination";
 import QuizCard from "@components/viewQuizzes/QuizCard";
 import { LoadingCard } from "@ui/Loader";
 import React, { useEffect, useState } from "react";
@@ -28,28 +29,33 @@ function Quiz() {
   return (
     <>
       <NavBar />
-      <div className="mx-auto flex w-3/5 flex-col gap-8 py-10">
-        <FilterBar
-          orderBy={orderBy}
-          setOrderBy={setOrderBy}
-          orderDir={orderDir}
-          setOrderDir={setOrderDir}
-          setSearch={setSearch}
-          numOfCols={numOfCols}
-          setNumOfCols={setNumOfCols}
-        />
-        <div
-          style={{
-            gridTemplateColumns: `repeat(${numOfCols[0]! + 1}, minmax(0, 1fr))`,
-          }}
-          className={`grid gap-6 text-gray-200`}
-        >
-          {getQuizzes.isLoading || getQuizzes.isFetching
-            ? loadingCards.map((card) => <LoadingCard key={card} />)
-            : getQuizzes.data?.map((quiz, i) => (
-                <QuizCard key={`quiz_${i}`} quiz={quiz} />
-              ))}
+      <div className="mx-auto flex h-[calc(100vh-57px)] w-3/5 flex-col justify-between py-10">
+        <div className="flex flex-col gap-8">
+          <FilterBar
+            orderBy={orderBy}
+            setOrderBy={setOrderBy}
+            orderDir={orderDir}
+            setOrderDir={setOrderDir}
+            setSearch={setSearch}
+            numOfCols={numOfCols}
+            setNumOfCols={setNumOfCols}
+          />
+          <div
+            style={{
+              gridTemplateColumns: `repeat(${
+                numOfCols[0]! + 1
+              }, minmax(0, 1fr))`,
+            }}
+            className={`grid gap-6 text-gray-200`}
+          >
+            {getQuizzes.isLoading || getQuizzes.isFetching
+              ? loadingCards.map((card) => <LoadingCard key={card} />)
+              : getQuizzes.data?.map((quiz, i) => (
+                  <QuizCard key={`quiz_${i}`} quiz={quiz} />
+                ))}
+          </div>
         </div>
+        <Pagination />
       </div>
     </>
   );

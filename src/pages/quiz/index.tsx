@@ -34,7 +34,7 @@ function Quiz() {
   return (
     <>
       <NavBar />
-      <div className="mx-auto flex h-[calc(100vh-57px)] w-3/5 flex-col justify-between gap-4 py-10">
+      <div className="mx-auto flex h-[calc(100vh-57px)] w-3/5 flex-col justify-between gap-4 pt-10">
         <div className="flex flex-col gap-8">
           <FilterBar
             orderBy={orderBy}

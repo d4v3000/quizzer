@@ -35,10 +35,10 @@ const Pagination: FC<IProps> = ({
             setCurrentPage={setCurrentPage}
           />
           <div className="flex gap-2">
-            {pageinationRange?.map((pageNumber) => {
+            {pageinationRange?.map((pageNumber, i) => {
               if (pageNumber === -1) {
                 return (
-                  <li>
+                  <li key={`pagination_${i}`}>
                     <a
                       className="
                        relative block py-1.5 px-3 text-lg font-medium text-zinc-400"
@@ -54,6 +54,7 @@ const Pagination: FC<IProps> = ({
                   active={pageNumber === currentPage}
                   pageNumber={pageNumber}
                   setCurrentPage={setCurrentPage}
+                  key={`pagination_${i}`}
                 />
               );
             })}

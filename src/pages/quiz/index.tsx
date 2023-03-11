@@ -49,9 +49,7 @@ function Quiz() {
           />
           <div
             style={{
-              gridTemplateColumns: `repeat(${
-                numOfCols[0]! + 1
-              }, minmax(0, 1fr))`,
+              gridTemplateColumns: `repeat(${numOfCols[0]!}, minmax(0, 1fr))`,
             }}
             className={`grid gap-6 text-gray-200`}
           >

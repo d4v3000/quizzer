@@ -114,7 +114,8 @@ const FilterBar: FC<IProps> = ({
       <div className="flex items-center justify-center">
         <Slider.Root
           value={numOfCols}
-          max={3}
+          max={4}
+          min={1}
           step={1}
           onValueChange={setNumOfCols}
           className="relative flex h-5 w-40 items-center"

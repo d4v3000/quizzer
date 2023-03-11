@@ -3,6 +3,7 @@ import FilterBar from "@components/viewQuizzes/FilterBar";
 import Pagination from "@components/viewQuizzes/Pagination";
 import QuizCard from "@components/viewQuizzes/QuizCard";
 import { LoadingCard } from "@ui/Loader";
+import { parseInt } from "lodash";
 import React, { useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
 
@@ -14,23 +15,26 @@ function Quiz() {
   const [search, setSearch] = useState("");
   const [numOfCols, setNumOfCols] = useState<number[]>([3]);
   const [itemsPerPage, setItemsPerPage] = useState("9");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const getQuizzes = trpc.quiz.getUserQuizzes.useQuery({
     orderBy: orderBy,
     orderDir: orderDir,
-    skip: 5,
-    take: 9,
+    skip: parseInt(itemsPerPage) * (currentPage - 1),
+    take: parseInt(itemsPerPage),
     search: search,
   });
+  const totalNumOfQuizzes = trpc.quiz.getNumberOfQuizzes.useQuery();
   const loadingCards = [...Array(9).keys()];
   useEffect(() => {
     getQuizzes.refetch();
+    totalNumOfQuizzes.refetch();
   }, []);
 
   return (
     <>
       <NavBar />
-      <div className="mx-auto flex h-[calc(100vh-57px)] w-3/5 flex-col justify-between py-10">
+      <div className="mx-auto flex h-[calc(100vh-57px)] w-3/5 flex-col justify-between gap-4 py-10">
         <div className="flex flex-col gap-8">
           <FilterBar
             orderBy={orderBy}
@@ -58,7 +62,14 @@ function Quiz() {
                 ))}
           </div>
         </div>
-        <Pagination itemsPerPage={+itemsPerPage} />
+        {totalNumOfQuizzes.data && (
+          <Pagination
+            itemsPerPage={parseInt(itemsPerPage)}
+            totalItems={totalNumOfQuizzes.data}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </div>
     </>
   );

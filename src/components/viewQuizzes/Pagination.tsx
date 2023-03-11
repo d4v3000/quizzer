@@ -7,15 +7,21 @@ import { usePagination } from "../../hooks/usePagination";
 
 interface IProps {
   itemsPerPage: number;
+  totalItems: number;
+  currentPage: number;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
 }
 
-const Pagination: FC<IProps> = ({ itemsPerPage }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-
+const Pagination: FC<IProps> = ({
+  itemsPerPage,
+  totalItems,
+  currentPage,
+  setCurrentPage,
+}) => {
   const pageinationRange = usePagination({
     currentPage: currentPage,
     pageSize: itemsPerPage,
-    totalCount: 100,
+    totalCount: totalItems,
   });
 
   return (
@@ -54,7 +60,7 @@ const Pagination: FC<IProps> = ({ itemsPerPage }) => {
           </div>
           <PaginationNavigator
             isPrev={false}
-            active={currentPage < Math.ceil(100 / itemsPerPage)}
+            active={currentPage < Math.ceil(totalItems / itemsPerPage)}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />

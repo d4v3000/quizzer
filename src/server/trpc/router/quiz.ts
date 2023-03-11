@@ -45,8 +45,13 @@ export const quizRouter = router({
           },
         },
         orderBy: orderBySet,
+        take: input.take,
+        skip: input.skip,
       });
     }),
+  getNumberOfQuizzes: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.quiz.count({ where: { authorId: ctx.session.user.id } });
+  }),
   createQuiz: protectedProcedure.mutation(({ ctx }) => {
     return ctx.prisma.quiz.create({
       data: {

@@ -4,6 +4,8 @@ import Input from "@ui/Input";
 import Label from "@ui/Label";
 import { LoadingSpinner } from "@ui/Loader";
 import Modal from "@ui/Modal";
+import Select from "@ui/Select";
+import { toNumber } from "lodash";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -13,6 +15,8 @@ const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [numOfTeams, setNumOfTeams] = useState(2);
 
   return (
     <>
@@ -74,7 +78,32 @@ const Home: NextPage = () => {
           </div>
         )}
         <Modal open={isModalOpen} setOpen={setIsModalOpen}>
-          <p className="text-4xl text-gray-200">Coming soon</p>
+          <div className="flex w-80 flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <Label text="Username" />
+              <Input
+                placeholder="Name of the question"
+                intent="secondary"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                maxLength={30}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label text="Number of teams" />
+              <select
+                className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
+                value={numOfTeams}
+                onChange={(e) => setNumOfTeams(toNumber(e.target.value))}
+              >
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+            </div>
+            <Button>Create</Button>
+          </div>
         </Modal>
       </main>
     </>

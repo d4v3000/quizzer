@@ -7,7 +7,9 @@ const input = cva("button", {
       primary: [
         "w-full p-3 border border-transparent text-base font-medium rounded-md text-zinc-200 bg-zinc-800 focus:outline-none",
       ],
-      secondary: ["flex items-center border border-zinc-500 uppercase"],
+      secondary: [
+        "w-full p-3 border border-transparent text-base font-medium rounded-md text-zinc-200 bg-zinc-700 focus:outline-none",
+      ],
     },
   },
   defaultVariants: {

@@ -14,7 +14,7 @@ const Lobby = () => {
   const router = useRouter();
   const [showInviteLink, setShowInviteLink] = useState(false);
 
-  const colors = ["red", "blue", "green", "purple", "fuchsia"];
+  const colors = ["#991b1b", "#1e40af", "#166534", "#6b21a8", "#854d0e"];
   const players = ["Name1", "Name2", "Name3"];
 
   return (
@@ -36,6 +36,7 @@ const Lobby = () => {
             <div
               key={`team_${i}`}
               className={`flex h-full w-full flex-col justify-between rounded-md border border-${color}-900 p-4`}
+              style={{ borderColor: color }}
             >
               Team Name
               <div className="flex flex-wrap gap-2">

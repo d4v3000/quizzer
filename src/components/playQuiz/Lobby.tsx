@@ -6,6 +6,7 @@ import {
 import Background from "@ui/Background";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const Lobby = () => {
   const baseUrl = "http://localhost:3000" || process.env.BASE_URL;
@@ -42,18 +43,23 @@ const Lobby = () => {
             <h3>You can expect 34 Questions this evening</h3>
           </div>
           <div className="flex w-1/2 cursor-pointer items-center rounded-2xl border border-zinc-200">
-            <div className="flex h-full w-full items-center justify-center rounded-2xl rounded-r-none border-0 border-r-2 p-2">
+            <div
+              className={`${
+                showInviteLink ? "cursor-text" : "cursor-pointer"
+              } flex h-full w-full items-center justify-center gap-2 rounded-2xl rounded-r-none border-0 border-r-2 p-2`}
+              onClick={() => {
+                if (!showInviteLink) {
+                  navigator.clipboard.writeText(baseUrl + router.asPath);
+                  toast.success("Copied to clipboard!");
+                }
+              }}
+            >
               {showInviteLink ? (
-                <div className="cursor-text">{router.query.id}</div>
+                <>{router.query.id}</>
               ) : (
-                <div
-                  className="flex items-center gap-2"
-                  onClick={() =>
-                    navigator.clipboard.writeText(baseUrl + router.asPath)
-                  }
-                >
+                <>
                   Copy Invitation Link <PaperClipIcon className="h-5 w-5" />
-                </div>
+                </>
               )}
             </div>
             <div

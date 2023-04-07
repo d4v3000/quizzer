@@ -8,9 +8,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { trpc } from "@utils/trpc";
 
 interface IFormInputs {
+  quizId: string;
   userName: string;
   numOfTeams: number;
 }
@@ -19,6 +21,12 @@ const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const getQuizzes = trpc.quiz.getAllQuizzes.useQuery();
+
+  useEffect(() => {
+    getQuizzes.refetch();
+  }, []);
 
   const {
     register,
@@ -100,6 +108,19 @@ const Home: NextPage = () => {
                 {errors.userName && (
                   <div className="text-red-400">Username is required</div>
                 )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label text="Quiz" />
+                <select
+                  className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
+                  {...register("quizId", { required: true })}
+                >
+                  {getQuizzes.data?.map((quiz) => (
+                    <option key={quiz.id} value={quiz.id}>
+                      {quiz.title}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="flex flex-col gap-2">
                 <Label text="Number of teams" />

@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { trpc } from "@utils/trpc";
+import { socket } from "@utils/websocket/socket";
 
 interface IFormInputs {
   quizId: string;
@@ -21,11 +22,32 @@ const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getQuizzes = trpc.quiz.getAllQuizzes.useQuery();
 
+  const createLobby = (data: IFormInputs) => {
+    setIsLoading(true);
+    socket.emit("create-lobby", {
+      quizId: data.quizId,
+      userName: data.userName,
+      numOfTeams: data.numOfTeams,
+    });
+  };
+
   useEffect(() => {
     getQuizzes.refetch();
+
+    const onLobbyCreated = (lobbyId: string) => {
+      setIsLoading(false);
+      router.push(`/play/${lobbyId}`);
+    };
+
+    socket.on("lobby-created", onLobbyCreated);
+
+    return () => {
+      socket.off("lobby-created", onLobbyCreated);
+    };
   }, []);
 
   const {
@@ -33,7 +55,7 @@ const Home: NextPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInputs>();
-  const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<IFormInputs> = (data) => createLobby(data);
 
   return (
     <>
@@ -134,7 +156,9 @@ const Home: NextPage = () => {
                   <option>5</option>
                 </select>
               </div>
-              <Button type="submit">Create</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? <LoadingSpinner /> : "Create"}
+              </Button>
             </div>
           </form>
         </Modal>

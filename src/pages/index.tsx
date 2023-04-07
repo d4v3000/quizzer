@@ -4,19 +4,28 @@ import Input from "@ui/Input";
 import Label from "@ui/Label";
 import { LoadingSpinner } from "@ui/Loader";
 import Modal from "@ui/Modal";
-import Select from "@ui/Select";
-import { toNumber } from "lodash";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+interface IFormInputs {
+  userName: string;
+  numOfTeams: number;
+}
+
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [numOfTeams, setNumOfTeams] = useState(2);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInputs>();
+  const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data);
 
   return (
     <>
@@ -78,32 +87,35 @@ const Home: NextPage = () => {
           </div>
         )}
         <Modal open={isModalOpen} setOpen={setIsModalOpen}>
-          <div className="flex w-80 flex-col gap-6">
-            <div className="flex flex-col gap-2">
-              <Label text="Username" />
-              <Input
-                placeholder="Name of the question"
-                intent="secondary"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                maxLength={30}
-              />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex w-80 flex-col gap-6">
+              <div className="flex flex-col gap-2">
+                <Label text="Username" />
+                <input
+                  placeholder="Enter Username"
+                  maxLength={30}
+                  {...register("userName", { required: true })}
+                  className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base font-medium text-zinc-200 focus:outline-none"
+                />
+                {errors.userName && (
+                  <div className="text-red-400">Username is required</div>
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label text="Number of teams" />
+                <select
+                  className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
+                  {...register("numOfTeams", { required: true })}
+                >
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+              </div>
+              <Button type="submit">Create</Button>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label text="Number of teams" />
-              <select
-                className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
-                value={numOfTeams}
-                onChange={(e) => setNumOfTeams(toNumber(e.target.value))}
-              >
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </div>
-            <Button>Create</Button>
-          </div>
+          </form>
         </Modal>
       </main>
     </>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { LoadingSpinner } from "@ui/Loader";
+import Lobby from "@components/playQuiz/Lobby";
 
 function Play() {
   const router = useRouter();
@@ -29,7 +30,7 @@ function Play() {
       {isLoading ? (
         <LoadingSpinner />
       ) : doesLobbyExist ? (
-        <p className="text-2xl">Lobby exists</p>
+        <Lobby />
       ) : (
         <p className="text-2xl">Lobby doesn't exist</p>
       )}

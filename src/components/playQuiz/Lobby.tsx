@@ -4,8 +4,9 @@ import {
   PaperClipIcon,
 } from "@heroicons/react/24/outline";
 import Background from "@ui/Background";
+import Button from "@ui/Button";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 const Lobby = () => {
@@ -13,9 +14,8 @@ const Lobby = () => {
   const router = useRouter();
   const [showInviteLink, setShowInviteLink] = useState(false);
 
-  useEffect(() => {
-    console.log(router);
-  }, [router]);
+  const colors = ["red", "blue", "green", "purple", "fuchsia"];
+  const players = ["Name1", "Name2", "Name3"];
 
   return (
     <div className="mx-auto grid h-screen w-10/12 grid-flow-col grid-rows-3 gap-6 py-8">
@@ -30,9 +30,31 @@ const Lobby = () => {
           </div>
         </div>
       </Background>
-      <Background className="col-span-5">
-        <div>Teams</div>
-      </Background>
+      <div className="col-span-5">
+        <div className="flex h-full gap-4">
+          {colors.map((color, i) => (
+            <div
+              key={`team_${i}`}
+              className={`flex h-full w-full flex-col justify-between rounded-md border border-${color}-900 p-4`}
+            >
+              Team Name
+              <div className="flex flex-wrap gap-2">
+                {players.map((player, j) => (
+                  <div
+                    key={`${player}_${i}${j}`}
+                    className="flex items-center rounded-full border border-zinc-600 py-1 px-3 text-sm"
+                  >
+                    {player}
+                  </div>
+                ))}
+              </div>
+              <Button intent="secondary" className="hover:bg-zinc-800">
+                Join Team
+              </Button>
+            </div>
+          ))}
+        </div>
+      </div>
       <Background className="col-span-2 row-span-2">
         <div className="flex h-full flex-col items-center justify-between p-4">
           <div className="flex w-full flex-col items-center gap-3">

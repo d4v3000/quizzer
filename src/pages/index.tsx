@@ -29,6 +29,7 @@ const Home: NextPage = () => {
   const setUserName = useGameStore((state) => state.setUserName);
   const setQuizName = useGameStore((state) => state.setQuizName);
   const setNumOfQuestions = useGameStore((state) => state.setNumOfQuestions);
+  const setNumOfTeams = useGameStore((state) => state.setNumOfTeams);
 
   const getQuizzes = trpc.quiz.getAllQuizzes.useQuery();
 
@@ -40,12 +41,15 @@ const Home: NextPage = () => {
     setSocketId(socket.id);
     setQuizName(quiz.title);
     setNumOfQuestions(quiz.numOfQuestions);
+    setNumOfTeams(data.numOfTeams);
     socket.emit(
       "create-lobby",
       {
         quizId: quiz.id,
         userName: data.userName,
         numOfTeams: data.numOfTeams,
+        quizName: quiz.title,
+        numOfQuestions: quiz.numOfQuestions,
       },
       (response: { id: string }) => {
         setIsLoading(false);

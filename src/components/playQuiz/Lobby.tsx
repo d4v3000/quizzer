@@ -8,14 +8,24 @@ import Background from "@ui/Background";
 import Button from "@ui/Button";
 import Input from "@ui/Input";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import * as Tabs from "@radix-ui/react-tabs";
+import { useGameStore } from "@utils/zustand/gameStore";
+import { socket } from "@utils/websocket/socket";
 
 const Lobby = () => {
   const baseUrl = "http://localhost:3000" || process.env.BASE_URL;
   const router = useRouter();
   const [showInviteLink, setShowInviteLink] = useState(false);
+  const [quizMaster, setquizMaster] = useState<{ id: string; name: string }>();
+  const [quiz, setQuiz] = useState<{ title: string; numOfQuestions: string }>();
+
+  const userName = useGameStore((state) => state.userName);
+  const socketId = useGameStore((state) => state.socketId);
+  const quizName = useGameStore((state) => state.quizName);
+  const numOfQuestions = useGameStore((state) => state.numOfQuestions);
+  const isQuizMaster = userName && socketId;
 
   const colors = ["#991b1b", "#1e40af", "#166534", "#6b21a8", "#854d0e"];
   const messages = [
@@ -32,6 +42,16 @@ const Lobby = () => {
     { message: "What's up?", sender: "Player 2" },
   ];
   const players = ["Name1", "Name2", "Name3"];
+
+  useEffect(() => {
+    if (userName && socketId) {
+      setquizMaster({ id: socketId, name: userName });
+    }
+
+    if (quizName && numOfQuestions) {
+      setQuiz({ title: quizName, numOfQuestions: numOfQuestions });
+    }
+  }, []);
 
   return (
     <div className="mx-auto grid h-screen w-10/12 grid-flow-col grid-cols-5 grid-rows-3 gap-4 py-8">
@@ -75,12 +95,17 @@ const Lobby = () => {
       <Background className="col-span-3 row-span-2">
         <div className="flex h-full flex-col items-center justify-between p-4">
           <div className="flex w-full flex-col items-center gap-3">
-            <h1 className="text-3xl font-extrabold">This awesome Quiz</h1>
+            <h1 className="text-3xl font-extrabold">{quiz?.title}</h1>
             <h2 className="text-xl font-bold">
-              presentend to you by: Quiz Master
+              presentend to you by:{" "}
+              {quizMaster?.name ? quizMaster.name : "Anonymous"}{" "}
+              {quizMaster?.id === socket.id ? " (You)" : ""}
             </h2>
-            <h3>You can expect 34 Questions this evening</h3>
+            <h3>
+              You can expect {quiz?.numOfQuestions} Questions this evening
+            </h3>
           </div>
+          {isQuizMaster && <Button size="large">Start Game</Button>}
           <div className="flex w-1/2 cursor-pointer items-center rounded-2xl border border-zinc-200">
             <div
               className={`${
@@ -137,11 +162,17 @@ const Lobby = () => {
                 {messages.map((message, i) => (
                   <>
                     {message.sender === "system" ? (
-                      <p className="text-center text-sm text-zinc-400">
+                      <p
+                        key={`message_${i}`}
+                        className="text-center text-sm text-zinc-400"
+                      >
                         {message.message}
                       </p>
                     ) : (
-                      <p className="text-base text-zinc-200">
+                      <p
+                        key={`message_${i}`}
+                        className="text-base text-zinc-200"
+                      >
                         <span className="font-bold">{message.sender}: </span>
                         {message.message}
                       </p>
@@ -155,11 +186,17 @@ const Lobby = () => {
                 {teamMessages.map((message, i) => (
                   <>
                     {message.sender === "system" ? (
-                      <p className="text-center text-sm text-zinc-400">
+                      <p
+                        key={`message_${i}`}
+                        className="text-center text-sm text-zinc-400"
+                      >
                         {message.message}
                       </p>
                     ) : (
-                      <p className="text-base text-zinc-200">
+                      <p
+                        key={`message_${i}`}
+                        className="text-base text-zinc-200"
+                      >
                         <span className="font-bold">{message.sender}: </span>
                         {message.message}
                       </p>

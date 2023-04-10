@@ -11,9 +11,10 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { trpc } from "@utils/trpc";
 import { socket } from "@utils/websocket/socket";
+import { useGameStore } from "@utils/zustand/gameStore";
 
 interface IFormInputs {
-  quizId: string;
+  quiz: string;
   userName: string;
   numOfTeams: number;
 }
@@ -24,30 +25,37 @@ const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const setSocketId = useGameStore((state) => state.setSocketId);
+  const setUserName = useGameStore((state) => state.setUserName);
+  const setQuizName = useGameStore((state) => state.setQuizName);
+  const setNumOfQuestions = useGameStore((state) => state.setNumOfQuestions);
+
   const getQuizzes = trpc.quiz.getAllQuizzes.useQuery();
 
   const createLobby = (data: IFormInputs) => {
+    const quiz = JSON.parse(data.quiz);
+
     setIsLoading(true);
-    socket.emit("create-lobby", {
-      quizId: data.quizId,
-      userName: data.userName,
-      numOfTeams: data.numOfTeams,
-    });
+    setUserName(data.userName);
+    setSocketId(socket.id);
+    setQuizName(quiz.title);
+    setNumOfQuestions(quiz.numOfQuestions);
+    socket.emit(
+      "create-lobby",
+      {
+        quizId: quiz.id,
+        userName: data.userName,
+        numOfTeams: data.numOfTeams,
+      },
+      (response: { id: string }) => {
+        setIsLoading(false);
+        router.push(`/play/${response.id}`);
+      }
+    );
   };
 
   useEffect(() => {
     getQuizzes.refetch();
-
-    const onLobbyCreated = (lobbyId: string) => {
-      setIsLoading(false);
-      router.push(`/play/${lobbyId}`);
-    };
-
-    socket.on("lobby-created", onLobbyCreated);
-
-    return () => {
-      socket.off("lobby-created", onLobbyCreated);
-    };
   }, []);
 
   const {
@@ -135,10 +143,15 @@ const Home: NextPage = () => {
                 <Label text="Quiz" />
                 <select
                   className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
-                  {...register("quizId", { required: true })}
+                  {...register("quiz", { required: true })}
                 >
                   {getQuizzes.data?.map((quiz) => (
-                    <option key={quiz.id} value={quiz.id}>
+                    <option
+                      key={quiz.id}
+                      value={`{"id": "${quiz.id}","title": "${
+                        quiz.title
+                      }","numOfQuestions": "${quiz._count.questions.toString()}"}`}
+                    >
                       {quiz.title}
                     </option>
                   ))}

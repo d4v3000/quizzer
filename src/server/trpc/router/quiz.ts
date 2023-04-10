@@ -60,6 +60,11 @@ export const quizRouter = router({
       select: {
         id: true,
         title: true,
+        _count: {
+          select: {
+            questions: true,
+          },
+        },
       },
       orderBy: { updatedAt: "desc" },
     });

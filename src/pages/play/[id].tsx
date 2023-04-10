@@ -12,7 +12,7 @@ function Play() {
   useEffect(() => {
     const URL = "http://localhost:4000" || process.env.NODE_URL;
     // check if lobby exists
-    if (router.query) {
+    if (router.query.id) {
       axios
         .post(`${URL}/lobby`, router.query)
         .then(() => {
@@ -32,7 +32,7 @@ function Play() {
       ) : doesLobbyExist ? (
         <Lobby />
       ) : (
-        <p className="text-2xl">Lobby doesn't exist</p>
+        <p className="text-2xl">Lobby doesn&apos;t exist</p>
       )}
     </div>
   );

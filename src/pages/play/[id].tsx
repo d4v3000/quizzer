@@ -10,7 +10,7 @@ function Play() {
   const [doesLobbyExist, setDoesLobbyExist] = useState(false);
 
   useEffect(() => {
-    const URL = "http://localhost:3000" || process.env.NODE_URL;
+    const URL = "http://localhost:4000" || process.env.NODE_URL;
     // check if lobby exists
     if (router.query) {
       axios

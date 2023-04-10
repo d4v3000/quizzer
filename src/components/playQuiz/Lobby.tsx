@@ -23,6 +23,7 @@ interface IFormInputs {
 interface IPlayer {
   id: string;
   name: string;
+  team: string | null;
 }
 
 interface ITeam {
@@ -35,7 +36,7 @@ interface ILobby {
   id: string;
   teams: ITeam[];
   playersWithoutTeam: IPlayer[];
-  quizMaster: IPlayer;
+  quizMaster: { id: string; name: string };
   quizName: string;
   numOfQuestions: string;
 }
@@ -45,7 +46,11 @@ const Lobby = () => {
   const router = useRouter();
   const [showInviteLink, setShowInviteLink] = useState(false);
   const [lobby, setLobby] = useState<ILobby>();
-  const [user, setUser] = useState<{ id: string; name: string }>();
+  const [user, setUser] = useState<{
+    id?: string;
+    name?: string;
+    team: string | null;
+  }>();
 
   const userName = useGameStore((state) => state.userName);
   const socketId = useGameStore((state) => state.socketId);
@@ -82,12 +87,30 @@ const Lobby = () => {
         setLobby(response);
       }
     );
-    setUser({ id: socket.id, name: data.userName });
+    setUser({ id: socket.id, name: data.userName, team: null });
+  };
+
+  const joinTeam = (teamId: string) => {
+    console.log(user);
+
+    socket.emit(
+      "join-team",
+      {
+        userName: user?.name,
+        lobbyId: router.query.id,
+        teamId: teamId,
+        oldTeam: user?.team,
+      },
+      (response: ILobby) => {
+        setLobby(response);
+      }
+    );
+    setUser((user) => ({ ...user, team: teamId }));
   };
 
   useEffect(() => {
     if (userName && socketId && quizName && numOfQuestions) {
-      setUser({ id: socketId, name: userName });
+      setUser({ id: socketId, name: userName, team: null });
 
       const lobby = {
         id: router.query.id as string,
@@ -113,10 +136,16 @@ const Lobby = () => {
       setLobby(data);
     };
 
+    const onTeamJoin = (data: ILobby) => {
+      setLobby(data);
+    };
+
     socket.on("joined-lobby", onLobbyJoin);
+    socket.on("joined-team", onTeamJoin);
 
     return () => {
       socket.off("joined-lobby", onLobbyJoin);
+      socket.off("joined-team", onTeamJoin);
     };
   }, []);
 
@@ -153,9 +182,9 @@ const Lobby = () => {
                   className={`flex h-full w-full flex-col justify-between rounded-md border p-4`}
                   style={{ borderColor: colors[i] }}
                 >
-                  Team Name
+                  {team.name}
                   <div className="flex flex-wrap gap-2">
-                    {team.players.map((player, j) => (
+                    {team.players.map((player) => (
                       <div
                         key={`${player.name}_${player.id}`}
                         className="flex items-center rounded-full border border-zinc-600 py-1 px-3 text-sm"
@@ -164,9 +193,15 @@ const Lobby = () => {
                       </div>
                     ))}
                   </div>
-                  <Button intent="secondary" className="hover:bg-zinc-800">
-                    Join Team
-                  </Button>
+                  {i.toString() !== user.team && !isQuizMaster && (
+                    <Button
+                      intent="secondary"
+                      className="hover:bg-zinc-800"
+                      onClick={() => joinTeam(i.toString())}
+                    >
+                      Join Team
+                    </Button>
+                  )}
                 </div>
               ))}
             </div>

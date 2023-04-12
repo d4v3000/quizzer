@@ -15,6 +15,7 @@ import { useGameStore } from "@utils/zustand/gameStore";
 import { socket } from "@utils/websocket/socket";
 import Label from "@ui/Label";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Chat from "./Chat";
 
 interface IFormInputs {
   userName: string;
@@ -41,6 +42,11 @@ interface ILobby {
   numOfQuestions: string;
 }
 
+export interface IMessage {
+  message: string;
+  sender: string;
+}
+
 const Lobby = () => {
   const baseUrl = "http://localhost:3000" || process.env.BASE_URL;
   const router = useRouter();
@@ -51,6 +57,8 @@ const Lobby = () => {
     name?: string;
     team: string | null;
   }>();
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [teamMessages, setTeamMessages] = useState<IMessage[]>([]);
 
   const userName = useGameStore((state) => state.userName);
   const socketId = useGameStore((state) => state.socketId);
@@ -60,21 +68,6 @@ const Lobby = () => {
   const isQuizMaster = userName && socketId;
 
   const colors = ["#991b1b", "#1e40af", "#166534", "#6b21a8", "#854d0e"];
-
-  const messages = [
-    { message: "Player 1 joined the game", sender: "system" },
-    { message: "Hey", sender: "Player 1" },
-    { message: "Player 1 left the game", sender: "system" },
-    { message: "Player 2 joined the game", sender: "system" },
-    { message: "What's up?", sender: "Player 2" },
-  ];
-
-  const teamMessages = [
-    { message: "Player 1 joined your team", sender: "system" },
-    { message: "Hey", sender: "Player 1" },
-    { message: "Player 2 joined your team", sender: "system" },
-    { message: "What's up?", sender: "Player 2" },
-  ];
 
   const joinLobby = (data: IFormInputs) => {
     socket.emit(
@@ -91,8 +84,6 @@ const Lobby = () => {
   };
 
   const joinTeam = (teamId: string) => {
-    console.log(user);
-
     socket.emit(
       "join-team",
       {
@@ -106,6 +97,7 @@ const Lobby = () => {
       }
     );
     setUser((user) => ({ ...user, team: teamId }));
+    setTeamMessages([]);
   };
 
   useEffect(() => {
@@ -132,20 +124,33 @@ const Lobby = () => {
       setLobby(lobby);
     }
 
-    const onLobbyJoin = (data: ILobby) => {
+    const onLobbyJoin = (data: ILobby, message: IMessage) => {
       setLobby(data);
+      setMessages((oldMessages) => [...oldMessages, message]);
     };
 
     const onTeamJoin = (data: ILobby) => {
       setLobby(data);
     };
 
+    const onGlobalMessage = (message: IMessage) => {
+      setMessages((oldMessages) => [...oldMessages, message]);
+    };
+
+    const onTeamMessage = (message: IMessage) => {
+      setTeamMessages((oldMessages) => [...oldMessages, message]);
+    };
+
     socket.on("joined-lobby", onLobbyJoin);
     socket.on("joined-team", onTeamJoin);
+    socket.on("global-message-received", onGlobalMessage);
+    socket.on("team-message-received", onTeamMessage);
 
     return () => {
       socket.off("joined-lobby", onLobbyJoin);
       socket.off("joined-team", onTeamJoin);
+      socket.off("global-message-received", onGlobalMessage);
+      socket.off("team-message-received", onTeamMessage);
     };
   }, []);
 
@@ -206,7 +211,7 @@ const Lobby = () => {
               ))}
             </div>
           </div>
-          <Background className="col-span-3 row-span-2">
+          <Background className="col-span-2 row-span-2">
             <div className="flex h-full flex-col items-center justify-between p-4">
               <div className="flex w-full flex-col items-center gap-3">
                 <h1 className="text-3xl font-extrabold">{lobby?.quizName}</h1>
@@ -252,84 +257,44 @@ const Lobby = () => {
               </div>
             </div>
           </Background>
-          <Background className="col-span-1 row-span-2">
-            <div className="flex h-full flex-col p-2">
-              <Tabs.Root className="h-full" defaultValue="tab1">
-                <Tabs.List className="flex pb-2">
+          <Background className="col-span-2 row-span-2">
+            <Tabs.Root
+              className="flex h-full flex-col p-2"
+              defaultValue="global"
+            >
+              <Tabs.List className="flex pb-2">
+                <Tabs.Trigger
+                  className="w-full border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
+                  value="global"
+                >
+                  Global
+                </Tabs.Trigger>
+                {user.team && (
                   <Tabs.Trigger
-                    className="w-full border-b-purple-600 pb-1 data-[state=active]:border-b"
-                    value="tab1"
-                  >
-                    Global
-                  </Tabs.Trigger>
-                  <Tabs.Trigger
-                    className="w-full border-b-purple-600 pb-1 data-[state=active]:border-b"
-                    value="tab2"
+                    className="w-full border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
+                    value="team"
                   >
                     Team
                   </Tabs.Trigger>
-                </Tabs.List>
+                )}
+              </Tabs.List>
 
-                <Tabs.Content value="tab1">
-                  <div className="flex h-full flex-col gap-2">
-                    {messages.map((message, i) => (
-                      <>
-                        {message.sender === "system" ? (
-                          <p
-                            key={`message_${i}`}
-                            className="text-center text-sm text-zinc-400"
-                          >
-                            {message.message}
-                          </p>
-                        ) : (
-                          <p
-                            key={`message_${i}`}
-                            className="text-base text-zinc-200"
-                          >
-                            <span className="font-bold">
-                              {message.sender}:{" "}
-                            </span>
-                            {message.message}
-                          </p>
-                        )}
-                      </>
-                    ))}
-                  </div>
-                </Tabs.Content>
-                <Tabs.Content value="tab2">
-                  <div className="flex h-full flex-col gap-2">
-                    {teamMessages.map((message, i) => (
-                      <>
-                        {message.sender === "system" ? (
-                          <p
-                            key={`message_${i}`}
-                            className="text-center text-sm text-zinc-400"
-                          >
-                            {message.message}
-                          </p>
-                        ) : (
-                          <p
-                            key={`message_${i}`}
-                            className="text-base text-zinc-200"
-                          >
-                            <span className="font-bold">
-                              {message.sender}:{" "}
-                            </span>
-                            {message.message}
-                          </p>
-                        )}
-                      </>
-                    ))}
-                  </div>
-                </Tabs.Content>
-              </Tabs.Root>
-              <div className="flex items-center gap-2">
-                <Input placeholder="Enter Message..." />
-                <button className="flex h-full items-center gap-2 rounded-md border p-2 hover:bg-zinc-800">
-                  Send <PaperAirplaneIcon className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
+              <Tabs.Content value="global" className="h-full overflow-clip">
+                <Chat messages={messages} userName={user.name} />
+              </Tabs.Content>
+
+              <Tabs.Content value="team" className="h-full overflow-clip">
+                <Chat
+                  messages={teamMessages}
+                  userName={user.name}
+                  roomId={
+                    router.query.id && user.team
+                      ? router.query.id + user.team
+                      : ""
+                  }
+                />
+              </Tabs.Content>
+            </Tabs.Root>
           </Background>
         </div>
       ) : (

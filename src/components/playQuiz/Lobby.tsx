@@ -59,6 +59,8 @@ const Lobby = () => {
   }>();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [teamMessages, setTeamMessages] = useState<IMessage[]>([]);
+  const [numOfUnreadMessages, setNumOfUnreadMessages] = useState(0);
+  const [currentTab, setCurrentTab] = useState("global");
 
   const userName = useGameStore((state) => state.userName);
   const socketId = useGameStore((state) => state.socketId);
@@ -135,10 +137,18 @@ const Lobby = () => {
 
     const onGlobalMessage = (message: IMessage) => {
       setMessages((oldMessages) => [...oldMessages, message]);
+      if (currentTab !== "global") {
+        setNumOfUnreadMessages(numOfUnreadMessages + 1);
+      }
     };
 
     const onTeamMessage = (message: IMessage) => {
       setTeamMessages((oldMessages) => [...oldMessages, message]);
+      if (currentTab !== "team") {
+        console.log(currentTab);
+
+        setNumOfUnreadMessages(numOfUnreadMessages + 1);
+      }
     };
 
     socket.on("joined-lobby", onLobbyJoin);
@@ -152,7 +162,7 @@ const Lobby = () => {
       socket.off("global-message-received", onGlobalMessage);
       socket.off("team-message-received", onTeamMessage);
     };
-  }, []);
+  }, [currentTab, numOfUnreadMessages]);
 
   const {
     register,
@@ -260,21 +270,41 @@ const Lobby = () => {
           <Background className="col-span-2 row-span-2">
             <Tabs.Root
               className="flex h-full flex-col p-2"
-              defaultValue="global"
+              value={currentTab}
+              onValueChange={(val) => {
+                console.log(val);
+
+                setCurrentTab(val);
+                setNumOfUnreadMessages(0);
+              }}
             >
               <Tabs.List className="flex pb-2">
                 <Tabs.Trigger
-                  className="w-full border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
+                  className="relative flex w-full items-center justify-center border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
                   value="global"
                 >
-                  Global
+                  <div className="relative">
+                    Global
+                    {numOfUnreadMessages > 0 && currentTab !== "global" && (
+                      <div className="absolute -top-2 -right-7 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
+                        {numOfUnreadMessages}
+                      </div>
+                    )}
+                  </div>
                 </Tabs.Trigger>
                 {user.team && (
                   <Tabs.Trigger
-                    className="w-full border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
+                    className="flex w-full items-center justify-center border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
                     value="team"
                   >
-                    Team
+                    <div className="relative">
+                      Team
+                      {numOfUnreadMessages > 0 && currentTab !== "team" && (
+                        <div className="absolute -top-2 -right-7 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                          {numOfUnreadMessages}
+                        </div>
+                      )}
+                    </div>
                   </Tabs.Trigger>
                 )}
               </Tabs.List>

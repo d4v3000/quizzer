@@ -339,6 +339,7 @@ const Lobby = () => {
               maxLength={30}
               {...register("userName", { required: true })}
               className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base font-medium text-zinc-200 focus:outline-none"
+              autoFocus
             />
             {errors.userName && (
               <div className="text-red-400">Username is required</div>

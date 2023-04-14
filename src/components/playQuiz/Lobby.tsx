@@ -1,12 +1,12 @@
 import {
+  CheckIcon,
   EyeIcon,
   EyeSlashIcon,
-  PaperAirplaneIcon,
   PaperClipIcon,
+  PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
-import Input from "@ui/Input";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -61,6 +61,8 @@ const Lobby = () => {
   const [teamMessages, setTeamMessages] = useState<IMessage[]>([]);
   const [numOfUnreadMessages, setNumOfUnreadMessages] = useState(0);
   const [currentTab, setCurrentTab] = useState("global");
+  const [isEditTeamName, setIsEditTeamName] = useState(-1);
+  const [teamName, setTeamName] = useState("");
 
   const userName = useGameStore((state) => state.userName);
   const socketId = useGameStore((state) => state.socketId);
@@ -102,6 +104,20 @@ const Lobby = () => {
     setTeamMessages([]);
   };
 
+  const editTeamName = (teamId: string) => {
+    socket.emit(
+      "edit-team-name",
+      {
+        lobbyId: router.query.id,
+        teamId: teamId,
+        name: teamName,
+      },
+      (response: ILobby) => {
+        setLobby(response);
+      }
+    );
+  };
+
   useEffect(() => {
     if (userName && socketId && quizName && numOfQuestions) {
       setUser({ id: socketId, name: userName, team: null });
@@ -135,6 +151,10 @@ const Lobby = () => {
       setLobby(data);
     };
 
+    const onTeamNameEdited = (data: ILobby) => {
+      setLobby(data);
+    };
+
     const onGlobalMessage = (message: IMessage) => {
       setMessages((oldMessages) => [...oldMessages, message]);
       if (currentTab !== "global") {
@@ -155,12 +175,14 @@ const Lobby = () => {
     socket.on("joined-team", onTeamJoin);
     socket.on("global-message-received", onGlobalMessage);
     socket.on("team-message-received", onTeamMessage);
+    socket.on("team-name-edited", onTeamNameEdited);
 
     return () => {
       socket.off("joined-lobby", onLobbyJoin);
       socket.off("joined-team", onTeamJoin);
       socket.off("global-message-received", onGlobalMessage);
       socket.off("team-message-received", onTeamMessage);
+      socket.off("team-name-edited", onTeamNameEdited);
     };
   }, [currentTab, numOfUnreadMessages]);
 
@@ -197,7 +219,45 @@ const Lobby = () => {
                   className={`flex h-full w-full flex-col justify-between rounded-md border p-4`}
                   style={{ borderColor: colors[i] }}
                 >
-                  {team.name}
+                  <div className="flex items-center gap-2">
+                    {isEditTeamName === i ? (
+                      <input
+                        value={teamName}
+                        className="bg-transparent focus:outline-none"
+                        autoFocus
+                        onChange={(e) => setTeamName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            setIsEditTeamName(-1);
+                            editTeamName(i.toString());
+                            setTeamName("");
+                          }
+                        }}
+                      />
+                    ) : (
+                      <div>{team.name}</div>
+                    )}
+                    {isQuizMaster && isEditTeamName !== i && (
+                      <PencilSquareIcon
+                        className="h-5 w-5 cursor-pointer"
+                        onClick={() => {
+                          setIsEditTeamName(i);
+                          setTeamName(team.name);
+                        }}
+                      />
+                    )}
+                    {isQuizMaster && isEditTeamName === i && (
+                      <CheckIcon
+                        className="h-5 w-5 cursor-pointer"
+                        onClick={() => {
+                          setIsEditTeamName(-1);
+                          editTeamName(i.toString());
+                          setTeamName("");
+                        }}
+                      />
+                    )}
+                  </div>
+
                   <div className="flex flex-wrap gap-2">
                     {team.players.map((player) => (
                       <div

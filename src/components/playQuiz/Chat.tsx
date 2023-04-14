@@ -1,5 +1,5 @@
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IMessage } from "./Lobby";
 import { socket } from "@utils/websocket/socket";
@@ -27,6 +27,12 @@ const Chat: FC<IProps> = ({ messages, userName, roomId }) => {
     }
     reset({ message: "" });
   };
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const {
     register,
@@ -63,6 +69,7 @@ const Chat: FC<IProps> = ({ messages, userName, roomId }) => {
               )}
             </>
           ))}
+          <div ref={scrollRef} />
         </ScrollArea.Viewport>
         <ScrollArea.Scrollbar
           orientation="vertical"

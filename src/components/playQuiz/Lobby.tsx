@@ -20,7 +20,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Chat from "./Chat";
 import PlayerBadge from "./PlayerBadge";
 import NavButton from "./NavButton";
-import * as Popover from "@radix-ui/react-popover";
+import Popover from "@ui/Popover";
 
 interface IFormInputs {
   userName: string;
@@ -217,56 +217,52 @@ const Lobby = () => {
           <div className="mx-auto flex h-screen w-10/12 flex-col gap-2 py-4">
             <div className="flex w-full justify-between">
               <div className="flex items-center gap-2">
-                <Popover.Root>
-                  <Popover.Trigger asChild>
+                <Popover
+                  className="rounded-md bg-zinc-300 p-5 data-[state=open]:animate-slideDownAndFade"
+                  sideOffset={5}
+                  align="start"
+                  triggerNode={
                     <NavButton>
                       Players <UserIcon className="h-5 w-5" />{" "}
                       {lobby?.players.length}
                     </NavButton>
-                  </Popover.Trigger>
-                  <Popover.Portal>
-                    <Popover.Content
-                      className="rounded-md bg-zinc-300 p-5 data-[state=open]:animate-slideDownAndFade"
-                      sideOffset={5}
-                      align="start"
-                    >
-                      <div className="flex w-full flex-col gap-2">
-                        <p className="text-xl font-semibold">
-                          Players in this room:
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {lobby?.players.map((player) => (
-                            <PlayerBadge
-                              name={player.name}
-                              id={player.id}
-                              isQuizMaster={isQuizMaster}
-                              key={`playerList_${player.id}`}
-                              className="bg-gray-600 text-white"
-                            />
-                          ))}
-                        </div>
-                        {isQuizMaster && (
-                          <>
-                            <Button
-                              intent="secondary"
-                              size="large"
-                              className="bg-gray-600"
-                            >
-                              Randomize Teams
-                            </Button>
-                            <Button
-                              intent="secondary"
-                              size="large"
-                              className="bg-gray-600"
-                            >
-                              Reset Teams
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </Popover.Content>
-                  </Popover.Portal>
-                </Popover.Root>
+                  }
+                >
+                  <div className="flex w-full flex-col gap-2">
+                    <p className="text-xl font-semibold">
+                      Players in this room:
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {lobby?.players.map((player) => (
+                        <PlayerBadge
+                          name={player.name}
+                          id={player.id}
+                          isQuizMaster={isQuizMaster}
+                          key={`playerList_${player.id}`}
+                          className="bg-gray-600 text-white"
+                        />
+                      ))}
+                    </div>
+                    {isQuizMaster && (
+                      <>
+                        <Button
+                          intent="secondary"
+                          size="large"
+                          className="bg-gray-600"
+                        >
+                          Randomize Teams
+                        </Button>
+                        <Button
+                          intent="secondary"
+                          size="large"
+                          className="bg-gray-600"
+                        >
+                          Reset Teams
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </Popover>
               </div>
               <div className="flex items-center gap-2">
                 <NavButton>Rules</NavButton>

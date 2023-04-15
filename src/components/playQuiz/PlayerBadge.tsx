@@ -7,16 +7,19 @@ interface IProps {
   name: string;
   id: string;
   isQuizMaster: boolean;
+  className?: string;
 }
 
-const PlayerBadge: FC<IProps> = ({ name, id, isQuizMaster }) => {
+const PlayerBadge: FC<IProps> = ({ name, id, isQuizMaster, className }) => {
   const router = useRouter();
   const kickPlayer = () => {
     socket.emit("kick-player", id, router.query.id);
   };
 
   return (
-    <div className="flex w-fit items-center gap-2 rounded-full border border-zinc-600 py-1 px-3 text-sm">
+    <div
+      className={`flex w-fit items-center gap-2 rounded-full border border-white py-1 px-3 text-sm ${className}`}
+    >
       {name} {socket.id === id ? "(You)" : ""}{" "}
       {isQuizMaster && (
         <XMarkIcon

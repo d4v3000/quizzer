@@ -2,10 +2,11 @@ import {
   CheckIcon,
   EyeIcon,
   EyeSlashIcon,
+  FaceSmileIcon,
   PaperClipIcon,
   PencilSquareIcon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
 import { useRouter } from "next/router";
@@ -18,6 +19,8 @@ import Label from "@ui/Label";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Chat from "./Chat";
 import PlayerBadge from "./PlayerBadge";
+import NavButton from "./NavButton";
+import * as Popover from "@radix-ui/react-popover";
 
 interface IFormInputs {
   userName: string;
@@ -211,199 +214,264 @@ const Lobby = () => {
             You were kicked by the quiz master
           </div>
         ) : (
-          <div className="mx-auto grid h-screen w-10/12 grid-flow-col grid-cols-5 grid-rows-3 gap-4 py-8">
-            <Background className="col-span-1 row-span-2">
-              <div className="flex flex-col gap-8 p-2">
-                <h2 className="text-2xl font-bold">
-                  Players currently unassigned:
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {lobby?.playersWithoutTeam.map((player) => (
-                    <PlayerBadge
-                      name={player.name}
-                      id={player.id}
-                      isQuizMaster={isQuizMaster}
-                      key={`playerList_${player.id}`}
-                    />
-                  ))}
-                </div>
+          <div className="mx-auto flex h-screen w-10/12 flex-col gap-2 py-4">
+            <div className="flex w-full justify-between">
+              <div className="flex items-center gap-2">
+                <Popover.Root>
+                  <Popover.Trigger asChild>
+                    <NavButton>
+                      Players <UserIcon className="h-5 w-5" /> 7
+                    </NavButton>
+                  </Popover.Trigger>
+                  <Popover.Portal>
+                    <Popover.Content
+                      className="rounded-md bg-zinc-300 p-5 data-[state=open]:animate-slideDownAndFade"
+                      sideOffset={5}
+                      align="start"
+                    >
+                      <div className="flex w-full flex-col gap-2">
+                        <p className="text-xl font-semibold">
+                          Players in this room:
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {lobby?.playersWithoutTeam.map((player) => (
+                            <PlayerBadge
+                              name={player.name}
+                              id={player.id}
+                              isQuizMaster={isQuizMaster}
+                              key={`playerList_${player.id}`}
+                              className="bg-gray-600 text-white"
+                            />
+                          ))}
+                        </div>
+                        {isQuizMaster && (
+                          <>
+                            <Button
+                              intent="secondary"
+                              size="large"
+                              className="bg-gray-600"
+                            >
+                              Randomize Teams
+                            </Button>
+                            <Button
+                              intent="secondary"
+                              size="large"
+                              className="bg-gray-600"
+                            >
+                              Reset Teams
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </Popover.Content>
+                  </Popover.Portal>
+                </Popover.Root>
               </div>
-            </Background>
-            <div className="col-span-5">
-              <div className="flex h-full gap-4">
-                {lobby?.teams.map((team, i) => (
-                  <div
-                    key={`team_${i}`}
-                    className={`flex h-full w-full flex-col justify-between rounded-md border p-4`}
-                    style={{ borderColor: colors[i] }}
-                  >
-                    <div className="flex items-center gap-2">
-                      {isEditTeamName === i ? (
-                        <input
-                          value={teamName}
-                          className="bg-transparent focus:outline-none"
-                          autoFocus
-                          onChange={(e) => setTeamName(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
+              <div className="flex items-center gap-2">
+                <NavButton>Rules</NavButton>
+                <NavButton>
+                  {user.name} <FaceSmileIcon className="h-5 w-5" />
+                </NavButton>
+              </div>
+            </div>
+            <div className="grid h-full grid-flow-col grid-cols-5 grid-rows-3 gap-4">
+              <Background className="col-span-1 row-span-2">
+                <div className="flex flex-col gap-8 p-2">
+                  <h2 className="text-2xl font-bold">
+                    Players currently unassigned:
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {lobby?.playersWithoutTeam.map((player) => (
+                      <PlayerBadge
+                        name={player.name}
+                        id={player.id}
+                        isQuizMaster={isQuizMaster}
+                        key={`playerList_${player.id}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </Background>
+              <div className="col-span-5">
+                <div className="flex h-full gap-4">
+                  {lobby?.teams.map((team, i) => (
+                    <div
+                      key={`team_${i}`}
+                      className={`flex h-full w-full flex-col justify-between rounded-md border p-4`}
+                      style={{ borderColor: colors[i] }}
+                    >
+                      <div className="flex items-center gap-2">
+                        {isEditTeamName === i ? (
+                          <input
+                            value={teamName}
+                            className="bg-transparent focus:outline-none"
+                            autoFocus
+                            onChange={(e) => setTeamName(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                setIsEditTeamName(-1);
+                                editTeamName(i.toString());
+                                setTeamName("");
+                              }
+                            }}
+                          />
+                        ) : (
+                          <div>{team.name}</div>
+                        )}
+                        {isQuizMaster && isEditTeamName !== i && (
+                          <PencilSquareIcon
+                            className="h-5 w-5 cursor-pointer"
+                            onClick={() => {
+                              setIsEditTeamName(i);
+                              setTeamName(team.name);
+                            }}
+                          />
+                        )}
+                        {isQuizMaster && isEditTeamName === i && (
+                          <CheckIcon
+                            className="h-5 w-5 cursor-pointer"
+                            onClick={() => {
                               setIsEditTeamName(-1);
                               editTeamName(i.toString());
                               setTeamName("");
-                            }
-                          }}
-                        />
-                      ) : (
-                        <div>{team.name}</div>
-                      )}
-                      {isQuizMaster && isEditTeamName !== i && (
-                        <PencilSquareIcon
-                          className="h-5 w-5 cursor-pointer"
-                          onClick={() => {
-                            setIsEditTeamName(i);
-                            setTeamName(team.name);
-                          }}
-                        />
-                      )}
-                      {isQuizMaster && isEditTeamName === i && (
-                        <CheckIcon
-                          className="h-5 w-5 cursor-pointer"
-                          onClick={() => {
-                            setIsEditTeamName(-1);
-                            editTeamName(i.toString());
-                            setTeamName("");
-                          }}
-                        />
-                      )}
-                    </div>
+                            }}
+                          />
+                        )}
+                      </div>
 
-                    <div className="flex flex-wrap gap-2">
-                      {team.players.map((player) => (
-                        <PlayerBadge
-                          name={player.name}
-                          id={player.id}
-                          isQuizMaster={isQuizMaster}
-                          key={`${player.name}_${player.id}`}
-                        />
-                      ))}
-                    </div>
-                    {i.toString() !== user.team && !isQuizMaster && (
-                      <Button
-                        intent="secondary"
-                        className="hover:bg-zinc-800"
-                        onClick={() => joinTeam(i.toString())}
-                      >
-                        Join Team
-                      </Button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <Background className="col-span-2 row-span-2">
-              <div className="flex h-full flex-col items-center justify-between p-4">
-                <div className="flex w-full flex-col items-center gap-3">
-                  <h1 className="text-3xl font-extrabold">{lobby?.quizName}</h1>
-                  <h2 className="text-xl font-bold">
-                    presentend to you by: {lobby?.quizMaster.name}
-                    {lobby?.quizMaster.id === socket.id ? " (You)" : ""}
-                  </h2>
-                  <h3>
-                    You can expect {lobby?.numOfQuestions} Questions this
-                    evening
-                  </h3>
-                </div>
-                {isQuizMaster && <Button size="large">Start Game</Button>}
-                <div className="flex w-1/2 cursor-pointer items-center rounded-2xl border border-zinc-200">
-                  <div
-                    className={`${
-                      showInviteLink ? "cursor-text" : "cursor-pointer"
-                    } flex h-full w-full items-center justify-center gap-2 rounded-2xl rounded-r-none border-0 border-r-2 p-2`}
-                    onClick={() => {
-                      if (!showInviteLink) {
-                        navigator.clipboard.writeText(baseUrl + router.asPath);
-                        toast.success("Copied to clipboard!");
-                      }
-                    }}
-                  >
-                    {showInviteLink ? (
-                      <>{router.query.id}</>
-                    ) : (
-                      <>
-                        Copy Invitation Link{" "}
-                        <PaperClipIcon className="h-5 w-5" />
-                      </>
-                    )}
-                  </div>
-                  <div
-                    className="flex items-center justify-center rounded-2xl rounded-l-none p-2"
-                    onClick={() => setShowInviteLink(!showInviteLink)}
-                  >
-                    {showInviteLink ? (
-                      <EyeSlashIcon className="h-6 w-6" />
-                    ) : (
-                      <EyeIcon className="h-6 w-6" />
-                    )}
-                  </div>
-                </div>
-              </div>
-            </Background>
-            <Background className="col-span-2 row-span-2">
-              <Tabs.Root
-                className="flex h-full flex-col p-2"
-                value={currentTab}
-                onValueChange={(val) => {
-                  setCurrentTab(val);
-                  setNumOfUnreadMessages(0);
-                }}
-              >
-                <Tabs.List className="flex pb-2">
-                  <Tabs.Trigger
-                    className="relative flex w-full items-center justify-center border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
-                    value="global"
-                  >
-                    <div className="relative">
-                      Global
-                      {numOfUnreadMessages > 0 && currentTab !== "global" && (
-                        <div className="absolute -top-2 -right-7 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
-                          {numOfUnreadMessages}
-                        </div>
+                      <div className="flex flex-wrap gap-2">
+                        {team.players.map((player) => (
+                          <PlayerBadge
+                            name={player.name}
+                            id={player.id}
+                            isQuizMaster={isQuizMaster}
+                            key={`${player.name}_${player.id}`}
+                          />
+                        ))}
+                      </div>
+                      {i.toString() !== user.team && !isQuizMaster && (
+                        <Button
+                          intent="secondary"
+                          className="hover:bg-zinc-800"
+                          onClick={() => joinTeam(i.toString())}
+                        >
+                          Join Team
+                        </Button>
                       )}
                     </div>
-                  </Tabs.Trigger>
-                  {user.team && (
+                  ))}
+                </div>
+              </div>
+              <Background className="col-span-2 row-span-2">
+                <div className="flex h-full flex-col items-center justify-between p-4">
+                  <div className="flex w-full flex-col items-center gap-3">
+                    <h1 className="text-3xl font-extrabold">
+                      {lobby?.quizName}
+                    </h1>
+                    <h2 className="text-xl font-bold">
+                      presentend to you by: {lobby?.quizMaster.name}
+                      {lobby?.quizMaster.id === socket.id ? " (You)" : ""}
+                    </h2>
+                    <h3>
+                      You can expect {lobby?.numOfQuestions} Questions this
+                      evening
+                    </h3>
+                  </div>
+                  {isQuizMaster && <Button size="large">Start Game</Button>}
+                  <div className="flex w-1/2 cursor-pointer items-center rounded-2xl border border-zinc-200">
+                    <div
+                      className={`${
+                        showInviteLink ? "cursor-text" : "cursor-pointer"
+                      } flex h-full w-full items-center justify-center gap-2 rounded-2xl rounded-r-none border-0 border-r-2 p-2`}
+                      onClick={() => {
+                        if (!showInviteLink) {
+                          navigator.clipboard.writeText(
+                            baseUrl + router.asPath
+                          );
+                          toast.success("Copied to clipboard!");
+                        }
+                      }}
+                    >
+                      {showInviteLink ? (
+                        <>{router.query.id}</>
+                      ) : (
+                        <>
+                          Copy Invitation Link{" "}
+                          <PaperClipIcon className="h-5 w-5" />
+                        </>
+                      )}
+                    </div>
+                    <div
+                      className="flex items-center justify-center rounded-2xl rounded-l-none p-2"
+                      onClick={() => setShowInviteLink(!showInviteLink)}
+                    >
+                      {showInviteLink ? (
+                        <EyeSlashIcon className="h-6 w-6" />
+                      ) : (
+                        <EyeIcon className="h-6 w-6" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </Background>
+              <Background className="col-span-2 row-span-2">
+                <Tabs.Root
+                  className="flex h-full flex-col p-2"
+                  value={currentTab}
+                  onValueChange={(val) => {
+                    setCurrentTab(val);
+                    setNumOfUnreadMessages(0);
+                  }}
+                >
+                  <Tabs.List className="flex pb-2">
                     <Tabs.Trigger
-                      className="flex w-full items-center justify-center border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
-                      value="team"
+                      className="relative flex w-full items-center justify-center border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
+                      value="global"
                     >
                       <div className="relative">
-                        Team
-                        {numOfUnreadMessages > 0 && currentTab !== "team" && (
-                          <div className="absolute -top-2 -right-7 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                        Global
+                        {numOfUnreadMessages > 0 && currentTab !== "global" && (
+                          <div className="absolute -top-2 -right-7 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
                             {numOfUnreadMessages}
                           </div>
                         )}
                       </div>
                     </Tabs.Trigger>
-                  )}
-                </Tabs.List>
+                    {user.team && (
+                      <Tabs.Trigger
+                        className="flex w-full items-center justify-center border-b-purple-600 pb-1 text-lg font-bold data-[state=active]:border-b"
+                        value="team"
+                      >
+                        <div className="relative">
+                          Team
+                          {numOfUnreadMessages > 0 && currentTab !== "team" && (
+                            <div className="absolute -top-2 -right-7 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                              {numOfUnreadMessages}
+                            </div>
+                          )}
+                        </div>
+                      </Tabs.Trigger>
+                    )}
+                  </Tabs.List>
 
-                <Tabs.Content value="global" className="h-full overflow-clip">
-                  <Chat messages={messages} userName={user.name} />
-                </Tabs.Content>
+                  <Tabs.Content value="global" className="h-full overflow-clip">
+                    <Chat messages={messages} userName={user.name} />
+                  </Tabs.Content>
 
-                <Tabs.Content value="team" className="h-full overflow-clip">
-                  <Chat
-                    messages={teamMessages}
-                    userName={user.name}
-                    roomId={
-                      router.query.id && user.team
-                        ? router.query.id + user.team
-                        : ""
-                    }
-                  />
-                </Tabs.Content>
-              </Tabs.Root>
-            </Background>
+                  <Tabs.Content value="team" className="h-full overflow-clip">
+                    <Chat
+                      messages={teamMessages}
+                      userName={user.name}
+                      roomId={
+                        router.query.id && user.team
+                          ? router.query.id + user.team
+                          : ""
+                      }
+                    />
+                  </Tabs.Content>
+                </Tabs.Root>
+              </Background>
+            </div>
           </div>
         )
       ) : (

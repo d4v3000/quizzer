@@ -4,6 +4,7 @@ import {
   EyeSlashIcon,
   PaperClipIcon,
   PencilSquareIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
@@ -165,10 +166,12 @@ const Lobby = () => {
     const onTeamMessage = (message: IMessage) => {
       setTeamMessages((oldMessages) => [...oldMessages, message]);
       if (currentTab !== "team") {
-        console.log(currentTab);
-
         setNumOfUnreadMessages(numOfUnreadMessages + 1);
       }
+    };
+
+    const onPlayerDisconnect = (data: ILobby) => {
+      setLobby(data);
     };
 
     socket.on("joined-lobby", onLobbyJoin);
@@ -176,6 +179,7 @@ const Lobby = () => {
     socket.on("global-message-received", onGlobalMessage);
     socket.on("team-message-received", onTeamMessage);
     socket.on("team-name-edited", onTeamNameEdited);
+    socket.on("player-disconnect", onPlayerDisconnect);
 
     return () => {
       socket.off("joined-lobby", onLobbyJoin);
@@ -183,6 +187,7 @@ const Lobby = () => {
       socket.off("global-message-received", onGlobalMessage);
       socket.off("team-message-received", onTeamMessage);
       socket.off("team-name-edited", onTeamNameEdited);
+      socket.off("player-disconnect", onPlayerDisconnect);
     };
   }, [currentTab, numOfUnreadMessages]);
 
@@ -262,9 +267,12 @@ const Lobby = () => {
                     {team.players.map((player) => (
                       <div
                         key={`${player.name}_${player.id}`}
-                        className="flex items-center rounded-full border border-zinc-600 py-1 px-3 text-sm"
+                        className="flex items-center gap-2 rounded-full border border-zinc-600 py-1 px-3 text-sm"
                       >
-                        {player.name} {socket.id === player.id ? "(You)" : ""}
+                        {player.name} {socket.id === player.id ? "(You)" : ""}{" "}
+                        {isQuizMaster && (
+                          <XMarkIcon className="h-5 w-5 cursor-pointer stroke-red-700 stroke-2" />
+                        )}
                       </div>
                     ))}
                   </div>

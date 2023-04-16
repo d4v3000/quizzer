@@ -325,7 +325,7 @@ const Lobby = () => {
                 </Popover>
               </div>
             </div>
-            <div className="grid h-full w-full grid-flow-col grid-cols-6 grid-rows-3 gap-4">
+            <div className="grid h-full w-full grid-flow-col grid-cols-6 grid-rows-3 gap-4 overflow-clip">
               <Background className="col-span-2 col-start-3 row-span-2">
                 <div className="flex h-full flex-col items-center justify-between p-4">
                   <div className="flex w-full flex-col items-center gap-3">

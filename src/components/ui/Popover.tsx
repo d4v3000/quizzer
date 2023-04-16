@@ -23,7 +23,7 @@ const Popover: FC<IProps> = ({
         <PopoverPrimitive.Content
           sideOffset={sideOffset}
           align={align}
-          className={className}
+          className={`rounded-md border border-zinc-400 bg-zinc-700 p-5 data-[state=open]:animate-slideDownAndFade  ${className}`}
         >
           {children}
         </PopoverPrimitive.Content>

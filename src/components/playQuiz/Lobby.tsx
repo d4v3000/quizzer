@@ -218,7 +218,6 @@ const Lobby = () => {
             <div className="flex w-full justify-between">
               <div className="flex items-center gap-2">
                 <Popover
-                  className="rounded-md bg-zinc-300 p-5 data-[state=open]:animate-slideDownAndFade"
                   sideOffset={5}
                   align="start"
                   triggerNode={
@@ -229,7 +228,7 @@ const Lobby = () => {
                   }
                 >
                   <div className="flex w-full flex-col gap-2">
-                    <p className="text-xl font-semibold">
+                    <p className="text-xl font-semibold text-white">
                       Players in this room:
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -266,9 +265,25 @@ const Lobby = () => {
               </div>
               <div className="flex items-center gap-2">
                 <NavButton>Rules</NavButton>
-                <NavButton>
-                  {user.name} <FaceSmileIcon className="h-5 w-5" />
-                </NavButton>
+                <Popover
+                  triggerNode={
+                    <NavButton>
+                      {user.name} <FaceSmileIcon className="h-5 w-5" />
+                    </NavButton>
+                  }
+                  sideOffset={5}
+                  align="end"
+                >
+                  <div className="flex w-full flex-col gap-2">
+                    <Button
+                      intent="secondary"
+                      size="large"
+                      className="bg-gray-600"
+                    >
+                      Leave the Lobby
+                    </Button>
+                  </div>
+                </Popover>
               </div>
             </div>
             <div className="grid h-full w-full grid-flow-col grid-cols-6 grid-rows-3 gap-4">

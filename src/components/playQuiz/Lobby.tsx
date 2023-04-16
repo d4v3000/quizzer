@@ -129,6 +129,14 @@ const Lobby = () => {
     router.push("/");
   };
 
+  const randomizeTeams = () => {
+    socket.emit("randomize-teams", router.query.id);
+  };
+
+  const resetTeams = () => {
+    socket.emit("reset-teams", router.query.id);
+  };
+
   useEffect(() => {
     if (userName && socketId && quizName && numOfQuestions) {
       setUser({ id: socketId, name: userName, team: null });
@@ -187,12 +195,18 @@ const Lobby = () => {
       }
     };
 
+    const onTeamsReset = (data: ILobby) => {
+      setUser((user) => ({ ...user, team: null }));
+      setLobby(data);
+    };
+
     socket.on("joined-lobby", onLobbyJoin);
     socket.on("joined-team", onTeamJoin);
     socket.on("global-message-received", onGlobalMessage);
     socket.on("team-message-received", onTeamMessage);
     socket.on("team-name-edited", onTeamNameEdited);
     socket.on("player-disconnect", onPlayerDisconnect);
+    socket.on("teams-reset", onTeamsReset);
 
     return () => {
       socket.off("joined-lobby", onLobbyJoin);
@@ -201,6 +215,7 @@ const Lobby = () => {
       socket.off("team-message-received", onTeamMessage);
       socket.off("team-name-edited", onTeamNameEdited);
       socket.off("player-disconnect", onPlayerDisconnect);
+      socket.off("teams-reset", onTeamsReset);
     };
   }, [currentTab, numOfUnreadMessages]);
 
@@ -253,6 +268,7 @@ const Lobby = () => {
                           intent="secondary"
                           size="large"
                           className="bg-gray-600"
+                          onClick={() => randomizeTeams()}
                         >
                           Randomize Teams
                         </Button>
@@ -260,6 +276,7 @@ const Lobby = () => {
                           intent="secondary"
                           size="large"
                           className="bg-gray-600"
+                          onClick={() => resetTeams()}
                         >
                           Reset Teams
                         </Button>

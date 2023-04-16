@@ -200,6 +200,20 @@ const Lobby = () => {
       setLobby(data);
     };
 
+    const onTeamsRandomized = (data: ILobby) => {
+      if (!isQuizMaster) {
+        const playerIndex = data.players.findIndex(
+          (player) => player.id === socket.id
+        );
+
+        setUser((user) => ({
+          ...user,
+          team: data.players[playerIndex]!.team,
+        }));
+      }
+      setLobby(data);
+    };
+
     socket.on("joined-lobby", onLobbyJoin);
     socket.on("joined-team", onTeamJoin);
     socket.on("global-message-received", onGlobalMessage);
@@ -207,6 +221,7 @@ const Lobby = () => {
     socket.on("team-name-edited", onTeamNameEdited);
     socket.on("player-disconnect", onPlayerDisconnect);
     socket.on("teams-reset", onTeamsReset);
+    socket.on("teams-randomized", onTeamsRandomized);
 
     return () => {
       socket.off("joined-lobby", onLobbyJoin);
@@ -216,6 +231,7 @@ const Lobby = () => {
       socket.off("team-name-edited", onTeamNameEdited);
       socket.off("player-disconnect", onPlayerDisconnect);
       socket.off("teams-reset", onTeamsReset);
+      socket.off("teams-randomized", onTeamsRandomized);
     };
   }, [currentTab, numOfUnreadMessages]);
 

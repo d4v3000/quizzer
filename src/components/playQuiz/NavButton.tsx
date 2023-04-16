@@ -1,4 +1,4 @@
-import React, { ReactNode, forwardRef } from "react";
+import React, { ReactNode } from "react";
 
 interface IProps {
   children: ReactNode;
@@ -17,5 +17,6 @@ const NavButton = React.forwardRef<HTMLButtonElement, IProps>(
     );
   }
 );
+NavButton.displayName = "NavButton";
 
 export default NavButton;

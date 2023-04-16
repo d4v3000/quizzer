@@ -124,6 +124,11 @@ const Lobby = () => {
     );
   };
 
+  const leaveLobby = () => {
+    socket.emit("leave-lobby", router.query.id);
+    router.push("/");
+  };
+
   useEffect(() => {
     if (userName && socketId && quizName && numOfQuestions) {
       setUser({ id: socketId, name: userName, team: null });
@@ -279,6 +284,7 @@ const Lobby = () => {
                       intent="secondary"
                       size="large"
                       className="bg-gray-600"
+                      onClick={() => leaveLobby()}
                     >
                       Leave the Lobby
                     </Button>

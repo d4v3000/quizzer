@@ -144,23 +144,27 @@ const Home: NextPage = () => {
                   <div className="text-red-400">Username is required</div>
                 )}
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col items-center gap-2">
                 <Label text="Quiz" />
-                <select
-                  className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
-                  {...register("quiz", { required: true })}
-                >
-                  {getQuizzes.data?.map((quiz) => (
-                    <option
-                      key={quiz.id}
-                      value={`{"id": "${quiz.id}","title": "${
-                        quiz.title
-                      }","numOfQuestions": "${quiz._count.questions.toString()}"}`}
-                    >
-                      {quiz.title}
-                    </option>
-                  ))}
-                </select>
+                {getQuizzes.isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <select
+                    className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
+                    {...register("quiz", { required: true })}
+                  >
+                    {getQuizzes.data?.map((quiz) => (
+                      <option
+                        key={quiz.id}
+                        value={`{"id": "${quiz.id}","title": "${
+                          quiz.title
+                        }","numOfQuestions": "${quiz._count.questions.toString()}"}`}
+                      >
+                        {quiz.title}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
               <div className="flex flex-col gap-2">
                 <Label text="Number of teams" />

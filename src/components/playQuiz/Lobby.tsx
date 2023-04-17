@@ -21,6 +21,7 @@ import Chat from "./Chat";
 import PlayerBadge from "./PlayerBadge";
 import NavButton from "./NavButton";
 import Popover from "@ui/Popover";
+import RulesModal from "./RulesModal";
 
 interface IFormInputs {
   userName: string;
@@ -69,6 +70,7 @@ const Lobby = () => {
   const [isEditTeamName, setIsEditTeamName] = useState(-1);
   const [teamName, setTeamName] = useState("");
   const [wasKicked, setWasKicked] = useState(false);
+  const [rulesModalOpen, setRulesModalOpen] = useState(false);
 
   const userName = useGameStore((state) => state.userName);
   const socketId = useGameStore((state) => state.socketId);
@@ -302,7 +304,10 @@ const Lobby = () => {
                 </Popover>
               </div>
               <div className="flex items-center gap-2">
-                <NavButton>Rules</NavButton>
+                <NavButton onClick={() => setRulesModalOpen(true)}>
+                  Rules
+                </NavButton>
+                <RulesModal open={rulesModalOpen} setOpen={setRulesModalOpen} />
                 <Popover
                   triggerNode={
                     <NavButton>

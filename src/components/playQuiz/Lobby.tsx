@@ -17,10 +17,10 @@ import Label from "@ui/Label";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Chat from "./Chat";
 import PlayerBadge from "./PlayerBadge";
-import NavButton from "./NavButton";
 import Popover from "@ui/Popover";
 import RulesModal from "./RulesModal";
 import TeamCard from "./TeamCard";
+import NavItem from "./NavItem";
 
 interface IFormInputs {
   userName: string;
@@ -225,10 +225,10 @@ const Lobby = () => {
                   sideOffset={5}
                   align="start"
                   triggerNode={
-                    <NavButton>
+                    <NavItem>
                       Players <UserIcon className="h-5 w-5" />{" "}
                       {lobby?.players.length}
-                    </NavButton>
+                    </NavItem>
                   }
                 >
                   <div className="flex w-full flex-col gap-2">
@@ -270,15 +270,13 @@ const Lobby = () => {
                 </Popover>
               </div>
               <div className="flex items-center gap-2">
-                <NavButton onClick={() => setRulesModalOpen(true)}>
-                  Rules
-                </NavButton>
+                <NavItem onClick={() => setRulesModalOpen(true)}>Rules</NavItem>
                 <RulesModal open={rulesModalOpen} setOpen={setRulesModalOpen} />
                 <Popover
                   triggerNode={
-                    <NavButton>
+                    <NavItem>
                       {user.name} <FaceSmileIcon className="h-5 w-5" />
-                    </NavButton>
+                    </NavItem>
                   }
                   sideOffset={5}
                   align="end"

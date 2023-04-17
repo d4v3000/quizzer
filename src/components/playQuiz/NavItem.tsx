@@ -4,7 +4,7 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
-const NavButton = forwardRef<HTMLButtonElement, IProps>((props, forwardRef) => {
+const NavItem = forwardRef<HTMLButtonElement, IProps>((props, forwardRef) => {
   const { children, ...otherProps } = props;
   return (
     <button
@@ -16,6 +16,6 @@ const NavButton = forwardRef<HTMLButtonElement, IProps>((props, forwardRef) => {
     </button>
   );
 });
-NavButton.displayName = "NavButton";
+NavItem.displayName = "NavButton";
 
-export default NavButton;
+export default NavItem;

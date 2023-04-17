@@ -1,10 +1,8 @@
 import {
   EyeIcon,
   EyeSlashIcon,
-  FaceSmileIcon,
   PaperClipIcon,
 } from "@heroicons/react/24/outline";
-import { UserIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
 import { useRouter } from "next/router";
@@ -16,11 +14,8 @@ import { socket } from "@utils/websocket/socket";
 import Label from "@ui/Label";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Chat from "./Chat";
-import PlayerBadge from "./PlayerBadge";
-import Popover from "@ui/Popover";
-import RulesModal from "./RulesModal";
 import TeamCard from "./TeamCard";
-import NavItem from "./NavItem";
+import NavBar from "./NavBar";
 
 interface IFormInputs {
   userName: string;
@@ -67,7 +62,6 @@ const Lobby = () => {
   const [numOfUnreadMessages, setNumOfUnreadMessages] = useState(0);
   const [currentTab, setCurrentTab] = useState("global");
   const [wasKicked, setWasKicked] = useState(false);
-  const [rulesModalOpen, setRulesModalOpen] = useState(false);
 
   const userName = useGameStore((state) => state.userName);
   const socketId = useGameStore((state) => state.socketId);
@@ -90,19 +84,6 @@ const Lobby = () => {
       }
     );
     setUser({ id: socket.id, name: data.userName, team: null });
-  };
-
-  const leaveLobby = () => {
-    socket.emit("leave-lobby", router.query.id);
-    router.push("/");
-  };
-
-  const randomizeTeams = () => {
-    socket.emit("randomize-teams", router.query.id);
-  };
-
-  const resetTeams = () => {
-    socket.emit("reset-teams", router.query.id);
   };
 
   useEffect(() => {
@@ -219,81 +200,11 @@ const Lobby = () => {
           </div>
         ) : (
           <div className="mx-auto flex h-screen w-10/12 flex-col gap-2 py-4">
-            <div className="flex w-full justify-between">
-              <div className="flex items-center gap-2">
-                <Popover
-                  sideOffset={5}
-                  align="start"
-                  triggerNode={
-                    <NavItem>
-                      Players <UserIcon className="h-5 w-5" />{" "}
-                      {lobby?.players.length}
-                    </NavItem>
-                  }
-                >
-                  <div className="flex w-full flex-col gap-2">
-                    <p className="text-xl font-semibold text-white">
-                      Players in this room:
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {lobby?.players.map((player) => (
-                        <PlayerBadge
-                          name={player.name}
-                          id={player.id}
-                          isQuizMaster={isQuizMaster}
-                          key={`playerList_${player.id}`}
-                          className="bg-gray-600 text-white"
-                        />
-                      ))}
-                    </div>
-                    {isQuizMaster && (
-                      <>
-                        <Button
-                          intent="secondary"
-                          size="large"
-                          className="bg-gray-600"
-                          onClick={() => randomizeTeams()}
-                        >
-                          Randomize Teams
-                        </Button>
-                        <Button
-                          intent="secondary"
-                          size="large"
-                          className="bg-gray-600"
-                          onClick={() => resetTeams()}
-                        >
-                          Reset Teams
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </Popover>
-              </div>
-              <div className="flex items-center gap-2">
-                <NavItem onClick={() => setRulesModalOpen(true)}>Rules</NavItem>
-                <RulesModal open={rulesModalOpen} setOpen={setRulesModalOpen} />
-                <Popover
-                  triggerNode={
-                    <NavItem>
-                      {user.name} <FaceSmileIcon className="h-5 w-5" />
-                    </NavItem>
-                  }
-                  sideOffset={5}
-                  align="end"
-                >
-                  <div className="flex w-full flex-col gap-2">
-                    <Button
-                      intent="secondary"
-                      size="large"
-                      className="bg-gray-600"
-                      onClick={() => leaveLobby()}
-                    >
-                      Leave the Lobby
-                    </Button>
-                  </div>
-                </Popover>
-              </div>
-            </div>
+            <NavBar
+              isQuizMaster={isQuizMaster}
+              players={lobby?.players}
+              userName={user.name}
+            />
             <div className="grid h-full w-full grid-flow-col grid-cols-6 grid-rows-3 gap-4 overflow-clip">
               <Background className="col-span-2 col-start-3 row-span-2">
                 <div className="flex h-full flex-col items-center justify-between p-4">

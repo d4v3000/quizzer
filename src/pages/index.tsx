@@ -9,12 +9,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import CreateLobbyModal from "@components/playQuiz/CreateLobbyModal";
 
-interface IFormInputs {
-  quiz: string;
-  userName: string;
-  numOfTeams: number;
-}
-
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();

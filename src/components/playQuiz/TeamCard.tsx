@@ -5,6 +5,7 @@ import Button from "@ui/Button";
 import { IMessage, IPlayer } from "./Lobby";
 import { socket } from "@utils/websocket/socket";
 import { useRouter } from "next/router";
+import { useGameStore } from "@utils/zustand/gameStore";
 
 interface IProps {
   color: string;
@@ -27,7 +28,6 @@ interface IProps {
       | undefined
     >
   >;
-  setTeamMessages: Dispatch<SetStateAction<IMessage[]>>;
 }
 
 const TeamCard: FC<IProps> = ({
@@ -38,11 +38,12 @@ const TeamCard: FC<IProps> = ({
   user,
   name,
   setUser,
-  setTeamMessages,
 }) => {
   const router = useRouter();
   const [teamName, setTeamName] = useState(name);
   const [isEdit, setIsEdit] = useState(false);
+
+  const setTeamMessages = useGameStore((state) => state.setTeamMessages);
 
   const editTeamName = (teamId: string) => {
     socket.emit("edit-team-name", {

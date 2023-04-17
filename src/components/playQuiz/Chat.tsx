@@ -85,6 +85,7 @@ const Chat: FC<IProps> = ({ messages, userName, roomId }) => {
             maxLength={30}
             {...register("message", { required: true })}
             className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base font-medium text-zinc-200 focus:outline-none"
+            autoFocus
           />
           <button
             type="submit"

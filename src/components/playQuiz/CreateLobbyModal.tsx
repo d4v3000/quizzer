@@ -1,4 +1,5 @@
 import Button from "@ui/Button";
+import Input from "@ui/Input";
 import Label from "@ui/Label";
 import { LoadingSpinner } from "@ui/Loader";
 import Modal from "@ui/Modal";
@@ -74,11 +75,11 @@ const CreateLobbyModal: FC<IProps> = ({ isModalOpen, setIsModalOpen }) => {
         <div className="flex w-80 flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Label text="Username" />
-            <input
+            <Input
               placeholder="Enter Username"
               maxLength={30}
               {...register("userName", { required: true })}
-              className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base font-medium text-zinc-200 focus:outline-none"
+              intent="secondary"
               autoFocus
             />
             {errors.userName && (

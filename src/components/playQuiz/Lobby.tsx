@@ -16,6 +16,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Chat from "./Chat";
 import TeamCard from "./TeamCard";
 import NavBar from "./NavBar";
+import JoinForm from "./JoinForm";
 
 interface IFormInputs {
   userName: string;
@@ -71,20 +72,6 @@ const Lobby = () => {
   const isQuizMaster = !!(userName && socketId);
 
   const colors = ["#991b1b", "#1e40af", "#166534", "#6b21a8", "#854d0e"];
-
-  const joinLobby = (data: IFormInputs) => {
-    socket.emit(
-      "join-lobby",
-      {
-        userName: data.userName,
-        lobbyId: router.query.id,
-      },
-      (response: ILobby) => {
-        setLobby(response);
-      }
-    );
-    setUser({ id: socket.id, name: data.userName, team: null });
-  };
 
   useEffect(() => {
     if (userName && socketId && quizName && numOfQuestions) {
@@ -183,13 +170,6 @@ const Lobby = () => {
       socket.off("teams-randomized", onTeamsRandomized);
     };
   }, [currentTab, numOfUnreadMessages]);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IFormInputs>();
-  const onSubmit: SubmitHandler<IFormInputs> = (data) => joinLobby(data);
 
   return (
     <>
@@ -336,25 +316,7 @@ const Lobby = () => {
           </div>
         )
       ) : (
-        <div className="mx-auto flex h-screen w-1/4 flex-col justify-center gap-4">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="mx-auto flex h-screen w-full flex-col justify-center gap-4"
-          >
-            <Label text="Username" />
-            <input
-              placeholder="Enter Username"
-              maxLength={30}
-              {...register("userName", { required: true })}
-              className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base font-medium text-zinc-200 focus:outline-none"
-              autoFocus
-            />
-            {errors.userName && (
-              <div className="text-red-400">Username is required</div>
-            )}
-            <Button type="submit">Join Lobby</Button>
-          </form>
-        </div>
+        <JoinForm setUser={setUser} />
       )}
     </>
   );

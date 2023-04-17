@@ -1,10 +1,8 @@
 import {
-  CheckIcon,
   EyeIcon,
   EyeSlashIcon,
   FaceSmileIcon,
   PaperClipIcon,
-  PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
@@ -22,12 +20,13 @@ import PlayerBadge from "./PlayerBadge";
 import NavButton from "./NavButton";
 import Popover from "@ui/Popover";
 import RulesModal from "./RulesModal";
+import TeamCard from "./TeamCard";
 
 interface IFormInputs {
   userName: string;
 }
 
-interface IPlayer {
+export interface IPlayer {
   id: string;
   name: string;
   team: string | null;
@@ -67,8 +66,6 @@ const Lobby = () => {
   const [teamMessages, setTeamMessages] = useState<IMessage[]>([]);
   const [numOfUnreadMessages, setNumOfUnreadMessages] = useState(0);
   const [currentTab, setCurrentTab] = useState("global");
-  const [isEditTeamName, setIsEditTeamName] = useState(-1);
-  const [teamName, setTeamName] = useState("");
   const [wasKicked, setWasKicked] = useState(false);
   const [rulesModalOpen, setRulesModalOpen] = useState(false);
 
@@ -93,37 +90,6 @@ const Lobby = () => {
       }
     );
     setUser({ id: socket.id, name: data.userName, team: null });
-  };
-
-  const joinTeam = (teamId: string) => {
-    socket.emit(
-      "join-team",
-      {
-        userName: user?.name,
-        lobbyId: router.query.id,
-        teamId: teamId,
-        oldTeam: user?.team,
-      },
-      (response: ILobby) => {
-        setLobby(response);
-      }
-    );
-    setUser((user) => ({ ...user, team: teamId }));
-    setTeamMessages([]);
-  };
-
-  const editTeamName = (teamId: string) => {
-    socket.emit(
-      "edit-team-name",
-      {
-        lobbyId: router.query.id,
-        teamId: teamId,
-        name: teamName,
-      },
-      (response: ILobby) => {
-        setLobby(response);
-      }
-    );
   };
 
   const leaveLobby = () => {
@@ -443,70 +409,17 @@ const Lobby = () => {
               <div className="col-start-1 col-end-7">
                 <div className="flex h-full gap-4">
                   {lobby?.teams.map((team, i) => (
-                    <div
+                    <TeamCard
                       key={`team_${i}`}
-                      className={`flex h-full w-full flex-col justify-between rounded-md border p-4`}
-                      style={{ borderColor: colors[i] }}
-                    >
-                      <div className="flex items-center gap-2">
-                        {isEditTeamName === i ? (
-                          <input
-                            value={teamName}
-                            className="bg-transparent focus:outline-none"
-                            autoFocus
-                            onChange={(e) => setTeamName(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") {
-                                setIsEditTeamName(-1);
-                                editTeamName(i.toString());
-                                setTeamName("");
-                              }
-                            }}
-                          />
-                        ) : (
-                          <div>{team.name}</div>
-                        )}
-                        {isQuizMaster && isEditTeamName !== i && (
-                          <PencilSquareIcon
-                            className="h-5 w-5 cursor-pointer"
-                            onClick={() => {
-                              setIsEditTeamName(i);
-                              setTeamName(team.name);
-                            }}
-                          />
-                        )}
-                        {isQuizMaster && isEditTeamName === i && (
-                          <CheckIcon
-                            className="h-5 w-5 cursor-pointer"
-                            onClick={() => {
-                              setIsEditTeamName(-1);
-                              editTeamName(i.toString());
-                              setTeamName("");
-                            }}
-                          />
-                        )}
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {team.players.map((player) => (
-                          <PlayerBadge
-                            name={player.name}
-                            id={player.id}
-                            isQuizMaster={isQuizMaster}
-                            key={`${player.name}_${player.id}`}
-                          />
-                        ))}
-                      </div>
-                      {i.toString() !== user.team && !isQuizMaster && (
-                        <Button
-                          intent="secondary"
-                          className="hover:bg-zinc-800"
-                          onClick={() => joinTeam(i.toString())}
-                        >
-                          Join Team
-                        </Button>
-                      )}
-                    </div>
+                      color={colors[i]!}
+                      index={i.toString()}
+                      isQuizMaster={isQuizMaster}
+                      name={team.name}
+                      players={team.players}
+                      setTeamMessages={setTeamMessages}
+                      setUser={setUser}
+                      user={user}
+                    />
                   ))}
                 </div>
               </div>

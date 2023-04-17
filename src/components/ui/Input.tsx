@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { FC, InputHTMLAttributes } from "react";
+import { FC, forwardRef, InputHTMLAttributes } from "react";
 
 const input = cva("button", {
   variants: {
@@ -21,8 +21,12 @@ export interface InputProps
   extends InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof input> {}
 
-const Input: FC<InputProps> = ({ className, intent, ...props }) => (
-  <input className={input({ intent, className })} {...props} />
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, intent, ...props }, ref) => {
+    return (
+      <input ref={ref} className={input({ intent, className })} {...props} />
+    );
+  }
 );
 
 export default Input;

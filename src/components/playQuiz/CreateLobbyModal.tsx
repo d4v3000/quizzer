@@ -42,6 +42,7 @@ const CreateLobbyModal: FC<IProps> = ({
 
   let quiz: { id: string; numOfQuestions: string; title: string };
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   let getQuizzes;
   if (quizId && numOfQuestions && quizTitle) {
@@ -82,6 +83,7 @@ const CreateLobbyModal: FC<IProps> = ({
   };
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     getQuizzes?.refetch();
   }, []);

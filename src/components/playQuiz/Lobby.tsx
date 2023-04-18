@@ -79,7 +79,9 @@ const Lobby = () => {
 
       setLobby(lobby);
     }
+  }, []);
 
+  useEffect(() => {
     const onLobbyJoin = (data: ILobby, message: IMessage) => {
       setLobby(data);
       setMessages([...messages, message]);

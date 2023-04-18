@@ -21,24 +21,24 @@ const ChatCard: FC<IProps> = ({ user }) => {
 
   const messages = useGameStore((state) => state.messages);
   const teamMessages = useGameStore((state) => state.teamMessages);
-  const setMessages = useGameStore((state) => state.setMessages);
-  const setTeamMessages = useGameStore((state) => state.setTeamMessages);
+  const addMessage = useGameStore((state) => state.addMessage);
+  const resetMessages = useGameStore((state) => state.resetMessages);
+  const addTeamMessage = useGameStore((state) => state.addTeamMessage);
 
   useEffect(() => {
-    setMessages([]);
-    setTeamMessages([]);
+    resetMessages();
   }, []);
 
   useEffect(() => {
     const onGlobalMessage = (message: IMessage) => {
-      setMessages([...messages, message]);
+      addMessage(message);
       if (currentTab !== "global") {
         setNumOfUnreadMessages(numOfUnreadMessages + 1);
       }
     };
 
     const onTeamMessage = (message: IMessage) => {
-      setTeamMessages([...teamMessages, message]);
+      addTeamMessage(message);
       if (currentTab !== "team") {
         setNumOfUnreadMessages(numOfUnreadMessages + 1);
       }

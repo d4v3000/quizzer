@@ -17,8 +17,10 @@ type Actions = {
   setQuizName: (quizName: string) => void;
   setNumOfQuestions: (numOfQuestions: string) => void;
   setNumOfTeams: (numOfTeams: number) => void;
-  setMessages: (messages: IMessage[]) => void;
-  setTeamMessages: (teamMessages: IMessage[]) => void;
+  addMessage: (message: IMessage) => void;
+  addTeamMessage: (message: IMessage) => void;
+  resetTeamMessages: () => void;
+  resetMessages: () => void;
   reset: () => void;
 };
 
@@ -32,15 +34,23 @@ const initialState: State = {
   teamMessages: [],
 };
 
-export const useGameStore = create<State & Actions>((set) => ({
+export const useGameStore = create<State & Actions>((set, get) => ({
   ...initialState,
   setSocketId: (socketId: string) => set({ socketId }),
   setUserName: (userName: string) => set({ userName }),
   setQuizName: (quizName: string) => set({ quizName }),
   setNumOfQuestions: (numOfQuestions: string) => set({ numOfQuestions }),
   setNumOfTeams: (numOfTeams: number) => set({ numOfTeams }),
-  setMessages: (messages: IMessage[]) => set({ messages }),
-  setTeamMessages: (teamMessages: IMessage[]) => set({ teamMessages }),
+  addMessage: (message: IMessage) =>
+    set({ messages: [...get().messages, message] }),
+  addTeamMessage: (message: IMessage) =>
+    set({ teamMessages: [...get().teamMessages, message] }),
+  resetMessages: () => {
+    set({ messages: [], teamMessages: [] });
+  },
+  resetTeamMessages: () => {
+    set({ teamMessages: [] });
+  },
   reset: () => {
     set(initialState);
   },

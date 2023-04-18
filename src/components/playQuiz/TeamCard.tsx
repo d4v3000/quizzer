@@ -43,7 +43,7 @@ const TeamCard: FC<IProps> = ({
   const [teamName, setTeamName] = useState(name);
   const [isEdit, setIsEdit] = useState(false);
 
-  const setTeamMessages = useGameStore((state) => state.setTeamMessages);
+  const resetTeamMessages = useGameStore((state) => state.resetTeamMessages);
 
   const editTeamName = (teamId: string) => {
     socket.emit("edit-team-name", {
@@ -68,7 +68,7 @@ const TeamCard: FC<IProps> = ({
         team: teamId,
       })
     );
-    setTeamMessages([]);
+    resetTeamMessages();
   };
 
   return (

@@ -51,7 +51,7 @@ const Lobby = () => {
   const numOfQuestions = useGameStore((state) => state.numOfQuestions);
   const numOfTeams = useGameStore((state) => state.numOfTeams);
   const messages = useGameStore((state) => state.messages);
-  const setMessages = useGameStore((state) => state.setMessages);
+  const addMessage = useGameStore((state) => state.addMessage);
   const isQuizMaster = !!(userName && socketId);
 
   const colors = ["#991b1b", "#1e40af", "#166534", "#6b21a8", "#854d0e"];
@@ -84,7 +84,7 @@ const Lobby = () => {
   useEffect(() => {
     const onLobbyJoin = (data: ILobby, message: IMessage) => {
       setLobby(data);
-      setMessages([...messages, message]);
+      addMessage(message);
     };
 
     const onTeamJoin = (data: ILobby) => {

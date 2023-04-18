@@ -3,16 +3,25 @@ import Button from "@ui/Button";
 import Input from "@ui/Input";
 import Label from "@ui/Label";
 import { LoadingSpinner } from "@ui/Loader";
-import Modal from "@ui/Modal";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import CreateLobbyModal from "@components/playQuiz/CreateLobbyModal";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ inviteCode: string }>();
+  const onSubmit: SubmitHandler<{ inviteCode: string }> = (data) =>
+    router.push(`/play/${data.inviteCode}`);
 
   return (
     <>
@@ -31,16 +40,28 @@ const Home: NextPage = () => {
             </p>
             <div className="w-3/5">
               <Label text="Enter invitation code" />
-              <div className="flex gap-2 pt-2">
-                <Input placeholder="Invitation Code" className="py-4" />
+
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex gap-2 pt-2"
+              >
+                <Input
+                  {...register("inviteCode", { required: true })}
+                  placeholder="Invitation Code"
+                  className="py-4"
+                />
                 <Button
                   intent="secondary"
                   className="w-1/4 hover:scale-[1.03]"
-                  onClick={() => setIsModalOpen(true)}
+                  type="submit"
                 >
                   Join Lobby
                 </Button>
-              </div>
+              </form>
+
+              {errors.inviteCode && (
+                <div className="text-red-400">Invitation code is required</div>
+              )}
             </div>
             <div className="w-3/5">
               {session ? (
@@ -55,6 +76,10 @@ const Home: NextPage = () => {
                       Create Room
                     </button>
                   </div>
+                  <CreateLobbyModal
+                    isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                  />
                 </>
               ) : (
                 <>
@@ -73,9 +98,6 @@ const Home: NextPage = () => {
             </div>
           </div>
         )}
-        <Modal open={isModalOpen} setOpen={setIsModalOpen}>
-          <p className="text-4xl text-gray-200">Coming soon</p>
-        </Modal>
       </main>
     </>
   );

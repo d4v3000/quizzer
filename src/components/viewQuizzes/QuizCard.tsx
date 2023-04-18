@@ -5,8 +5,9 @@ import {
 import Button from "@ui/Button";
 import { isUndefined } from "lodash";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Prisma } from "@prisma/client";
+import CreateLobbyModal from "@components/playQuiz/CreateLobbyModal";
 
 type Quiz = Prisma.QuizGetPayload<{ include: { questions: true } }>;
 
@@ -16,6 +17,7 @@ interface IProps {
 
 const QuizCard: FC<IProps> = ({ quiz }) => {
   const formatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-2 rounded-md border border-zinc-700 p-4">
@@ -38,9 +40,17 @@ const QuizCard: FC<IProps> = ({ quiz }) => {
           intent="secondary"
           className="w-1/3 hover:scale-[1.03]"
           size="medium"
+          onClick={() => setIsModalOpen(true)}
         >
           Play
         </Button>
+        <CreateLobbyModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          quizId={quiz.id}
+          numOfQuestions={quiz.questions.length.toString()}
+          quizTitle={quiz.title}
+        />
         <Link href={`/quiz/${quiz.id}/edit`} className="w-1/3">
           <Button
             intent="secondary"

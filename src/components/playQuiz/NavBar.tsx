@@ -6,9 +6,10 @@ import { FaceSmileIcon } from "@heroicons/react/24/outline";
 import PlayerBadge from "./PlayerBadge";
 import { UserIcon } from "@heroicons/react/24/solid";
 import { IPlayer } from "./Lobby";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { socket } from "@utils/websocket/socket";
 import { useRouter } from "next/router";
+import { useGameStore } from "@utils/zustand/gameStore";
 
 interface IProps {
   players?: IPlayer[];
@@ -20,8 +21,11 @@ const NavBar: FC<IProps> = ({ players, isQuizMaster, userName }) => {
   const router = useRouter();
   const [rulesModalOpen, setRulesModalOpen] = useState(false);
 
+  const reset = useGameStore((state) => state.reset);
+
   const leaveLobby = () => {
     socket.emit("leave-lobby", router.query.id);
+    reset();
     router.push("/");
   };
 

@@ -1,7 +1,7 @@
 import { IMessage } from "@components/playQuiz/Lobby";
 import { create } from "zustand";
 
-interface IProps {
+type State = {
   socketId: string;
   userName: string;
   quizName: string;
@@ -9,6 +9,9 @@ interface IProps {
   numOfTeams: number;
   messages: IMessage[];
   teamMessages: IMessage[];
+};
+
+type Actions = {
   setSocketId: (socketId: string) => void;
   setUserName: (userName: string) => void;
   setQuizName: (quizName: string) => void;
@@ -16,9 +19,10 @@ interface IProps {
   setNumOfTeams: (numOfTeams: number) => void;
   setMessages: (messages: IMessage[]) => void;
   setTeamMessages: (teamMessages: IMessage[]) => void;
-}
+  reset: () => void;
+};
 
-export const useGameStore = create<IProps>((set) => ({
+const initialState: State = {
   socketId: "",
   userName: "",
   quizName: "",
@@ -26,6 +30,10 @@ export const useGameStore = create<IProps>((set) => ({
   numOfTeams: 2,
   messages: [],
   teamMessages: [],
+};
+
+export const useGameStore = create<State & Actions>((set) => ({
+  ...initialState,
   setSocketId: (socketId: string) => set({ socketId }),
   setUserName: (userName: string) => set({ userName }),
   setQuizName: (quizName: string) => set({ quizName }),
@@ -33,4 +41,7 @@ export const useGameStore = create<IProps>((set) => ({
   setNumOfTeams: (numOfTeams: number) => set({ numOfTeams }),
   setMessages: (messages: IMessage[]) => set({ messages }),
   setTeamMessages: (teamMessages: IMessage[]) => set({ teamMessages }),
+  reset: () => {
+    set(initialState);
+  },
 }));

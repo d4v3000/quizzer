@@ -19,9 +19,18 @@ interface IFormInputs {
 interface IProps {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  quizId?: string;
+  numOfQuestions?: string;
+  quizTitle?: string;
 }
 
-const CreateLobbyModal: FC<IProps> = ({ isModalOpen, setIsModalOpen }) => {
+const CreateLobbyModal: FC<IProps> = ({
+  isModalOpen,
+  setIsModalOpen,
+  quizId,
+  numOfQuestions,
+  quizTitle,
+}) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,10 +40,24 @@ const CreateLobbyModal: FC<IProps> = ({ isModalOpen, setIsModalOpen }) => {
   const setNumOfQuestions = useGameStore((state) => state.setNumOfQuestions);
   const setNumOfTeams = useGameStore((state) => state.setNumOfTeams);
 
-  const getQuizzes = trpc.quiz.getAllQuizzes.useQuery();
+  let quiz: { id: string; numOfQuestions: string; title: string };
+
+  // @ts-ignore
+  let getQuizzes;
+  if (quizId && numOfQuestions && quizTitle) {
+    quiz = {
+      id: quizId,
+      numOfQuestions: numOfQuestions,
+      title: quizTitle,
+    };
+  } else {
+    getQuizzes = trpc.quiz.getAllQuizzes.useQuery();
+  }
 
   const createLobby = (data: IFormInputs) => {
-    const quiz = JSON.parse(data.quiz);
+    if (!quiz) {
+      quiz = JSON.parse(data.quiz);
+    }
 
     setIsLoading(true);
     setUserName(data.userName);
@@ -59,7 +82,8 @@ const CreateLobbyModal: FC<IProps> = ({ isModalOpen, setIsModalOpen }) => {
   };
 
   useEffect(() => {
-    getQuizzes.refetch();
+    // @ts-ignore
+    getQuizzes?.refetch();
   }, []);
 
   const {
@@ -86,28 +110,30 @@ const CreateLobbyModal: FC<IProps> = ({ isModalOpen, setIsModalOpen }) => {
               <div className="text-red-400">Username is required</div>
             )}
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <Label text="Quiz" />
-            {getQuizzes.isLoading ? (
-              <LoadingSpinner />
-            ) : (
-              <select
-                className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
-                {...register("quiz", { required: true })}
-              >
-                {getQuizzes.data?.map((quiz) => (
-                  <option
-                    key={quiz.id}
-                    value={`{"id": "${quiz.id}","title": "${
-                      quiz.title
-                    }","numOfQuestions": "${quiz._count.questions.toString()}"}`}
-                  >
-                    {quiz.title}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
+          {!quizId && getQuizzes && (
+            <div className="flex flex-col items-center gap-2">
+              <Label text="Quiz" />
+              {getQuizzes.isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <select
+                  className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
+                  {...register("quiz", { required: true })}
+                >
+                  {getQuizzes.data?.map((quiz) => (
+                    <option
+                      key={quiz.id}
+                      value={`{"id": "${quiz.id}","title": "${
+                        quiz.title
+                      }","numOfQuestions": "${quiz._count.questions.toString()}"}`}
+                    >
+                      {quiz.title}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+          )}
           <div className="flex flex-col gap-2">
             <Label text="Number of teams" />
             <select

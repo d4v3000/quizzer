@@ -1,11 +1,11 @@
 import MainContainer from "@components/editQuiz/MainContainer";
 import SideBar from "@components/editQuiz/SideBar";
+import CreateLobbyModal from "@components/playQuiz/CreateLobbyModal";
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
 import { LoadingSpinner } from "@ui/Loader";
-import Modal from "@ui/Modal";
 import { trpc } from "@utils/trpc";
 import { useQuizStore } from "@utils/zustand/quizStore";
 import { useRouter } from "next/router";
@@ -93,9 +93,13 @@ function Edit() {
           </Button>
         </div>
       </div>
-      <Modal open={isModalOpen} setOpen={setIsModalOpen}>
-        <p className="text-4xl">Coming soon</p>
-      </Modal>
+      <CreateLobbyModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        quizId={router.query.id as string}
+        numOfQuestions={questions.length.toString()}
+        quizTitle={quizName}
+      />
       <div className="flex h-5/6 w-full flex-grow gap-6 pt-4">
         <Background className="relative flex h-full w-1/5 justify-center overflow-hidden">
           <div className="flex h-full w-full flex-col items-center justify-between">

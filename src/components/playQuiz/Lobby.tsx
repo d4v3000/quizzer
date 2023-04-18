@@ -161,7 +161,7 @@ const Lobby = () => {
                   quizName={lobby?.quizName}
                 />
               </Background>
-              <Background className="col-span-2 col-start-5 row-span-1 row-start-2">
+              <Background className="col-span-2 col-start-5 row-span-2">
                 <ChatCard user={user} />
               </Background>
               <div className="col-start-1 col-end-7">

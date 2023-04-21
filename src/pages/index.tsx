@@ -9,6 +9,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import CreateLobbyModal from "@components/playQuiz/CreateLobbyModal";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { GetServerSideProps } from "next";
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
@@ -101,6 +104,14 @@ const Home: NextPage = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {
+      session: await getServerSession(context.req, context.res, authOptions),
+    },
+  };
 };
 
 export default Home;

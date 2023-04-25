@@ -76,6 +76,15 @@ export const quizRouter = router({
       },
     });
   }),
+  deleteQuiz: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.quiz.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
   getQuiz: protectedProcedure
     .input(
       z.object({

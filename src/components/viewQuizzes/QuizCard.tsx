@@ -8,6 +8,7 @@ import Link from "next/link";
 import { FC, useState } from "react";
 import { Prisma } from "@prisma/client";
 import CreateLobbyModal from "@components/playQuiz/CreateLobbyModal";
+import DeleteQuizModal from "@components/editQuiz/DeleteQuizModal";
 
 type Quiz = Prisma.QuizGetPayload<{ include: { questions: true } }>;
 
@@ -17,7 +18,8 @@ interface IProps {
 
 const QuizCard: FC<IProps> = ({ quiz }) => {
   const formatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-2 rounded-md border border-zinc-700 p-4">
@@ -40,13 +42,13 @@ const QuizCard: FC<IProps> = ({ quiz }) => {
           intent="secondary"
           className="w-1/3 hover:scale-[1.03]"
           size="medium"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => setIsCreateModalOpen(true)}
         >
           Play
         </Button>
         <CreateLobbyModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
+          isModalOpen={isCreateModalOpen}
+          setIsModalOpen={setIsCreateModalOpen}
           quizId={quiz.id}
           numOfQuestions={quiz.questions.length.toString()}
           quizTitle={quiz.title}
@@ -64,9 +66,15 @@ const QuizCard: FC<IProps> = ({ quiz }) => {
           intent="danger"
           className="w-1/3 hover:scale-[1.03]"
           size="medium"
+          onClick={() => setIsDeleteModalOpen(true)}
         >
           Delete
         </Button>
+        <DeleteQuizModal
+          open={isDeleteModalOpen}
+          setOpen={setIsDeleteModalOpen}
+          id={quiz.id}
+        />
       </div>
     </div>
   );

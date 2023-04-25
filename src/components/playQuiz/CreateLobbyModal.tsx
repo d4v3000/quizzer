@@ -3,12 +3,12 @@ import Input from "@ui/Input";
 import Label from "@ui/Label";
 import { LoadingSpinner } from "@ui/Loader";
 import Modal from "@ui/Modal";
-import { trpc } from "@utils/trpc";
 import { socket } from "@utils/websocket/socket";
 import { useGameStore } from "@utils/zustand/gameStore";
 import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import AllQuizzesSelect from "./AllQuizzesSelect";
 
 interface IFormInputs {
   quiz: string;
@@ -33,6 +33,11 @@ const CreateLobbyModal: FC<IProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [quiz, setQuiz] = useState<{
+    id: string;
+    numOfQuestions: string;
+    title: string;
+  }>();
 
   const setSocketId = useGameStore((state) => state.setSocketId);
   const setUserName = useGameStore((state) => state.setUserName);
@@ -40,40 +45,21 @@ const CreateLobbyModal: FC<IProps> = ({
   const setNumOfQuestions = useGameStore((state) => state.setNumOfQuestions);
   const setNumOfTeams = useGameStore((state) => state.setNumOfTeams);
 
-  let quiz: { id: string; numOfQuestions: string; title: string };
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  let getQuizzes;
-  if (quizId && numOfQuestions && quizTitle) {
-    quiz = {
-      id: quizId,
-      numOfQuestions: numOfQuestions,
-      title: quizTitle,
-    };
-  } else {
-    getQuizzes = trpc.quiz.getAllQuizzes.useQuery();
-  }
-
   const createLobby = (data: IFormInputs) => {
-    if (!quiz) {
-      quiz = JSON.parse(data.quiz);
-    }
-
     setIsLoading(true);
     setUserName(data.userName);
     setSocketId(socket.id);
-    setQuizName(quiz.title);
-    setNumOfQuestions(quiz.numOfQuestions);
+    setQuizName(quiz!.title);
+    setNumOfQuestions(quiz!.numOfQuestions);
     setNumOfTeams(data.numOfTeams);
     socket.emit(
       "create-lobby",
       {
-        quizId: quiz.id,
+        quizId: quiz!.id,
         userName: data.userName,
         numOfTeams: data.numOfTeams,
-        quizName: quiz.title,
-        numOfQuestions: quiz.numOfQuestions,
+        quizName: quiz!.title,
+        numOfQuestions: quiz!.numOfQuestions,
       },
       (response: { id: string }) => {
         setIsLoading(false);
@@ -83,10 +69,10 @@ const CreateLobbyModal: FC<IProps> = ({
   };
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    getQuizzes?.refetch();
-  }, []);
+    if (quizId && numOfQuestions && quizTitle) {
+      setQuiz({ id: quizId, numOfQuestions: numOfQuestions, title: quizTitle });
+    }
+  }, [quizId, numOfQuestions, quizTitle]);
 
   const {
     register,
@@ -112,30 +98,7 @@ const CreateLobbyModal: FC<IProps> = ({
               <div className="text-red-400">Username is required</div>
             )}
           </div>
-          {!quizId && getQuizzes && (
-            <div className="flex flex-col items-center gap-2">
-              <Label text="Quiz" />
-              {getQuizzes.isLoading ? (
-                <LoadingSpinner />
-              ) : (
-                <select
-                  className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
-                  {...register("quiz", { required: true })}
-                >
-                  {getQuizzes.data?.map((quiz) => (
-                    <option
-                      key={quiz.id}
-                      value={`{"id": "${quiz.id}","title": "${
-                        quiz.title
-                      }","numOfQuestions": "${quiz._count.questions.toString()}"}`}
-                    >
-                      {quiz.title}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
-          )}
+          {!quizId && <AllQuizzesSelect setQuiz={setQuiz} />}
           <div className="flex flex-col gap-2">
             <Label text="Number of teams" />
             <select

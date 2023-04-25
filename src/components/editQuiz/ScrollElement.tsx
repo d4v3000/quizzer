@@ -1,11 +1,10 @@
 import { Bars3Icon, TrashIcon } from "@heroicons/react/24/outline";
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { IQuestion } from "../../models/question";
-import DeleteModal from "./DeleteModal";
+import { FC, useState } from "react";
 import IconTypes from "./IconTypes";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useQuizStore } from "@utils/zustand/quizStore";
+import DeleteQuestionModal from "./DeleteQuestionModal";
 
 interface IProps {
   title: string;
@@ -66,7 +65,7 @@ const ScrollElement: FC<IProps> = ({ title, type, i }) => {
         {...attributes}
         {...listeners}
       />
-      <DeleteModal open={open} setOpen={setOpen} index={i} />
+      <DeleteQuestionModal open={open} setOpen={setOpen} index={i} />
     </div>
   );
 };

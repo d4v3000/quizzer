@@ -9,13 +9,13 @@ interface IProps {
   index: number;
 }
 
-const DeleteModal: FC<IProps> = ({ open, setOpen, index }) => {
+const DeleteQuestionModal: FC<IProps> = ({ open, setOpen, index }) => {
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
   const currentQuestion = useQuizStore((state) => state.currentQuestion);
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
 
-  const handleClick = () => {
+  const handleRemove = () => {
     setQuestions(questions.filter((_, i) => i !== index));
     setCurrentQuestion(currentQuestion - 1);
     setOpen(false);
@@ -26,10 +26,10 @@ const DeleteModal: FC<IProps> = ({ open, setOpen, index }) => {
       <p className="text-xl font-bold">Remove round?</p>
       <p className="text-lg font-semibold">Do you want to remove this round?</p>
       <div className="flex gap-4">
-        <Button intent="danger" size="large" onClick={() => handleClick()}>
+        <Button intent="danger" size="large" onClick={() => handleRemove()}>
           Remove Round
         </Button>
-        <Button intent="secondary" size="large">
+        <Button intent="secondary" size="large" onClick={() => setOpen(false)}>
           Cancel
         </Button>
       </div>
@@ -37,4 +37,4 @@ const DeleteModal: FC<IProps> = ({ open, setOpen, index }) => {
   );
 };
 
-export default DeleteModal;
+export default DeleteQuestionModal;

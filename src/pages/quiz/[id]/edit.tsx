@@ -71,11 +71,7 @@ function Edit() {
   return (
     <div className="flex h-screen flex-col px-10 py-4 text-gray-200">
       <div className="flex w-full justify-between">
-        <Button
-          intent="secondary"
-          size="large"
-          onClick={() => router.push("/quiz")}
-        >
+        <Button intent="secondary" size="large" onClick={() => router.back()}>
           <ArrowLongLeftIcon className="h-6 w-6" />
           Back
         </Button>

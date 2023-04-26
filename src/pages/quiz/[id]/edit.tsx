@@ -100,8 +100,8 @@ function Edit() {
         numOfQuestions={questions.length.toString()}
         quizTitle={quizName}
       />
-      <div className="flex h-5/6 w-full flex-grow gap-6 pt-4">
-        <Background className="relative flex h-full w-1/5 justify-center overflow-hidden">
+      <div className="flex h-full w-full gap-6 pt-4">
+        <Background className="relative h-full w-1/5 overflow-hidden ">
           <div className="flex h-full w-full flex-col items-center justify-between">
             <div className="flex w-full items-center">
               <p className="w-full truncate text-center text-xl font-semibold">

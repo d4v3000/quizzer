@@ -10,9 +10,10 @@ interface IProps {
   title: string;
   type: string;
   i: number;
+  width: number;
 }
 
-const ScrollElement: FC<IProps> = ({ title, type, i }) => {
+const ScrollElement: FC<IProps> = ({ title, type, i, width }) => {
   const [hovered, setHovered] = useState(false);
   const [open, setOpen] = useState(false);
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
@@ -31,40 +32,44 @@ const ScrollElement: FC<IProps> = ({ title, type, i }) => {
 
   return (
     <div
-      className="mr-4 flex items-center gap-2"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       ref={setNodeRef}
       style={style}
     >
-      <TrashIcon
-        className={`h-7 w-7 cursor-pointer stroke-2 ${
-          hovered ? "" : "invisible"
-        }`}
-        onClick={() => setOpen(true)}
-      />
       <div
-        className={`${
-          currentQuestion === i
-            ? "bg-gradient-to-r from-indigo-600 to-violet-700"
-            : "bg-zinc-500"
-        } w-full cursor-pointer rounded-md p-[3px]`}
-        onClick={() => setCurrentQuestion(i)}
+        className="flex w-full items-center gap-2 p-2"
+        style={{ maxWidth: width }}
       >
-        <div className="flex h-full w-full items-center justify-between gap-2 bg-zinc-900 p-1">
-          <p className="w-full truncate">
-            {`${i + 1}. `} {title}
-          </p>
-          <IconTypes type={type} />
+        <TrashIcon
+          className={`h-8 w-8 cursor-pointer stroke-2 ${
+            hovered ? "" : "invisible"
+          }`}
+          onClick={() => setOpen(true)}
+        />
+        <div
+          className={`${
+            currentQuestion === i
+              ? "bg-gradient-to-r from-indigo-600 to-violet-700"
+              : "bg-zinc-500"
+          } w-full cursor-pointer overflow-auto rounded-md p-[3px]`}
+          onClick={() => setCurrentQuestion(i)}
+        >
+          <div className="flex w-full gap-2 bg-zinc-900 p-1">
+            <div className="w-full truncate">
+              {`${i + 1}. `} {title}
+            </div>
+            <IconTypes type={type} />
+          </div>
         </div>
+        <Bars3Icon
+          className={`h-8 w-8 cursor-pointer stroke-2 ${
+            hovered ? "" : "invisible"
+          }`}
+          {...attributes}
+          {...listeners}
+        />
       </div>
-      <Bars3Icon
-        className={`h-7 w-7 cursor-pointer stroke-2 ${
-          hovered ? "" : "invisible"
-        }`}
-        {...attributes}
-        {...listeners}
-      />
       <DeleteQuestionModal open={open} setOpen={setOpen} index={i} />
     </div>
   );

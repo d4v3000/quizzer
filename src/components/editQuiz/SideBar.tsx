@@ -42,16 +42,27 @@ const SideBar: FC = () => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    const activeIndex = toNumber(active.id) - 1;
+    const overIndex = toNumber(over?.id) - 1;
+
     if (active.id !== over?.id) {
-      setQuestions(
-        arrayMove<IQuestion>(
-          questions,
-          toNumber(active.id) - 1,
-          toNumber(over?.id) - 1
-        )
-      );
-      if (currentQuestion === toNumber(active.id) - 1) {
-        setCurrentQuestion(toNumber(over?.id) - 1);
+      setQuestions(arrayMove<IQuestion>(questions, activeIndex, overIndex));
+
+      if (currentQuestion === activeIndex) {
+        // current question is dragged
+        setCurrentQuestion(overIndex);
+      } else if (
+        activeIndex > currentQuestion &&
+        overIndex <= currentQuestion
+      ) {
+        // question under current question gets dragged above
+        setCurrentQuestion(currentQuestion + 1);
+      } else if (
+        activeIndex < currentQuestion &&
+        overIndex >= currentQuestion
+      ) {
+        // question over current question gets dragged below
+        setCurrentQuestion(currentQuestion - 1);
       }
     }
   };

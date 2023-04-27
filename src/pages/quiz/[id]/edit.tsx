@@ -10,12 +10,16 @@ import { trpc } from "@utils/trpc";
 import { useQuizStore } from "@utils/zustand/quizStore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 function Edit() {
   const router = useRouter();
 
   const quiz = trpc.quiz.getQuiz.useQuery({ id: router.query.id as string });
-  const editQuiz = trpc.quiz.editQuiz.useMutation();
+  const editQuiz = trpc.quiz.editQuiz.useMutation({
+    onSuccess: () => toast.success("Quiz saved succesfully"),
+    onError: () => toast.error("There was an error saving this quiz"),
+  });
 
   const quizName = useQuizStore((state) => state.name);
   const numTeams = useQuizStore((state) => state.numTeams);

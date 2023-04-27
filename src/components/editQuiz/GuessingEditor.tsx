@@ -1,6 +1,7 @@
 import Input from "@ui/Input";
 import Label from "@ui/Label";
 import { useQuizStore } from "@utils/zustand/quizStore";
+import { toNumber } from "lodash";
 
 const GuessingEditor = () => {
   const questions = useQuizStore((state) => state.questions);
@@ -12,10 +13,12 @@ const GuessingEditor = () => {
       <Input
         placeholder="Enter the correct number"
         type={"number"}
-        value={questions[currentQuestion]!.answers[0]!.title}
+        value={questions[currentQuestion]!.guessingAnswer?.answer}
         onChange={(e) => {
           const newQuestions = [...questions];
-          questions[currentQuestion]!.answers[0]!.title = e.target.value;
+          questions[currentQuestion]!.guessingAnswer!.answer = toNumber(
+            e.target.value
+          );
           useQuizStore.setState({ questions: newQuestions });
         }}
       />

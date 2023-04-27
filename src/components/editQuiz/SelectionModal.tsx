@@ -20,24 +20,23 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
       type,
       title: "",
       imgUrl: "",
-      answers: [],
+      guessingAnswer: null,
+      locationAnswer: null,
+      multipleChoiceAnswers: null,
     };
     if (type === "guessing") {
-      newQuestion.answers = [];
+      newQuestion.guessingAnswer = { answer: 0 };
     } else if (type === "location") {
-      newQuestion.answers = [
-        {
-          x: 0,
-          y: 0,
-        },
-      ];
+      newQuestion.locationAnswer = { x: 0, y: 0 };
     } else if (type === "question") {
-      newQuestion.answers = [
-        { placeholder: "A", title: "", isCorrect: true },
-        { placeholder: "B", title: "", isCorrect: false },
-        { placeholder: "C", title: "", isCorrect: false },
-        { placeholder: "D", title: "", isCorrect: false },
-      ];
+      newQuestion.multipleChoiceAnswers = {
+        answers: [
+          { name: "", isCorrect: true },
+          { name: "", isCorrect: false },
+          { name: "", isCorrect: false },
+          { name: "", isCorrect: false },
+        ],
+      };
     }
     setQuestions([...questions, newQuestion]);
     setCurrentQuestion(questions.length);
@@ -53,11 +52,10 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
       type: "location",
       name: "Location",
     },
-    // Currently broken, uncomment after db schema changes
-    // {
-    //   type: "guessing",
-    //   name: "Guessing",
-    // },
+    {
+      type: "guessing",
+      name: "Guessing",
+    },
   ];
 
   return (

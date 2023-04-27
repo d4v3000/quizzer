@@ -16,8 +16,8 @@ const LocationEditor: FC<IProps> = ({ children }) => {
     const localX = e.clientX - rect.left;
     const localY = e.clientY - rect.top;
     const newQuestions = [...questions];
-    questions[currentQuestion]!.answers[0]!.x = localX;
-    questions[currentQuestion]!.answers[0]!.y = localY;
+    questions[currentQuestion]!.locationAnswer!.x = localX;
+    questions[currentQuestion]!.locationAnswer!.y = localY;
     useQuizStore.setState({ questions: newQuestions });
     setMakerPos({ x: localX, y: localY });
   };

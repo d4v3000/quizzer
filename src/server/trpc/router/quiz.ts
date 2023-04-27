@@ -33,16 +33,12 @@ export const quizRouter = router({
           },
         },
         include: {
-          questions: {
-            include: {
-              answers: true,
-            },
-          },
           _count: {
             select: {
               questions: true,
             },
           },
+          questions: true,
         },
         orderBy: orderBySet,
         take: input.take,
@@ -106,7 +102,13 @@ export const quizRouter = router({
         include: {
           questions: {
             include: {
-              answers: true,
+              guessingAnswer: true,
+              locationAnswer: true,
+              multipleChoiceAnswers: {
+                include: {
+                  answers: true,
+                },
+              },
             },
           },
         },
@@ -123,15 +125,17 @@ export const quizRouter = router({
             title: z.string(),
             imgUrl: z.string().optional(),
             type: z.enum(["question", "location", "guessing"]),
-            answers: z.array(
-              z.object({
-                title: z.string().optional(),
-                placeholder: z.string().optional(),
-                isCorrect: z.boolean().optional(),
-                x: z.number().optional(),
-                y: z.number().optional(),
+            multipleChoiceAnswers: z
+              .object({
+                answers: z.array(
+                  z.object({ name: z.string(), isCorrect: z.boolean() })
+                ),
               })
-            ),
+              .nullable(),
+            locationAnswer: z
+              .object({ x: z.number(), y: z.number() })
+              .nullable(),
+            guessingAnswer: z.object({ answer: z.number() }).nullable(),
           })
         ),
       })
@@ -150,8 +154,29 @@ export const quizRouter = router({
               title: question.title,
               imgUrl: question.imgUrl,
               type: question.type,
-              answers: {
-                create: question.answers,
+              guessingAnswer:
+                question.guessingAnswer != null
+                  ? {
+                      create: question.guessingAnswer,
+                    }
+                  : undefined,
+              locationAnswer:
+                question.locationAnswer != null
+                  ? {
+                      create: question.locationAnswer,
+                    }
+                  : undefined,
+              multipleChoiceAnswers: {
+                create: {
+                  answers: {
+                    create: question.multipleChoiceAnswers?.answers.map(
+                      (answer) => ({
+                        name: answer.name,
+                        isCorrect: answer.isCorrect,
+                      })
+                    ),
+                  },
+                },
               },
             })),
           },

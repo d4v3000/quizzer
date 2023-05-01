@@ -6,6 +6,7 @@ interface IProps {
   onValueChange: (value: string) => void;
   items: IItem[];
   icon?: ReactNode;
+  className?: string;
 }
 
 interface IItem {
@@ -13,10 +14,18 @@ interface IItem {
   text: string;
 }
 
-const Select: FC<IProps> = ({ value, onValueChange, items, icon }) => {
+const Select: FC<IProps> = ({
+  value,
+  onValueChange,
+  items,
+  icon,
+  className,
+}) => {
   return (
     <RadixSelect.Root value={value} onValueChange={onValueChange}>
-      <RadixSelect.Trigger className="h-full w-28 rounded-md p-2 hover:bg-zinc-700 focus:outline-0">
+      <RadixSelect.Trigger
+        className={`h-full w-28 rounded-md p-2 hover:bg-zinc-700 focus:outline-0 ${className}`}
+      >
         <div className="flex items-center justify-center gap-4">
           <RadixSelect.Value aria-label={value}>
             {items.find((item) => item.value === value)?.text}

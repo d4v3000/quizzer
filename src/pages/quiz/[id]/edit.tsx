@@ -15,8 +15,12 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 function Edit() {
   const router = useRouter();
+  const quizId = router.query.id as string;
 
-  const quiz = trpc.quiz.getQuiz.useQuery({ id: router.query.id as string });
+  const quiz = trpc.quiz.getQuiz.useQuery(
+    { id: quizId },
+    { enabled: !!quizId }
+  );
   const editQuiz = trpc.quiz.editQuiz.useMutation({
     onSuccess: () => toast.success("Quiz saved succesfully"),
     onError: () => toast.error("There was an error saving this quiz"),
@@ -39,7 +43,7 @@ function Edit() {
 
   const handleSave = () => {
     editQuiz.mutate({
-      id: router.query.id as string,
+      id: quizId,
       title: quizName,
       numberTeams: numTeams,
       questions: questions,
@@ -97,7 +101,7 @@ function Edit() {
       <CreateLobbyModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        quizId={router.query.id as string}
+        quizId={quizId}
         numOfQuestions={questions.length.toString()}
         quizTitle={quizName}
       />

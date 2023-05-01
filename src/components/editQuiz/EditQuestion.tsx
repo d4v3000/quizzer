@@ -43,7 +43,7 @@ const EditQuestion = () => {
         onChange={(e) => handleNameChange(e)}
         value={questions[currentQuestion]?.title}
       />
-      {!showImg && (
+      {!showImg && questions[currentQuestion]?.type !== "location" && (
         <>
           <Label text="Image" />
 
@@ -61,40 +61,25 @@ const EditQuestion = () => {
           </div>
         </>
       )}
-      {showImg &&
-        (questions[currentQuestion]?.type === "location" ? (
-          <LocationEditor>
-            <img
-              src={questions[currentQuestion]?.imgUrl}
-              alt=""
-              className="w-fit"
-            />
-            <XMarkIcon
-              className="absolute top-1 right-1 h-6 w-6 cursor-pointer stroke-black"
-              onClick={() => {
-                setShowImg(false);
-                setImgUrl("");
-              }}
-            />
-          </LocationEditor>
-        ) : (
-          <div className="relative mx-auto my-4 flex h-fit w-fit">
-            <img
-              src={questions[currentQuestion]?.imgUrl}
-              alt=""
-              className="w-fit"
-            />
-            <XMarkIcon
-              className="absolute top-1 right-1 h-6 w-6 cursor-pointer stroke-black"
-              onClick={() => {
-                setShowImg(false);
-                setImgUrl("");
-              }}
-            />
-          </div>
-        ))}
+      {showImg && questions[currentQuestion]?.type !== "location" && (
+        <div className="relative mx-auto my-4 flex h-fit w-fit">
+          <img
+            src={questions[currentQuestion]?.imgUrl}
+            alt=""
+            className="w-fit"
+          />
+          <XMarkIcon
+            className="absolute right-1 top-1 h-6 w-6 cursor-pointer rounded-full bg-black stroke-white"
+            onClick={() => {
+              setShowImg(false);
+              setImgUrl("");
+            }}
+          />
+        </div>
+      )}
       {questions[currentQuestion]?.type === "guessing" && <GuessingEditor />}
       {questions[currentQuestion]?.type === "question" && <QuestionEditor />}
+      {questions[currentQuestion]?.type === "location" && <LocationEditor />}
     </div>
   );
 };

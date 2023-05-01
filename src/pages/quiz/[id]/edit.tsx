@@ -11,6 +11,7 @@ import { useQuizStore } from "@utils/zustand/quizStore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 function Edit() {
   const router = useRouter();
@@ -100,7 +101,7 @@ function Edit() {
         numOfQuestions={questions.length.toString()}
         quizTitle={quizName}
       />
-      <div className="flex h-full w-full gap-6 pt-4">
+      <div className="flex h-[95%] w-full gap-6 pt-4">
         <Background className="relative h-full w-1/5 overflow-hidden ">
           <div className="flex h-full w-full flex-col items-center justify-between">
             <div className="flex w-full items-center">
@@ -116,8 +117,21 @@ function Edit() {
             <SideBar />
           </div>
         </Background>
-        <Background className="flex w-full justify-center">
-          <MainContainer isSettingsOpen={isSettingsOpen} />
+        <Background className="flex h-full w-full justify-center">
+          <ScrollArea.Root
+            type="auto"
+            className="h-full w-full overflow-hidden p-2"
+          >
+            <ScrollArea.Viewport className="h-full w-full">
+              <MainContainer isSettingsOpen={isSettingsOpen} />
+            </ScrollArea.Viewport>
+            <ScrollArea.Scrollbar
+              orientation="vertical"
+              className="my-2 flex rounded-md bg-zinc-600 p-1"
+            >
+              <ScrollArea.Thumb className="relative flex rounded-2xl border-4 border-zinc-900" />
+            </ScrollArea.Scrollbar>
+          </ScrollArea.Root>
         </Background>
       </div>
     </div>

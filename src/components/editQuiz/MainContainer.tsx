@@ -11,7 +11,7 @@ const MainContainer: FC<IProps> = ({ isSettingsOpen }) => {
   const currentQuestion = useQuizStore((state) => state.currentQuestion);
 
   return (
-    <div className="flex w-2/4 flex-col items-center justify-between p-10">
+    <div className="mx-auto flex w-3/4 flex-col items-center justify-between px-10">
       {isSettingsOpen && currentQuestion === -1 ? (
         <Settings />
       ) : (

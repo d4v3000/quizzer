@@ -51,7 +51,9 @@ function Edit() {
   };
 
   useEffect(() => {
-    quiz.refetch();
+    if (quizId) {
+      quiz.refetch();
+    }
     if (questions.length > 0) {
       setCurrentQuestion(0);
     }

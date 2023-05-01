@@ -36,11 +36,11 @@ const Modal: FC<IProps> = ({ children, open, setOpen }) => {
             <Dialog.Content
               forceMount
               asChild
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md border-2 border-zinc-700 bg-zinc-800 px-16 py-8"
+              className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-md border-2 border-zinc-700 bg-zinc-800 px-16 py-8"
             >
               <animated.div style={styles}>
                 <div className="flex flex-col items-center gap-3">
-                  <Dialog.Close className="absolute top-0 right-0 p-2">
+                  <Dialog.Close className="absolute right-0 top-0 p-2">
                     <XMarkIcon className="h-6 w-6 stroke-white" />
                   </Dialog.Close>
                   {children}

@@ -68,6 +68,12 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
             onClick={() =>
               handleClick(option.type as "guessing" | "location" | "question")
             }
+            onKeyDown={(e) => {
+              if (e.key === "Enter")
+                handleClick(
+                  option.type as "guessing" | "location" | "question"
+                );
+            }}
           >
             <IconTypes type={option.type} />
             <p className="text-lg font-bold">{option.name}</p>

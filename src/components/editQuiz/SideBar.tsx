@@ -92,9 +92,12 @@ const SideBar: FC = () => {
           <p>{`${questions.length} Rounds`}</p>
         </div>
       </div>
-      <div className="flex h-full w-full flex-col gap-2 p-2">
-        <ScrollArea.Root type="auto" ref={ref}>
-          <ScrollArea.Viewport>
+      <div className="flex h-[80%] w-full flex-col gap-2">
+        <ScrollArea.Root type="auto" className="h-full overflow-hidden">
+          <ScrollArea.Viewport
+            ref={ref}
+            className="h-full data-[state=visible]:mr-2"
+          >
             <DndContext
               collisionDetection={closestCenter}
               onDragEnd={handleDragEnd}
@@ -119,7 +122,7 @@ const SideBar: FC = () => {
           </ScrollArea.Viewport>
           <ScrollArea.Scrollbar
             orientation="vertical"
-            className="my-2 flex rounded-md bg-zinc-600 p-1"
+            className="my-2 ml-2 flex rounded-md bg-zinc-600 p-1"
           >
             <ScrollArea.Thumb className="relative flex rounded-2xl border-4 border-zinc-900" />
           </ScrollArea.Scrollbar>

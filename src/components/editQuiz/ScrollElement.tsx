@@ -38,7 +38,7 @@ const ScrollElement: FC<IProps> = ({ title, type, i, width }) => {
       style={style}
     >
       <div
-        className="flex w-full items-center gap-2 p-2"
+        className="flex w-full items-center gap-2 py-2 pr-4"
         style={{ maxWidth: width }}
       >
         <TrashIcon

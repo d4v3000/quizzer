@@ -62,7 +62,6 @@ model Quiz {
   updatedAt     DateTime        @updatedAt
   title         String         @default("Untitled Quiz")
   authorId      String
-  numberTeams  Int @default(2)
   questions     Question[]
 }
 

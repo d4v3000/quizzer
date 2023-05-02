@@ -28,13 +28,9 @@ const QuizCard: FC<IProps> = ({ quiz }) => {
         {formatter.format(quiz.createdAt)}
       </p>
       <div className="flex w-full p-2">
-        <div className="flex w-full items-center gap-2">
-          <UserGroupIcon className="h-6 w-6" />
-          <p>{isUndefined(quiz.numberTeams) ? 1 : quiz.numberTeams} Teams</p>
-        </div>
-        <div className="flex w-full items-center justify-end gap-2">
+        <div className="flex w-full items-center justify-center gap-2">
           <ArrowPathRoundedSquareIcon className="h-6 w-6" />
-          <p>{`${quiz.questions ? quiz.questions.length : "0"} Rounds`}</p>
+          <p>{`${quiz.questions ? quiz.questions.length : "0"} Questions`}</p>
         </div>
       </div>
       <div className="flex w-full justify-between gap-2">

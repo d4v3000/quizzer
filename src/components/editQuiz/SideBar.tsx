@@ -31,7 +31,6 @@ const SideBar: FC = () => {
   const [open, setOpen] = useState(false);
   const [width, setWidth] = useState<number>(0);
   const [scrollDown, setScrollDown] = useState(false);
-  const numTeams = useQuizStore((state) => state.numTeams);
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
   const currentQuestion = useQuizStore((state) => state.currentQuestion);
@@ -92,13 +91,9 @@ const SideBar: FC = () => {
   return (
     <>
       <div className="flex w-full p-2">
-        <div className="flex w-full items-center gap-2">
-          <UserGroupIcon className="h-6 w-6" />
-          <p>{isUndefined(numTeams) ? 1 : numTeams} Teams</p>
-        </div>
-        <div className="flex w-full items-center justify-end gap-2">
+        <div className="flex w-full items-center justify-center gap-2">
           <ArrowPathRoundedSquareIcon className="h-6 w-6" />
-          <p>{`${questions.length} Rounds`}</p>
+          <p>{`${questions.length} Questions`}</p>
         </div>
       </div>
       <div className="flex h-[80%] w-full flex-col gap-2">

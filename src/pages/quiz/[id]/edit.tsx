@@ -27,9 +27,7 @@ function Edit() {
   });
 
   const quizName = useQuizStore((state) => state.name);
-  const numTeams = useQuizStore((state) => state.numTeams);
   const setQuizName = useQuizStore((state) => state.setName);
-  const setNumTeams = useQuizStore((state) => state.setNumTeams);
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
   const [isSettingsOpen, setIsSettingsOpen] = useState(true);
   const questions = useQuizStore((state) => state.questions);
@@ -45,7 +43,6 @@ function Edit() {
     editQuiz.mutate({
       id: quizId,
       title: quizName,
-      numberTeams: numTeams,
       questions: questions,
     });
   };
@@ -62,7 +59,6 @@ function Edit() {
   useEffect(() => {
     if (quiz.data) {
       setQuizName(quiz.data.title);
-      setNumTeams(quiz.data.numberTeams);
       setQuestions(quiz.data.questions);
     }
   }, [quiz.data]);

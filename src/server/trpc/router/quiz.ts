@@ -119,7 +119,6 @@ export const quizRouter = router({
       z.object({
         id: z.string(),
         title: z.string(),
-        numberTeams: z.number(),
         questions: z.array(
           z.object({
             title: z.string(),
@@ -153,7 +152,6 @@ export const quizRouter = router({
         },
         data: {
           title: input.title,
-          numberTeams: input.numberTeams,
           questions: {
             deleteMany: {},
             create: input.questions.map((question) => ({

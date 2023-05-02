@@ -16,14 +16,9 @@ export interface IGuessingAnswer {
 }
 
 export interface ILocationAnswer {
-  x: number;
-  y: number;
-}
-
-export interface IAnswer {
-  title?: string;
-  placeholder?: string;
-  isCorrect?: boolean;
-  x?: number;
-  y?: number;
+  mapName: string;
+  lat: number | null;
+  lon: number | null;
+  placeName: string | null;
+  withOutlines: boolean;
 }

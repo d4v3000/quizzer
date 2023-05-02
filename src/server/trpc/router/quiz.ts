@@ -133,7 +133,13 @@ export const quizRouter = router({
               })
               .nullable(),
             locationAnswer: z
-              .object({ x: z.number(), y: z.number() })
+              .object({
+                mapName: z.string(),
+                lat: z.number().nullable(),
+                lon: z.number().nullable(),
+                placeName: z.string().nullable(),
+                withOutlines: z.boolean(),
+              })
               .nullable(),
             guessingAnswer: z.object({ answer: z.number() }).nullable(),
           })

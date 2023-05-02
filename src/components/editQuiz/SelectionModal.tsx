@@ -28,7 +28,13 @@ const SelectionModal: FC<IProps> = ({ open, setOpen, customFun }) => {
     if (type === "guessing") {
       newQuestion.guessingAnswer = { answer: 0 };
     } else if (type === "location") {
-      newQuestion.locationAnswer = { x: 0, y: 0 };
+      newQuestion.locationAnswer = {
+        mapName: "World",
+        withOutlines: false,
+        lat: null,
+        lon: null,
+        placeName: null,
+      };
     } else if (type === "question") {
       newQuestion.multipleChoiceAnswers = {
         answers: [

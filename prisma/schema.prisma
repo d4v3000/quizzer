@@ -108,8 +108,11 @@ model MultipleChoiceAnswer {
 
 model LocationAnswer {
   id      String @id @default(cuid())
-  x     Int @default(0)
-  y     Int @default(0)
+  mapName   String
+  lat   Float?
+  lon   Float?
+  placeName   String?
+  withOutlines    Boolean
 
   question  Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId  String  @unique

@@ -11,6 +11,7 @@ import QuestionEditor from "./QuestionEditor";
 const EditQuestion = () => {
   const questions = useQuizStore((state) => state.questions);
   const currentQuestion = useQuizStore((state) => state.currentQuestion);
+  const setQuestions = useQuizStore((state) => state.setQuestions);
 
   const [imgUrl, setImgUrl] = useState("");
   const [showImg, setShowImg] = useState(false);
@@ -24,7 +25,7 @@ const EditQuestion = () => {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuestions = [...questions];
     newQuestions[currentQuestion]!.title = e.target.value;
-    useQuizStore.setState({ questions: newQuestions });
+    setQuestions(newQuestions);
   };
 
   const handleImgChange = () => {

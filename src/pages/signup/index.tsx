@@ -1,7 +1,10 @@
 import React from "react";
 import { GoogleOutlined } from "@ant-design/icons";
-import { getProviders, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { GetServerSidePropsContext } from "next";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 function SignUp({ providers }: any) {
   return (
@@ -18,8 +21,8 @@ function SignUp({ providers }: any) {
           <p className="text-xl">Create your Quizzer Account</p>
         </div>
         <div
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-indigo-400 bg-indigo-500 py-2 px-20 text-white hover:bg-indigo-400"
-          onClick={() => signIn(providers.google.id, { callbackUrl: "/" })}
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-indigo-400 bg-indigo-500 px-20 py-2 text-white hover:bg-indigo-400"
+          onClick={() => signIn("google", { callbackUrl: "/" })}
         >
           <GoogleOutlined className="text-white" />
           Continue with Google
@@ -31,9 +34,14 @@ function SignUp({ providers }: any) {
 
 export default SignUp;
 
-export async function getServerSideProps() {
-  const providers = await getProviders();
-  return {
-    props: { providers },
-  };
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session) {
+    return { redirect: { destination: "/" } };
+  } else {
+    return {
+      props: {},
+    };
+  }
 }

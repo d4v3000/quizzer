@@ -8,9 +8,10 @@ import Modal from "@ui/Modal";
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  customFun?: () => void;
 }
 
-const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
+const SelectionModal: FC<IProps> = ({ open, setOpen, customFun }) => {
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
@@ -41,6 +42,9 @@ const SelectionModal: FC<IProps> = ({ open, setOpen }) => {
     setQuestions([...questions, newQuestion]);
     setCurrentQuestion(questions.length);
     setOpen(false);
+    if (customFun) {
+      customFun();
+    }
   };
 
   const options = [

@@ -30,6 +30,7 @@ import { IQuestion } from "../../models/question";
 const SideBar: FC = () => {
   const [open, setOpen] = useState(false);
   const [width, setWidth] = useState<number>(0);
+  const [scrollDown, setScrollDown] = useState(false);
   const numTeams = useQuizStore((state) => state.numTeams);
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
@@ -37,6 +38,7 @@ const SideBar: FC = () => {
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
 
   const ref = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const sensor = useSensor(PointerSensor);
 
@@ -80,6 +82,13 @@ const SideBar: FC = () => {
     return () => window.removeEventListener("resize", getwidth);
   }, []);
 
+  useEffect(() => {
+    if (scrollDown) {
+      scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+      setScrollDown(false);
+    }
+  }, [scrollDown]);
+
   return (
     <>
       <div className="flex w-full p-2">
@@ -119,6 +128,7 @@ const SideBar: FC = () => {
                 ))}
               </SortableContext>
             </DndContext>
+            <div ref={scrollRef} />
           </ScrollArea.Viewport>
           <ScrollArea.Scrollbar
             orientation="vertical"
@@ -133,7 +143,11 @@ const SideBar: FC = () => {
         <Button intent="secondary" size="small" onClick={() => setOpen(true)}>
           Add Round
         </Button>
-        <SelectionModal open={open} setOpen={setOpen} />
+        <SelectionModal
+          open={open}
+          setOpen={setOpen}
+          customFun={() => setScrollDown(true)}
+        />
       </div>
     </>
   );

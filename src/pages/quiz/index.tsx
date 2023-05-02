@@ -6,6 +6,9 @@ import { LoadingCard } from "@ui/Loader";
 import { parseInt } from "lodash";
 import React, { useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
+import { GetServerSidePropsContext } from "next";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 
 function Quiz() {
   const [orderBy, setOrderBy] = useState<
@@ -74,3 +77,15 @@ function Quiz() {
 }
 
 export default Quiz;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session) {
+    return { redirect: { destination: "/" } };
+  } else {
+    return {
+      props: {},
+    };
+  }
+}

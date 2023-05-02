@@ -73,7 +73,7 @@ function NavBar() {
                     )}
                   </button>
                   <Button
-                    onClick={() => signOut()}
+                    onClick={() => signOut({ callbackUrl: "/" })}
                     intent="primary"
                     size="small"
                   >

@@ -1,46 +1,14 @@
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useQuizStore } from "@utils/zustand/quizStore";
-import { useState } from "react";
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  ZoomableGroup,
-  Annotation,
-} from "react-simple-maps";
+import { useEffect, useState } from "react";
 import * as Switch from "@radix-ui/react-switch";
 import Input from "@ui/Input";
 import Button from "@ui/Button";
 import Select from "@ui/Select";
 import { SubmitHandler, useForm } from "react-hook-form";
-
-const maps = [
-  {
-    text: "World",
-    value:
-      "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries-sans-antarctica.json",
-  },
-  {
-    text: "Europe",
-    value:
-      "https://raw.githubusercontent.com/deldersveld/topojson/master/continents/europe.json",
-  },
-  {
-    text: "Dach",
-    value:
-      "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/germany/dach-states.json",
-  },
-  {
-    text: "USA",
-    value:
-      "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/united-states/us-albers.json",
-  },
-  {
-    text: "North America",
-    value:
-      "https://raw.githubusercontent.com/deldersveld/topojson/master/continents/north-america.json",
-  },
-];
+import Map from "@components/Map";
+import { maps } from "@constants/maps";
+import { shallow } from "zustand/shallow";
 
 interface IFormInputs {
   place: string;
@@ -48,17 +16,11 @@ interface IFormInputs {
 }
 
 const LocationEditor = () => {
-  const [coordinates, setCoordinates] = useState<{
-    lat: number;
-    lon: number;
-  }>();
-  const [placeName, setPlaceName] = useState("");
-  const [showOutlines, setShowOutlines] = useState(false);
-  const [geoUrl, setGeoUrl] = useState(
-    "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries-sans-antarctica.json"
+  const questions = useQuizStore((state) => state.questions, shallow);
+  const currentQuestion = useQuizStore(
+    (state) => state.questions[state.currentQuestion]!.locationAnswer!
   );
-  const questions = useQuizStore((state) => state.questions);
-  const currentQuestion = useQuizStore((state) => state.currentQuestion);
+  const setQuestions = useQuizStore((state) => state.setQuestions);
 
   const parseCoordinates = (coords: string) => {
     // Split the string into two parts: the latitude and longitude
@@ -79,20 +41,46 @@ const LocationEditor = () => {
     const longNumber = isWest ? -long : long;
 
     // Return the result as an object with the latitude and longitude properties
-    setCoordinates({ lat: latNumber, lon: longNumber });
+    return { lat: latNumber, lon: longNumber };
   };
 
   const addMarker = (data: IFormInputs) => {
-    parseCoordinates(data.coordinates);
-    setPlaceName(data.place);
+    const { lat, lon } = parseCoordinates(data.coordinates);
+    const newQuestions = [...questions];
+    currentQuestion.lat = lat;
+    currentQuestion.lon = lon;
+    currentQuestion.placeName = data.place;
+    setQuestions(newQuestions);
   };
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<IFormInputs>();
   const onSubmit: SubmitHandler<IFormInputs> = (data) => addMarker(data);
+
+  useEffect(() => {
+    setValue(
+      "place",
+      currentQuestion.placeName ? currentQuestion.placeName : ""
+    );
+    setValue(
+      "coordinates",
+      currentQuestion.lat && currentQuestion.lon
+        ? `${
+            currentQuestion.lat > 0
+              ? `${currentQuestion.lat}° N`
+              : `${-currentQuestion.lat}° S`
+          }, ${
+            currentQuestion.lon > 0
+              ? `${currentQuestion.lon}° E`
+              : `${-currentQuestion.lon}° W`
+          }`
+        : ""
+    );
+  }, []);
 
   return (
     <div className="flex flex-col gap-3 py-4">
@@ -101,9 +89,17 @@ const LocationEditor = () => {
           <div className="w-min text-base leading-none text-white">Map: </div>
           <div className="flex w-fit items-center gap-1 rounded-md bg-zinc-800 text-zinc-200">
             <Select
-              value={geoUrl}
-              items={maps}
-              onValueChange={(value) => setGeoUrl(value)}
+              value={
+                maps.find((item) => item.text === currentQuestion.mapName)!.text
+              }
+              items={maps.map((map) => {
+                return { text: map.text, value: map.text };
+              })}
+              onValueChange={(value) => {
+                const newQuestions = [...questions];
+                currentQuestion.mapName = value;
+                setQuestions(newQuestions);
+              }}
               icon={<ChevronUpDownIcon className="h-4 w-4" />}
               className="w-full"
             />
@@ -113,8 +109,12 @@ const LocationEditor = () => {
               Show Outlines:
             </label>
             <Switch.Root
-              checked={showOutlines}
-              onCheckedChange={() => setShowOutlines(!showOutlines)}
+              checked={currentQuestion.withOutlines}
+              onCheckedChange={(value) => {
+                const newQuestions = [...questions];
+                currentQuestion.withOutlines = value;
+                setQuestions(newQuestions);
+              }}
               className="relative h-[25px] w-[42px] cursor-default rounded-full bg-zinc-600 outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-white data-[state=checked]:bg-violet-700"
             >
               <Switch.Thumb className="shadow-blackA7 block h-[21px] w-[21px] translate-x-0.5 rounded-full bg-white shadow-[0_2px_2px] transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
@@ -166,60 +166,7 @@ const LocationEditor = () => {
           </Button>
         </div>
       </form>
-      <ComposableMap
-        className="aspect-video rounded-md bg-zinc-800"
-        projection="geoMercator"
-      >
-        <ZoomableGroup maxZoom={30} minZoom={-10} scale={1}>
-          <Geographies geography={geoUrl}>
-            {({ geographies }) =>
-              geographies.map((geo) => {
-                return (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    className="fill-white outline-none hover:outline-dotted"
-                    tabIndex={-1}
-                    style={{
-                      default: {
-                        stroke: showOutlines ? "#000" : "#fff",
-                        strokeWidth: 0.5,
-                      },
-                      hover: {
-                        stroke: showOutlines ? "#000" : "#fff",
-                        strokeWidth: 0.5,
-                      },
-                    }}
-                  />
-                );
-              })
-            }
-          </Geographies>
-          {coordinates && (
-            <>
-              <Annotation
-                subject={[coordinates.lon, coordinates.lat]}
-                connectorProps={{
-                  stroke: "#6d28d9",
-                  strokeWidth: 0.5,
-                  strokeLinecap: "round",
-                }}
-                dx={-45}
-                dy={-15}
-              >
-                <text
-                  x="-8"
-                  textAnchor="end"
-                  alignmentBaseline="middle"
-                  fill="#6d28d9"
-                >
-                  {placeName}
-                </text>
-              </Annotation>
-            </>
-          )}
-        </ZoomableGroup>
-      </ComposableMap>
+      <Map />
     </div>
   );
 };

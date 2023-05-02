@@ -37,7 +37,7 @@ const Select: FC<IProps> = ({
         <RadixSelect.Content
           position="popper"
           sideOffset={6}
-          className="w-28 rounded-md bg-zinc-800 p-2 text-zinc-200"
+          className={`w-28 rounded-md bg-zinc-800 p-2 text-zinc-200 ${className}`}
         >
           <RadixSelect.Viewport>
             {items.map((item, i) => (

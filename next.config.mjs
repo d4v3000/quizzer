@@ -13,5 +13,16 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  experimental: {
+    esmExternals: false,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "uploadthing.com",
+      },
+    ],
+  },
 };
 export default config;

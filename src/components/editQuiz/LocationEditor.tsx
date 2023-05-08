@@ -1,6 +1,6 @@
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useQuizStore } from "@utils/zustand/quizStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import * as Switch from "@radix-ui/react-switch";
 import Input from "@ui/Input";
 import Button from "@ui/Button";
@@ -17,6 +17,7 @@ interface IFormInputs {
 
 const LocationEditor = () => {
   const questions = useQuizStore((state) => state.questions, shallow);
+  const currentQuestionIndex = useQuizStore((state) => state.currentQuestion);
   const currentQuestion = useQuizStore(
     (state) => state.questions[state.currentQuestion]!.locationAnswer!
   );
@@ -47,9 +48,9 @@ const LocationEditor = () => {
   const addMarker = (data: IFormInputs) => {
     const { lat, lon } = parseCoordinates(data.coordinates);
     const newQuestions = [...questions];
-    currentQuestion.lat = lat;
-    currentQuestion.lon = lon;
-    currentQuestion.placeName = data.place;
+    newQuestions[currentQuestionIndex]!.locationAnswer!.lat = lat;
+    newQuestions[currentQuestionIndex]!.locationAnswer!.lon = lon;
+    newQuestions[currentQuestionIndex]!.locationAnswer!.placeName = data.place;
     setQuestions(newQuestions);
   };
 
@@ -80,7 +81,7 @@ const LocationEditor = () => {
           }`
         : ""
     );
-  }, []);
+  }, [currentQuestion]);
 
   return (
     <div className="flex flex-col gap-3 py-4">
@@ -97,7 +98,8 @@ const LocationEditor = () => {
               })}
               onValueChange={(value) => {
                 const newQuestions = [...questions];
-                currentQuestion.mapName = value;
+                newQuestions[currentQuestionIndex]!.locationAnswer!.mapName =
+                  value;
                 setQuestions(newQuestions);
               }}
               icon={<ChevronUpDownIcon className="h-4 w-4" />}
@@ -112,10 +114,12 @@ const LocationEditor = () => {
               checked={currentQuestion.withOutlines}
               onCheckedChange={(value) => {
                 const newQuestions = [...questions];
-                currentQuestion.withOutlines = value;
+                newQuestions[
+                  currentQuestionIndex
+                ]!.locationAnswer!.withOutlines = value;
                 setQuestions(newQuestions);
               }}
-              className="relative h-[25px] w-[42px] cursor-default rounded-full bg-zinc-600 outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-white data-[state=checked]:bg-violet-700"
+              className="relative h-[25px] w-[42px] cursor-pointer rounded-full bg-zinc-600 outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-white data-[state=checked]:bg-violet-700"
             >
               <Switch.Thumb className="shadow-blackA7 block h-[21px] w-[21px] translate-x-0.5 rounded-full bg-white shadow-[0_2px_2px] transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
             </Switch.Root>

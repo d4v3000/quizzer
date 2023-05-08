@@ -5,21 +5,24 @@ import { toNumber } from "lodash";
 
 const GuessingEditor = () => {
   const questions = useQuizStore((state) => state.questions);
-  const currentQuestion = useQuizStore(
-    (state) => state.questions[state.currentQuestion]!.guessingAnswer!
-  );
+  const currentQuestionIndex = useQuizStore((state) => state.currentQuestion);
   const setQuestions = useQuizStore((state) => state.setQuestions);
+  const currentQuestion = useQuizStore(
+    (state) => state.questions[currentQuestionIndex]
+  );
 
   return (
     <>
       <Label text="Answer" />
       <Input
         placeholder="Enter the correct number"
-        type={"number"}
-        value={currentQuestion.answer}
+        type="number"
+        value={currentQuestion!.guessingAnswer!.answer}
         onChange={(e) => {
           const newQuestions = [...questions];
-          currentQuestion.answer = toNumber(e.target.value);
+          newQuestions[currentQuestionIndex]!.guessingAnswer!.answer = toNumber(
+            e.target.value
+          );
           setQuestions(newQuestions);
         }}
       />

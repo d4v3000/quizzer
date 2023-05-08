@@ -7,6 +7,7 @@ const QuestionEditor = () => {
   const currentQuestion = useQuizStore(
     (state) => state.questions[state.currentQuestion]!.multipleChoiceAnswers!
   );
+  const currentQuestionIndex = useQuizStore((state) => state.currentQuestion);
   const setQuestions = useQuizStore((state) => state.setQuestions);
 
   return (
@@ -22,10 +23,14 @@ const QuestionEditor = () => {
               onChange={() => {
                 const newQuestions = [...questions];
 
-                currentQuestion.answers.forEach(
+                newQuestions[
+                  currentQuestionIndex
+                ]!.multipleChoiceAnswers!.answers.forEach(
                   (answer) => (answer.isCorrect = false)
                 );
-                currentQuestion.answers[i]!.isCorrect = true;
+                newQuestions[
+                  currentQuestionIndex
+                ]!.multipleChoiceAnswers!.answers[i]!.isCorrect = true;
                 setQuestions(newQuestions);
               }}
             />
@@ -34,7 +39,9 @@ const QuestionEditor = () => {
               value={answer.name}
               onChange={(e) => {
                 const newQuestions = [...questions];
-                currentQuestion.answers[i]!.name = e.target.value;
+                newQuestions[
+                  currentQuestionIndex
+                ]!.multipleChoiceAnswers!.answers[i]!.name = e.target.value;
                 setQuestions(newQuestions);
               }}
             />

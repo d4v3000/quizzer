@@ -12,7 +12,8 @@ const ImageUploader = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const currentQuestionIndex = useQuizStore((state) => state.currentQuestion);
-  const updateQuestion = useQuizStore((state) => state.updateQuestion);
+  const setQuestions = useQuizStore((state) => state.setQuestions);
+  const questions = useQuizStore((state) => state.questions);
   const currentQuestion = useQuizStore(
     (state) => state.questions[currentQuestionIndex]
   );
@@ -21,13 +22,14 @@ const ImageUploader = () => {
     setIsUploading(true);
     const upload = await startUpload();
     currentQuestion!.imgUrl = upload[0].fileUrl;
-    updateQuestion(currentQuestion!, currentQuestionIndex);
+    const newQuestions = [...questions];
+    newQuestions[currentQuestionIndex]!.imgUrl = upload[0].fileUrl;
+    setQuestions(newQuestions);
     setIsUploading(false);
   };
 
   useEffect(() => {
     if (files.length > 0 && !errorMessage) {
-      console.log(files);
       uploadImage();
     }
   }, [files]);

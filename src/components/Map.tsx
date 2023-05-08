@@ -10,12 +10,13 @@ import {
 } from "react-simple-maps";
 
 const Map = () => {
-  const currentQuestion = useQuizStore(
-    (state) => state.questions[state.currentQuestion]!.locationAnswer!
-  );
+  const questions = useQuizStore((state) => state.questions);
+  const currentQuestionIndex = useQuizStore((state) => state.currentQuestion);
   const mapName = useQuizStore(
     (state) => state.questions[state.currentQuestion]!.locationAnswer!.mapName
   );
+
+  const currentQuestion = questions[currentQuestionIndex]!.locationAnswer!;
 
   const [currentMap, setCurrentMap] = useState(
     maps.find((item) => item.text === mapName)!

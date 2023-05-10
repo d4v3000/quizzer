@@ -17,8 +17,15 @@ const DeleteQuestionModal: FC<IProps> = ({ open, setOpen, index }) => {
 
   const handleRemove = () => {
     setQuestions(questions.filter((_, i) => i !== index));
-    if (currentQuestion > 0) {
+
+    if (currentQuestion > 0 && index < currentQuestion) {
       setCurrentQuestion(currentQuestion - 1);
+    } else if (currentQuestion === 0 && questions.length <= 1) {
+      setCurrentQuestion(-1);
+    } else if (currentQuestion === index) {
+      if (currentQuestion === questions.length - 1) {
+        setCurrentQuestion(currentQuestion - 1);
+      }
     }
     setOpen(false);
   };

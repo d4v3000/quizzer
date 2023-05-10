@@ -39,16 +39,10 @@ function Edit() {
   const quizName = useQuizStore((state) => state.name);
   const setQuizName = useQuizStore((state) => state.setName);
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(true);
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const currentQuestion = useQuizStore((state) => state.currentQuestion);
-
-  const handleSettingsClicked = () => {
-    setIsSettingsOpen(true);
-    setCurrentQuestion(-1);
-  };
 
   const handleSave = () => {
     editQuiz.mutate({
@@ -62,9 +56,6 @@ function Edit() {
     if (quizId) {
       quiz.refetch();
     }
-    if (questions.length > 0) {
-      setCurrentQuestion(0);
-    }
   }, []);
 
   useEffect(() => {
@@ -72,14 +63,15 @@ function Edit() {
       setQuizName(quiz.data.title);
       setQuestions(quiz.data.questions);
       if (quiz.data.questions.length === 0) {
-        setIsSettingsOpen(true);
         setCurrentQuestion(-1);
+      } else {
+        setCurrentQuestion(0);
       }
     }
   }, [quiz.data]);
 
   useEffect(() => {
-    if (currentQuestion >= 0) {
+    if (currentQuestion >= -1) {
       setOpenQuestionList(false);
     }
   }, [currentQuestion]);
@@ -134,7 +126,7 @@ function Edit() {
 
               <Cog8ToothIcon
                 className=" h-6 w-6 cursor-pointer"
-                onClick={handleSettingsClicked}
+                onClick={() => setCurrentQuestion(-1)}
               />
             </div>
             <SideBar />
@@ -146,7 +138,7 @@ function Edit() {
             className="h-full w-full overflow-hidden p-2"
           >
             <ScrollArea.Viewport className="h-full w-full">
-              <MainContainer isSettingsOpen={isSettingsOpen} />
+              <MainContainer />
             </ScrollArea.Viewport>
             <ScrollArea.Scrollbar
               orientation="vertical"
@@ -160,7 +152,7 @@ function Edit() {
       <div className="fixed bottom-0 right-0 flex h-[8%] w-full items-center justify-between bg-zinc-800 px-2 lg:hidden">
         <Cog8ToothIcon
           className=" h-6 w-6 cursor-pointer"
-          onClick={handleSettingsClicked}
+          onClick={() => setCurrentQuestion(-1)}
         />
         <Button
           intent="secondary"

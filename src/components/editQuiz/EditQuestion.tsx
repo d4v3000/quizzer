@@ -16,7 +16,7 @@ const EditQuestion = () => {
     (state) => state.questions[currentQuestionIndex]
   );
 
-  const imgUrl = currentQuestion!.imgUrl;
+  const imgUrl = currentQuestion?.imgUrl;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuestions = [...questions];
@@ -30,7 +30,7 @@ const EditQuestion = () => {
       <Input
         placeholder="Name of the question"
         onChange={(e) => handleNameChange(e)}
-        value={currentQuestion!.title}
+        value={currentQuestion?.title}
       />
       {!imgUrl && <ImageUploader />}
       {imgUrl && (
@@ -52,9 +52,9 @@ const EditQuestion = () => {
           />
         </div>
       )}
-      {currentQuestion!.type === "guessing" && <GuessingEditor />}
-      {currentQuestion!.type === "question" && <QuestionEditor />}
-      {currentQuestion!.type === "location" && <LocationEditor />}
+      {currentQuestion?.type === "guessing" && <GuessingEditor />}
+      {currentQuestion?.type === "question" && <QuestionEditor />}
+      {currentQuestion?.type === "location" && <LocationEditor />}
     </div>
   );
 };

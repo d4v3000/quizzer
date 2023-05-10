@@ -71,6 +71,10 @@ function Edit() {
     if (quiz.data) {
       setQuizName(quiz.data.title);
       setQuestions(quiz.data.questions);
+      if (quiz.data.questions.length === 0) {
+        setIsSettingsOpen(true);
+        setCurrentQuestion(-1);
+      }
     }
   }, [quiz.data]);
 

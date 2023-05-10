@@ -30,7 +30,7 @@ const Home: NextPage = () => {
     <>
       <div className="h-screen">
         <NavBar />
-        <main className="mx-auto flex h-[92%] w-full flex-col items-center justify-start p-4 sm:w-5/6 md:p-0 md:pt-10 xl:w-3/5">
+        <main className="mx-auto flex h-full w-full flex-col items-center justify-start p-4 pt-[20%] sm:w-5/6 md:p-0 md:pt-[10%] lg:pt-[8%] xl:w-3/5 xl:pt-[6%]">
           <div className="flex flex-col items-center gap-10">
             <p className="bg-gradient-to-r from-indigo-500 to-violet-600 bg-clip-text text-center text-5xl font-semibold leading-snug text-transparent">
               Quizzer

@@ -126,5 +126,6 @@ const QuestionList = forwardRef<HTMLDivElement, IProps>(
     );
   }
 );
+QuestionList.displayName = "QuestionList";
 
 export default QuestionList;

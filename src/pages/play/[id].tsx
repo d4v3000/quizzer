@@ -26,7 +26,7 @@ function Play() {
   }, [router.query]);
 
   return (
-    <div className="mx-auto flex h-screen items-center justify-center text-white">
+    <div className="mx-auto flex items-center justify-center text-white md:h-screen">
       {isLoading ? (
         <LoadingSpinner />
       ) : doesLobbyExist ? (

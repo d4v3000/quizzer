@@ -146,14 +146,14 @@ const Lobby = () => {
             You were kicked by the quiz master
           </div>
         ) : (
-          <div className="mx-auto flex h-screen w-10/12 flex-col gap-2 py-4">
+          <div className="mx-auto flex h-full w-10/12 flex-col gap-2 py-4">
             <NavBar
               isQuizMaster={isQuizMaster}
               players={lobby?.players}
               userName={user.name}
             />
-            <div className="grid h-full w-full grid-flow-col grid-cols-6 grid-rows-3 gap-4 overflow-clip">
-              <Background className="col-span-2 col-start-3 row-span-2">
+            <div className="flex h-full w-full grid-rows-3 flex-col gap-4 overflow-clip md:grid md:grid-flow-col md:grid-cols-4 xl:grid-cols-6">
+              <Background className="h-80 md:col-span-2 md:row-span-2 md:h-full xl:col-start-3">
                 <InformationCard
                   isQuizMaster={isQuizMaster}
                   numOfQuestions={lobby?.numOfQuestions}
@@ -161,11 +161,11 @@ const Lobby = () => {
                   quizName={lobby?.quizName}
                 />
               </Background>
-              <Background className="col-span-2 col-start-5 row-span-2">
+              <Background className="h-96 md:col-span-2 md:col-start-3 md:row-span-2 md:h-full xl:col-start-5">
                 <ChatCard user={user} />
               </Background>
-              <div className="col-start-1 col-end-7">
-                <div className="flex h-full gap-4">
+              <div className="col-start-1 h-full md:col-end-5 xl:col-end-7">
+                <div className="flex h-full flex-col gap-4 md:flex-row">
                   {lobby?.teams.map((team, i) => (
                     <TeamCard
                       key={`team_${i}`}

@@ -38,7 +38,7 @@ const InformationCard: FC<IProps> = ({
         <h3>You can expect {numOfQuestions} Questions this evening</h3>
       </div>
       {isQuizMaster && <Button size="large">Start Game</Button>}
-      <div className="flex w-1/2 cursor-pointer items-center rounded-2xl border border-zinc-200">
+      <div className="flex w-full cursor-pointer items-center rounded-2xl border border-zinc-200 lg:w-1/2">
         <div
           className={`${
             showInviteLink ? "cursor-text" : "cursor-pointer"

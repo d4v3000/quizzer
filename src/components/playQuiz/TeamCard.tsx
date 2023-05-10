@@ -73,7 +73,7 @@ const TeamCard: FC<IProps> = ({
 
   return (
     <div
-      className={`flex h-full w-full flex-col justify-between rounded-md border p-4`}
+      className={`flex h-44 w-full flex-col justify-between rounded-md border p-4 md:h-full`}
       style={{ borderColor: color }}
     >
       <div className="flex items-center gap-2">

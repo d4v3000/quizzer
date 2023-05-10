@@ -188,7 +188,7 @@ function Edit() {
       <div
         className={`${
           openQuestionList ? "flex" : "hidden"
-        } absolute bottom-[8%] left-0 z-50 h-[92%] w-full flex-col bg-black`}
+        } fixed left-0 top-0 z-50 h-[92%] w-full flex-col bg-black`}
       >
         <div className="flex w-full items-center justify-center gap-2 py-2">
           <ArrowPathRoundedSquareIcon className="h-6 w-6" />

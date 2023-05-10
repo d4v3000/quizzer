@@ -15,12 +15,10 @@ const button = cva("button", {
       danger: ["flex items-center justify-center bg-red-500 uppercase"],
     },
     size: {
-      small: [
-        "text-sm py-1.5 px-3 mr-4 my-3 rounded-3xl font-bold hover:scale-[1.03]",
-      ],
+      small: ["text-sm py-1.5 px-3 rounded-3xl font-bold hover:scale-[1.03]"],
       medium: ["text-base py-2 px-4 rounded-md font-bold"],
       large: [
-        "px-8 py-2",
+        "md:px-8 md:py-2 px-4 py-1",
         "rounded-3xl",
         "uppercase font-bold hover:scale-[1.03] gap-3",
       ],

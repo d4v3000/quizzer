@@ -52,7 +52,7 @@ const FilterBar: FC<IProps> = ({
   }, []);
 
   return (
-    <div className="flex w-full gap-4">
+    <div className="flex w-full flex-wrap gap-4 md:flex-nowrap">
       <Input
         onChange={debouncedChangeHandler}
         className="w-1/5"
@@ -111,7 +111,7 @@ const FilterBar: FC<IProps> = ({
           <ListBulletIcon className="h-6 w-6" />
         </div>
       </div>
-      <div className="flex items-center justify-center">
+      <div className="hidden items-center justify-center lg:flex">
         <Slider.Root
           value={numOfCols}
           max={4}

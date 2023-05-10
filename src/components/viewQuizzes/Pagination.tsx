@@ -25,7 +25,7 @@ const Pagination: FC<IProps> = ({
   });
 
   return (
-    <div className="flex justify-center pb-10">
+    <div className="flex w-full justify-center pb-2 md:pb-10">
       <nav className="w-full">
         <ul className="list-style-none flex w-full justify-between">
           <PaginationNavigator
@@ -41,7 +41,7 @@ const Pagination: FC<IProps> = ({
                   <li key={`pagination_${i}`}>
                     <a
                       className="
-                       relative block py-1.5 px-3 text-lg font-medium text-zinc-400"
+                       relative block px-3 py-1.5 text-lg font-medium text-zinc-400"
                     >
                       . . .
                     </a>
@@ -88,9 +88,9 @@ const PaginationItem: FC<ItemProps> = ({
         onClick={() => setCurrentPage(pageNumber)}
         className={`${
           active
-            ? "border-t-2 border-indigo-600 text-indigo-600"
+            ? "border-t-[1px] border-indigo-600 text-indigo-600 sm:border-t-2"
             : "cursor-pointer rounded-md bg-transparent text-zinc-400 hover:bg-zinc-800"
-        } relative block py-1.5 px-3 text-lg font-medium`}
+        } relative block px-1.5 py-0.5 text-lg font-medium sm:px-3 sm:py-1.5`}
       >
         {pageNumber}
       </a>
@@ -121,7 +121,7 @@ const PaginationNavigator: FC<NavigatorProps> = ({
           active
             ? "cursor-pointer text-zinc-400"
             : "pointer-events-none text-zinc-500"
-        } items-center gap-4 rounded bg-transparent py-1.5 px-3 text-lg transition-all duration-300 hover:bg-zinc-800`}
+        } items-center gap-4 rounded bg-transparent px-1 py-0.5 text-lg transition-all duration-300 hover:bg-zinc-800 sm:px-3 sm:py-1.5`}
       >
         {isPrev ? (
           <>

@@ -36,7 +36,7 @@ const Modal: FC<IProps> = ({ children, open, setOpen }) => {
             <Dialog.Content
               forceMount
               asChild
-              className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-md border-2 border-zinc-700 bg-zinc-800 px-16 py-8"
+              className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-md border-2 border-zinc-700 bg-zinc-800 px-8 py-4 lg:px-16 lg:py-8"
             >
               <animated.div style={styles}>
                 <div className="flex flex-col items-center gap-3">

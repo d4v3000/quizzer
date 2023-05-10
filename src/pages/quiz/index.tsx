@@ -36,41 +36,43 @@ function Quiz() {
 
   return (
     <>
-      <NavBar />
-      <div className="mx-auto flex h-[calc(100vh-57px)] w-3/5 flex-col justify-between gap-4 pt-10">
-        <div className="flex flex-col gap-8">
-          <FilterBar
-            orderBy={orderBy}
-            setOrderBy={setOrderBy}
-            orderDir={orderDir}
-            setOrderDir={setOrderDir}
-            setSearch={setSearch}
-            numOfCols={numOfCols}
-            setNumOfCols={setNumOfCols}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-          />
-          <div
-            style={{
-              gridTemplateColumns: `repeat(${numOfCols[0]!}, minmax(0, 1fr))`,
-            }}
-            className={`grid gap-6 text-gray-200`}
-          >
-            {getQuizzes.isLoading || getQuizzes.isFetching
-              ? loadingCards.map((card) => <LoadingCard key={card} />)
-              : getQuizzes.data?.map((quiz, i) => (
-                  <QuizCard key={`quiz_${i}`} quiz={quiz} />
-                ))}
+      <div className="h-screen">
+        <NavBar />
+        <div className="mx-auto flex h-[92%] w-full flex-col justify-between gap-4 p-2 sm:w-5/6 md:p-0 md:pt-10 xl:w-3/5">
+          <div className="flex flex-col gap-8">
+            <FilterBar
+              orderBy={orderBy}
+              setOrderBy={setOrderBy}
+              orderDir={orderDir}
+              setOrderDir={setOrderDir}
+              setSearch={setSearch}
+              numOfCols={numOfCols}
+              setNumOfCols={setNumOfCols}
+              itemsPerPage={itemsPerPage}
+              setItemsPerPage={setItemsPerPage}
+            />
+            <div
+              style={{
+                gridTemplateColumns: `repeat(${numOfCols[0]!}, minmax(0, 1fr))`,
+              }}
+              className={`flex-col space-y-2 text-gray-200 md:grid md:gap-6 md:space-y-0`}
+            >
+              {getQuizzes.isLoading || getQuizzes.isFetching
+                ? loadingCards.map((card) => <LoadingCard key={card} />)
+                : getQuizzes.data?.map((quiz, i) => (
+                    <QuizCard key={`quiz_${i}`} quiz={quiz} />
+                  ))}
+            </div>
           </div>
+          {totalNumOfQuizzes.data && (
+            <Pagination
+              itemsPerPage={parseInt(itemsPerPage)}
+              totalItems={totalNumOfQuizzes.data}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
         </div>
-        {totalNumOfQuizzes.data && (
-          <Pagination
-            itemsPerPage={parseInt(itemsPerPage)}
-            totalItems={totalNumOfQuizzes.data}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-        )}
       </div>
     </>
   );

@@ -86,7 +86,7 @@ const LocationEditor = () => {
   return (
     <div className="flex flex-col gap-3 py-4">
       <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 md:flex-nowrap">
           <div className="w-min text-base leading-none text-white">Map: </div>
           <div className="flex w-fit items-center gap-1 rounded-md bg-zinc-800 text-zinc-200">
             <Select
@@ -127,7 +127,7 @@ const LocationEditor = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 md:flex-nowrap">
           <label
             htmlFor="place"
             className="w-min text-base leading-none text-white"
@@ -165,7 +165,7 @@ const LocationEditor = () => {
           {errors.coordinates && (
             <div className="text-red-400">{errors.coordinates.message}</div>
           )}
-          <Button className="w-1/2" intent="secondary" type="submit">
+          <Button className="w-full lg:w-1/2" intent="secondary" type="submit">
             Apply Place
           </Button>
         </div>

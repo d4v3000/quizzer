@@ -43,7 +43,7 @@ const ScrollElement: FC<IProps> = ({ title, type, i, width }) => {
       >
         <TrashIcon
           className={`h-8 w-8 cursor-pointer stroke-2 ${
-            hovered ? "" : "invisible"
+            hovered ? "" : "lg:invisible"
           }`}
           onClick={() => setOpen(true)}
         />
@@ -64,7 +64,7 @@ const ScrollElement: FC<IProps> = ({ title, type, i, width }) => {
         </div>
         <Bars3Icon
           className={`h-8 w-8 cursor-pointer stroke-2 ${
-            hovered ? "" : "invisible"
+            hovered ? "" : "lg:invisible"
           }`}
           {...attributes}
           {...listeners}

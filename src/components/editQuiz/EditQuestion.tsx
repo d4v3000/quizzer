@@ -34,7 +34,7 @@ const EditQuestion = () => {
       />
       {!imgUrl && <ImageUploader />}
       {imgUrl && (
-        <div className="relative my-4 h-96 w-full overflow-hidden">
+        <div className="relative my-4 h-52 w-full overflow-hidden md:h-72 lg:h-96">
           <Image
             src={imgUrl!}
             alt="question-image"

@@ -42,7 +42,7 @@ const ImageUploader = () => {
       >
         <label
           htmlFor="dropzone-file"
-          className={`flex h-56 w-full flex-col items-center justify-center rounded-lg bg-zinc-800 ${
+          className={`flex h-32 w-full flex-col items-center justify-center rounded-lg bg-zinc-800 md:h-44 lg:h-56 ${
             isUploading ? "" : "cursor-pointer hover:bg-zinc-700"
           }`}
         >

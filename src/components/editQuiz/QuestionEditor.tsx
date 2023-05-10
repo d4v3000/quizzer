@@ -13,7 +13,7 @@ const QuestionEditor = () => {
   return (
     <>
       <Label text="Answers" />
-      <div className="grid grid-cols-2 grid-rows-2 gap-4">
+      <div className="grid grid-cols-1 grid-rows-2 gap-4 md:grid-cols-2">
         {currentQuestion.answers.map((answer, i) => (
           <div key={`radio_${i}`} className="flex items-center gap-2">
             <input

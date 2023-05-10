@@ -71,7 +71,7 @@ const SelectionModal: FC<IProps> = ({ open, setOpen, customFun }) => {
   return (
     <Modal open={open} setOpen={setOpen}>
       <p className="text-lg font-semibold uppercase">Choose Round Type</p>
-      <div className="flex gap-4">
+      <div className="flex flex-wrap justify-center gap-4">
         {options.map((option) => (
           <TypeBox
             key={option.type}

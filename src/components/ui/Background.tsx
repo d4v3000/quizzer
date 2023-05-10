@@ -7,7 +7,9 @@ interface IProps {
 
 function Background({ children, className }: IProps) {
   return (
-    <div className={`rounded-lg border border-zinc-400 p-2 ${className}`}>
+    <div
+      className={`rounded-lg border border-zinc-400 p-0 lg:p-2 ${className}`}
+    >
       {children}
     </div>
   );

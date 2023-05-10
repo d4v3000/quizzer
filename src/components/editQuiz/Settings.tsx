@@ -29,7 +29,7 @@ const Settings = () => {
         <Button
           size="large"
           intent="danger"
-          className="w-1/4"
+          className="w-full md:w-1/2 lg:w-1/4"
           onClick={() => setIsDeleteModalOpen(true)}
         >
           Delete

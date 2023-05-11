@@ -1,42 +1,56 @@
 # Quizzer
 
-## What is Quizzer?
-
-Quizzer is a work in progress web app designed for people that always wanted to host their own quiz show and test their friends knowledge. Every other website i found that has a similar intention either doesn't allow for multiplayer, requires a degree just to understand how to create a quiz, or has very limited options for your questions. So i decided to try it out myself and focus on making the experience in creating a new quiz as easy as possible and making it fun. It is my first full stack app with the intention to challenge me and learn new technology that i never worked with before. I am no ui/ux designer so most of the design was heavily inspired by different websites that i like and will probably change once i have a vision of how i want the look of the site to be.
+Quizzer is a web app created using the [t3-stack](https://create.t3.gg/) where people can create quizzes with different question categories and let their friends test their knowledge.
 
 You can try a live demo [here](https://quizzer-eight.vercel.app/).
 
 ## Technologies used
 
-Quizzer was created using the [t3-stack](https://create.t3.gg/) and other libraries that i found interesting and wanted to test out. I used [dnd-kit](https://dndkit.com/) to add a drag and drop functionality to let the user sort the questions of a quiz in an easy way. I also used some [radix ui](https://www.radix-ui.com/) components like the dialog and selection and styled them using [Tailwind CSS](https://tailwindcss.com/). I picked [zustand](https://github.com/pmndrs/zustand) as my state management tool because i already have some experience using contexts and redux and wanted to test new tools. 
+- [tailwind css](https://tailwindcss.com/)
+- [nextjs](https://nextjs.org/)
+- [nextauth](https://next-auth.js.org/)
+- [trpc](https://trpc.io/)
+- [prisma](https://www.prisma.io/)
+- [dnd-kit](https://dndkit.com/)
+- [radix ui](https://www.radix-ui.com/)
+- [zustand](https://github.com/pmndrs/zustand)
+- mysql
+- [uploadthing](https://uploadthing.com/)
+- [socket.io](https://socket.io/)
+- [react-hook-form](https://react-hook-form.com/)
+- [react-simple-maps](https://www.react-simple-maps.io/)
 
-The site is hosted using [Vercel](https://vercel.com/) and uses [Planetscale](https://planetscale.com/) as the database provider. 
+The site is hosted using [Vercel](https://vercel.com/) and uses [Planetscale](https://planetscale.com/) as the database provider. You can find the code for the nodejs server [here](https://github.com/d4v3000/quizzer-server)
 
-## Currently implemented
+## Features
 
 - Authentication using google
-- Creating/editing quizzes with 2 types of questions
-- Viewing all your created quizzes with different sorting options
+- Create/edit/delete quizzes with 3 different question types and image upload
+  - Multiple choice questions
+  - Location questions with multiple map options
+  - Guessing questions
+- View all your quizzes with different sorting options
+- Completely responsive
+- Host lobbies using socket.io
+  - Choose between 2 and 5 teams
+  - Quiz master can kick players and randomize teams
+  - Global chat and seperated team chats  
 
-## What's coming next?
+## Coming soon
 
-Things i want to implement before i think the mvp is ready:
-
-- Finishing the quizzes view page (adding pagination, list view)
-- Creating a nodejs server with socket.io for the multiplayer part
-- Changing the database model to be more expandable in the future
-- Quality of life improvements like tooltips and descriptions
-- Fixing current bugs
-
-Features planned after the mvp:
-
-- Adding music integration
-- Add mobile view
-- Adding webcam support and/or customizable characters
-- More question categories
+- Tooltips
+- Hotkey support
+- More question types (audio, video, sorting, etc)
+- Add music
 
 ## Screenshots
 
-![Startpage](./src/assets/start.png)
-![Overview](./src/assets/overview.png)
-![Editor](./src/assets/editor.png)
+![homepage](https://github.com/d4v3000/quizzer/assets/24357816/9f29c092-09fd-4589-88d5-a0a5fdf56050)
+
+![overview](https://github.com/d4v3000/quizzer/assets/24357816/2c6bef62-47e5-4cbc-a29a-32f8f92e22ef)
+
+![editor](https://github.com/d4v3000/quizzer/assets/24357816/431a8f6e-d801-4d7e-98d6-344b93ecb568)
+
+![mobile_editor](https://github.com/d4v3000/quizzer/assets/24357816/6b73d723-af9b-4484-9ea9-198d7d2d3914)
+
+![lobby](https://github.com/d4v3000/quizzer/assets/24357816/5a412f25-b125-4f94-8951-fd9c730d728a)

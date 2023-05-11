@@ -1,13 +1,11 @@
 import MainContainer from "@components/editQuiz/MainContainer";
 import SideBar from "@components/editQuiz/SideBar";
-import CreateLobbyModal from "@components/playQuiz/CreateLobbyModal";
 import {
   ArrowPathRoundedSquareIcon,
   Bars3Icon,
   Cog8ToothIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Background from "@ui/Background";
 import Button from "@ui/Button";
 import { LoadingSpinner } from "@ui/Loader";
@@ -15,10 +13,10 @@ import { trpc } from "@utils/trpc";
 import { useQuizStore } from "@utils/zustand/quizStore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import SelectionModal from "@components/editQuiz/SelectionModal";
 import QuestionList from "@components/editQuiz/QuestionList";
+import NavBar from "@components/editQuiz/NavBar";
 
 function Edit() {
   const router = useRouter();
@@ -31,26 +29,12 @@ function Edit() {
     { enabled: !!quizId }
   );
 
-  const editQuiz = trpc.quiz.editQuiz.useMutation({
-    onSuccess: () => toast.success("Quiz saved succesfully"),
-    onError: () => toast.error("There was an error saving this quiz"),
-  });
-
   const quizName = useQuizStore((state) => state.name);
   const setQuizName = useQuizStore((state) => state.setName);
   const setCurrentQuestion = useQuizStore((state) => state.setCurrentQuestion);
   const questions = useQuizStore((state) => state.questions);
   const setQuestions = useQuizStore((state) => state.setQuestions);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const currentQuestion = useQuizStore((state) => state.currentQuestion);
-
-  const handleSave = () => {
-    editQuiz.mutate({
-      id: quizId,
-      title: quizName,
-      questions: questions,
-    });
-  };
 
   useEffect(() => {
     if (quizId) {
@@ -89,34 +73,9 @@ function Edit() {
   }
 
   return (
-    <div className="flex h-screen flex-col gap-3 px-4 py-3 text-gray-200 md:py-4 lg:px-10">
-      <div className="flex h-[5%] w-full justify-between gap-2 lg:gap-0">
-        <Button intent="secondary" size="large" onClick={() => router.back()}>
-          <ArrowLongLeftIcon className="h-6 w-6" />
-          Back
-        </Button>
-        <div className="flex gap-2 lg:gap-6">
-          <Button intent="secondary" size="large" onClick={handleSave}>
-            {editQuiz.isLoading ? <LoadingSpinner /> : "Save"}
-          </Button>
-
-          <Button
-            intent="primary"
-            size="large"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Start Quiz
-          </Button>
-        </div>
-      </div>
-      <CreateLobbyModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        quizId={quizId}
-        numOfQuestions={questions.length.toString()}
-        quizTitle={quizName}
-      />
-      <div className="flex h-[85%] w-full gap-6 lg:h-[95%]">
+    <>
+      <NavBar />
+      <div className="flex h-screen w-full gap-6 px-4 pb-20 pt-20 text-white lg:pb-4">
         <Background className="relative hidden h-full w-2/5 overflow-hidden lg:block xl:w-1/5">
           <div className="flex h-full w-full flex-col items-center justify-between">
             <div className="flex w-full items-center">
@@ -149,7 +108,7 @@ function Edit() {
           </ScrollArea.Root>
         </Background>
       </div>
-      <div className="fixed bottom-0 right-0 flex h-[8%] w-full items-center justify-between bg-zinc-800 px-2 lg:hidden">
+      <div className="fixed bottom-0 right-0 flex h-16 w-full items-center justify-between bg-zinc-800 px-2 text-white lg:hidden">
         <Cog8ToothIcon
           className=" h-6 w-6 cursor-pointer"
           onClick={() => setCurrentQuestion(-1)}
@@ -184,7 +143,7 @@ function Edit() {
       <div
         className={`${
           openQuestionList ? "flex" : "hidden"
-        } fixed left-0 top-0 z-50 h-[92%] w-full flex-col bg-black`}
+        } fixed left-0 top-0 z-50 h-[calc(100vh-64px)] w-full flex-col bg-black text-white lg:hidden`}
       >
         <div className="flex w-full items-center justify-center gap-2 py-2">
           <ArrowPathRoundedSquareIcon className="h-6 w-6" />
@@ -192,7 +151,7 @@ function Edit() {
         </div>
         <QuestionList isShowing={openQuestionList} />
       </div>
-    </div>
+    </>
   );
 }
 

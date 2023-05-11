@@ -25,7 +25,7 @@ const Pagination: FC<IProps> = ({
   });
 
   return (
-    <div className="flex w-full justify-center pb-2 md:pb-10">
+    <div className="flex w-full justify-center pb-2">
       <nav className="w-full">
         <ul className="list-style-none flex w-full justify-between">
           <PaginationNavigator

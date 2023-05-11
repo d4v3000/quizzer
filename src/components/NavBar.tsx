@@ -37,7 +37,7 @@ function NavBar() {
 
   return (
     <>
-      <nav className="fixed top-0 h-[8%] w-full bg-zinc-900">
+      <nav className="fixed top-0 h-16 w-full bg-zinc-900">
         <div className="mx-auto flex h-full w-full justify-between p-2 font-semibold text-white sm:w-5/6 md:p-0 xl:w-3/5">
           <div
             className="flex cursor-pointer items-center"
@@ -107,7 +107,7 @@ function NavBar() {
       <div
         className={`${
           open ? "flex" : "hidden"
-        } fixed bottom-0 left-0 z-50 min-h-[92%] w-full overflow-hidden bg-black`}
+        } fixed bottom-0 left-0 z-50 h-[calc(100vh-64px)] w-full overflow-hidden bg-black`}
       >
         <ul className="w-full flex-1 list-none flex-col space-y-12 py-8">
           <NavItem>

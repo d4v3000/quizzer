@@ -50,14 +50,14 @@ const NavBar = () => {
             </Button>
           </div>
         </div>
-        <CreateLobbyModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          quizId={quizId}
-          numOfQuestions={questions.length.toString()}
-          quizTitle={quizName}
-        />
       </div>
+      <CreateLobbyModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        quizId={quizId}
+        numOfQuestions={questions.length.toString()}
+        quizTitle={quizName}
+      />
     </>
   );
 };

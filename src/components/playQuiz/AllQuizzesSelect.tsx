@@ -1,22 +1,9 @@
 import Label from "@ui/Label";
 import { LoadingSpinner } from "@ui/Loader";
 import { trpc } from "@utils/trpc";
-import { Dispatch, FC, SetStateAction, useEffect } from "react";
+import { forwardRef, useEffect } from "react";
 
-interface IProps {
-  setQuiz: Dispatch<
-    SetStateAction<
-      | {
-          id: string;
-          numOfQuestions: string;
-          title: string;
-        }
-      | undefined
-    >
-  >;
-}
-
-const AllQuizzesSelect: FC<IProps> = ({ setQuiz }) => {
+const AllQuizzesSelect = forwardRef<HTMLSelectElement>(({ ...props }, ref) => {
   const getQuizzes = trpc.quiz.getAllQuizzes.useQuery();
 
   useEffect(() => {
@@ -31,9 +18,10 @@ const AllQuizzesSelect: FC<IProps> = ({ setQuiz }) => {
       ) : (
         <select
           className="w-full rounded-md border border-transparent bg-zinc-700 p-3 text-base text-zinc-200 focus:outline-none"
-          onChange={(e) => setQuiz(JSON.parse(e.target.value))}
+          ref={ref}
+          {...props}
         >
-          {getQuizzes.data?.map((quiz) => (
+          {getQuizzes.data?.map((quiz, i) => (
             <option
               key={quiz.id}
               value={`{"id": "${quiz.id}","title": "${
@@ -47,6 +35,7 @@ const AllQuizzesSelect: FC<IProps> = ({ setQuiz }) => {
       )}
     </div>
   );
-};
+});
+AllQuizzesSelect.displayName = "AllQuizzesSelect";
 
 export default AllQuizzesSelect;

@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import AllQuizzesSelect from "./AllQuizzesSelect";
+import { useQuizStore } from "@utils/zustand/quizStore";
 
 interface IFormInputs {
   quiz: string;
@@ -33,25 +34,23 @@ const CreateLobbyModal: FC<IProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [quiz, setQuiz] = useState<{
-    id: string;
-    numOfQuestions: string;
-    title: string;
-  }>();
 
   const setSocketId = useGameStore((state) => state.setSocketId);
   const setUserName = useGameStore((state) => state.setUserName);
   const setQuizName = useGameStore((state) => state.setQuizName);
   const setNumOfQuestions = useGameStore((state) => state.setNumOfQuestions);
   const setNumOfTeams = useGameStore((state) => state.setNumOfTeams);
+  const setId = useQuizStore((state) => state.setId);
 
   const createLobby = (data: IFormInputs) => {
+    const quiz = JSON.parse(data.quiz);
     setIsLoading(true);
     setUserName(data.userName);
     setSocketId(socket.id);
     setQuizName(quiz!.title);
     setNumOfQuestions(quiz!.numOfQuestions);
     setNumOfTeams(data.numOfTeams);
+    setId(quiz!.id);
     socket.emit(
       "create-lobby",
       {
@@ -70,7 +69,10 @@ const CreateLobbyModal: FC<IProps> = ({
 
   useEffect(() => {
     if (quizId && numOfQuestions && quizTitle) {
-      setQuiz({ id: quizId, numOfQuestions: numOfQuestions, title: quizTitle });
+      setValue(
+        "quiz",
+        `{"id": "${quizId}","title": "${quizTitle}","numOfQuestions": "${numOfQuestions}"}`
+      );
     }
   }, [quizId, numOfQuestions, quizTitle]);
 
@@ -78,6 +80,7 @@ const CreateLobbyModal: FC<IProps> = ({
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<IFormInputs>();
   const onSubmit: SubmitHandler<IFormInputs> = (data) => createLobby(data);
 
@@ -98,7 +101,7 @@ const CreateLobbyModal: FC<IProps> = ({
               <div className="text-red-400">Username is required</div>
             )}
           </div>
-          {!quizId && <AllQuizzesSelect setQuiz={setQuiz} />}
+          {!quizId && <AllQuizzesSelect {...register("quiz")} />}
           <div className="flex flex-col gap-2">
             <Label text="Number of teams" />
             <select

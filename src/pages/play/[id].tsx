@@ -1,21 +1,34 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { LoadingSpinner } from "@ui/Loader";
 import Lobby from "@components/playQuiz/Lobby";
+import Game from "@components/playQuiz/Game";
+import { IGame } from "../../models/game";
+import { useGameStore } from "@utils/zustand/gameStore";
+
+const PageWrapper = (props: { children: ReactNode }) => {
+  return (
+    <div className="mx-auto flex items-center justify-center text-white md:h-screen">
+      {props.children}
+    </div>
+  );
+};
 
 function Play() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [doesLobbyExist, setDoesLobbyExist] = useState(false);
+  const { gameStarted, setGameStarted } = useGameStore();
 
   useEffect(() => {
     const URL = process.env.NEXT_PUBLIC_NODE_URL || "http://localhost:4000";
     // check if lobby exists
     if (router.query.id) {
       axios
-        .post(`${URL}/lobby`, router.query)
-        .then(() => {
+        .get<IGame>(`${URL}/lobby/${router.query.id}`)
+        .then((res) => {
+          setGameStarted(res.data.gameStarted);
           setIsLoading(false);
           setDoesLobbyExist(true);
         })
@@ -25,15 +38,25 @@ function Play() {
     }
   }, [router.query]);
 
+  if (isLoading) {
+    return (
+      <PageWrapper>
+        <LoadingSpinner />
+      </PageWrapper>
+    );
+  }
+
+  if (!doesLobbyExist) {
+    return (
+      <PageWrapper>
+        <p className="text-2xl">Lobby doesn&apos;t exist</p>
+      </PageWrapper>
+    );
+  }
+
   return (
     <div className="mx-auto flex items-center justify-center text-white md:h-screen">
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : doesLobbyExist ? (
-        <Lobby />
-      ) : (
-        <p className="text-2xl">Lobby doesn&apos;t exist</p>
-      )}
+      {gameStarted ? <Game /> : <Lobby />}
     </div>
   );
 }

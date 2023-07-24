@@ -9,6 +9,7 @@ type State = {
   numOfTeams: number;
   messages: IMessage[];
   teamMessages: IMessage[];
+  gameStarted: boolean;
 };
 
 type Actions = {
@@ -17,11 +18,13 @@ type Actions = {
   setQuizName: (quizName: string) => void;
   setNumOfQuestions: (numOfQuestions: string) => void;
   setNumOfTeams: (numOfTeams: number) => void;
+  setGameStarted: (gameStarted: boolean) => void;
   addMessage: (message: IMessage) => void;
   addTeamMessage: (message: IMessage) => void;
   resetTeamMessages: () => void;
   resetMessages: () => void;
   reset: () => void;
+  startGame: () => void;
 };
 
 const initialState: State = {
@@ -32,6 +35,7 @@ const initialState: State = {
   numOfTeams: 2,
   messages: [],
   teamMessages: [],
+  gameStarted: false,
 };
 
 export const useGameStore = create<State & Actions>((set, get) => ({
@@ -41,6 +45,7 @@ export const useGameStore = create<State & Actions>((set, get) => ({
   setQuizName: (quizName: string) => set({ quizName }),
   setNumOfQuestions: (numOfQuestions: string) => set({ numOfQuestions }),
   setNumOfTeams: (numOfTeams: number) => set({ numOfTeams }),
+  setGameStarted: (gameStarted: boolean) => set({ gameStarted }),
   addMessage: (message: IMessage) =>
     set({ messages: [...get().messages, message] }),
   addTeamMessage: (message: IMessage) =>
@@ -53,5 +58,8 @@ export const useGameStore = create<State & Actions>((set, get) => ({
   },
   reset: () => {
     set(initialState);
+  },
+  startGame: () => {
+    set({ gameStarted: true });
   },
 }));

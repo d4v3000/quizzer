@@ -1,6 +1,5 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { socket } from "@utils/websocket/socket";
-import { IPlayer } from "./Lobby";
 import Button from "@ui/Button";
 import {
   EyeIcon,
@@ -37,7 +36,14 @@ const InformationCard: FC<IProps> = ({
         </h2>
         <h3>You can expect {numOfQuestions} Questions this evening</h3>
       </div>
-      {isQuizMaster && <Button size="large">Start Game</Button>}
+      {isQuizMaster && (
+        <Button
+          onClick={() => socket.emit("start-game", router.query.id, {})}
+          size="large"
+        >
+          Start Game
+        </Button>
+      )}
       <div className="flex w-full cursor-pointer items-center rounded-2xl border border-zinc-200 lg:w-1/2">
         <div
           className={`${

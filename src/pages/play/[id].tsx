@@ -6,6 +6,7 @@ import Lobby from "@components/playQuiz/Lobby";
 import Game from "@components/playQuiz/Game";
 import { IGame } from "../../models/game";
 import { useGameStore } from "@utils/zustand/gameStore";
+import { socket } from "@utils/websocket/socket";
 
 const PageWrapper = (props: { children: ReactNode }) => {
   return (
@@ -20,6 +21,18 @@ function Play() {
   const [isLoading, setIsLoading] = useState(true);
   const [doesLobbyExist, setDoesLobbyExist] = useState(false);
   const { gameStarted, setGameStarted } = useGameStore();
+
+  useEffect(() => {
+    const onGameStarted = () => {
+      setGameStarted(true);
+    };
+
+    socket.on("game-started", onGameStarted);
+
+    return () => {
+      socket.off("game-started", onGameStarted);
+    };
+  }, []);
 
   useEffect(() => {
     const URL = process.env.NEXT_PUBLIC_NODE_URL || "http://localhost:4000";

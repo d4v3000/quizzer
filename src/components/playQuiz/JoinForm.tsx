@@ -1,6 +1,7 @@
 import Button from "@ui/Button";
 import Label from "@ui/Label";
 import { socket } from "@utils/websocket/socket";
+import { useGameStore } from "@utils/zustand/gameStore";
 import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -9,21 +10,10 @@ interface IFormInputs {
   userName: string;
 }
 
-interface IProps {
-  setUser: Dispatch<
-    SetStateAction<
-      | {
-          id?: string | undefined;
-          name?: string | undefined;
-          team: string | null;
-        }
-      | undefined
-    >
-  >;
-}
-
-const JoinForm: FC<IProps> = ({ setUser }) => {
+const JoinForm = () => {
   const router = useRouter();
+  const setUser = useGameStore((state) => state.setUser);
+
   const joinLobby = (data: IFormInputs) => {
     socket.emit("join-lobby", {
       userName: data.userName,

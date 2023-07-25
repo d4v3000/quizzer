@@ -38,14 +38,11 @@ export interface IMessage {
 const Lobby = () => {
   const router = useRouter();
   const [lobby, setLobby] = useState<ILobby>();
-  const [user, setUser] = useState<{
-    id?: string;
-    name?: string;
-    team: string | null;
-  }>();
   const [wasKicked, setWasKicked] = useState(false);
 
   const userName = useGameStore((state) => state.userName);
+  const user = useGameStore((state) => state.user);
+  const setUser = useGameStore((state) => state.setUser);
   const socketId = useGameStore((state) => state.socketId);
   const quizName = useGameStore((state) => state.quizName);
   const numOfQuestions = useGameStore((state) => state.numOfQuestions);
@@ -58,8 +55,6 @@ const Lobby = () => {
 
   useEffect(() => {
     if (userName && socketId && quizName && numOfQuestions) {
-      setUser({ id: socketId, name: userName, team: null });
-
       const lobby = {
         id: router.query.id as string,
         players: [] as IPlayer[],
@@ -103,7 +98,7 @@ const Lobby = () => {
     };
 
     const onTeamsReset = (data: ILobby) => {
-      setUser((user) => ({ ...user, team: null }));
+      setUser({ team: null, name: user.name, id: user.id });
       setLobby(data);
     };
 
@@ -113,10 +108,11 @@ const Lobby = () => {
           (player) => player.id === socket.id
         );
 
-        setUser((user) => ({
-          ...user,
+        setUser({
           team: data.players[playerIndex]!.team,
-        }));
+          name: user.name,
+          id: user.id,
+        });
       }
       setLobby(data);
     };
@@ -140,51 +136,45 @@ const Lobby = () => {
 
   return (
     <>
-      {user ? (
-        wasKicked ? (
-          <div className="mx-auto flex h-screen w-1/4 flex-col justify-center gap-4">
-            You were kicked by the quiz master
-          </div>
-        ) : (
-          <div className="mx-auto flex h-full w-10/12 flex-col gap-2 py-4">
-            <NavBar
-              isQuizMaster={isQuizMaster}
-              players={lobby?.players}
-              userName={user.name}
-            />
-            <div className="flex h-full w-full grid-rows-3 flex-col gap-4 overflow-clip md:grid md:grid-flow-col md:grid-cols-4 xl:grid-cols-6">
-              <Background className="h-80 md:col-span-2 md:row-span-2 md:h-full xl:col-start-3">
-                <InformationCard
-                  isQuizMaster={isQuizMaster}
-                  numOfQuestions={lobby?.numOfQuestions}
-                  quizMaster={lobby?.quizMaster}
-                  quizName={lobby?.quizName}
-                />
-              </Background>
-              <Background className="h-96 md:col-span-2 md:col-start-3 md:row-span-2 md:h-full xl:col-start-5">
-                <ChatCard user={user} />
-              </Background>
-              <div className="col-start-1 h-full md:col-end-5 xl:col-end-7">
-                <div className="flex h-full flex-col gap-4 md:flex-row">
-                  {lobby?.teams.map((team, i) => (
-                    <TeamCard
-                      key={`team_${i}`}
-                      color={colors[i]!}
-                      index={i.toString()}
-                      isQuizMaster={isQuizMaster}
-                      name={team.name}
-                      players={team.players}
-                      setUser={setUser}
-                      user={user}
-                    />
-                  ))}
-                </div>
+      {wasKicked ? (
+        <div className="mx-auto flex h-screen w-1/4 flex-col justify-center gap-4">
+          You were kicked by the quiz master
+        </div>
+      ) : (
+        <div className="mx-auto flex h-full w-10/12 flex-col gap-2 py-4">
+          <NavBar
+            isQuizMaster={isQuizMaster}
+            players={lobby?.players}
+            userName={user.name}
+          />
+          <div className="flex h-full w-full grid-rows-3 flex-col gap-4 overflow-clip md:grid md:grid-flow-col md:grid-cols-4 xl:grid-cols-6">
+            <Background className="h-80 md:col-span-2 md:row-span-2 md:h-full xl:col-start-3">
+              <InformationCard
+                isQuizMaster={isQuizMaster}
+                numOfQuestions={lobby?.numOfQuestions}
+                quizMaster={lobby?.quizMaster}
+                quizName={lobby?.quizName}
+              />
+            </Background>
+            <Background className="h-96 md:col-span-2 md:col-start-3 md:row-span-2 md:h-full xl:col-start-5">
+              <ChatCard />
+            </Background>
+            <div className="col-start-1 h-full md:col-end-5 xl:col-end-7">
+              <div className="flex h-full flex-col gap-4 md:flex-row">
+                {lobby?.teams.map((team, i) => (
+                  <TeamCard
+                    key={`team_${i}`}
+                    color={colors[i]!}
+                    index={i.toString()}
+                    isQuizMaster={isQuizMaster}
+                    name={team.name}
+                    players={team.players}
+                  />
+                ))}
               </div>
             </div>
           </div>
-        )
-      ) : (
-        <JoinForm setUser={setUser} />
+        </div>
       )}
     </>
   );

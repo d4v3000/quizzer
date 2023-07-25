@@ -6,19 +6,12 @@ import { FC, useEffect, useState } from "react";
 import { socket } from "@utils/websocket/socket";
 import { useGameStore } from "@utils/zustand/gameStore";
 
-interface IProps {
-  user: {
-    id?: string;
-    name?: string;
-    team: string | null;
-  };
-}
-
-const ChatCard: FC<IProps> = ({ user }) => {
+const ChatCard = () => {
   const router = useRouter();
   const [numOfUnreadMessages, setNumOfUnreadMessages] = useState(0);
   const [currentTab, setCurrentTab] = useState("global");
 
+  const user = useGameStore((state) => state.user);
   const messages = useGameStore((state) => state.messages);
   const teamMessages = useGameStore((state) => state.teamMessages);
   const addMessage = useGameStore((state) => state.addMessage);
@@ -70,7 +63,7 @@ const ChatCard: FC<IProps> = ({ user }) => {
           <div className="relative">
             Global
             {numOfUnreadMessages > 0 && currentTab !== "global" && (
-              <div className="absolute -top-2 -right-7 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
+              <div className="absolute -right-7 -top-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
                 {numOfUnreadMessages}
               </div>
             )}
@@ -84,7 +77,7 @@ const ChatCard: FC<IProps> = ({ user }) => {
             <div className="relative">
               Team
               {numOfUnreadMessages > 0 && currentTab !== "team" && (
-                <div className="absolute -top-2 -right-7 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                <div className="absolute -right-7 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
                   {numOfUnreadMessages}
                 </div>
               )}

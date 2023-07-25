@@ -7,6 +7,7 @@ import Game from "@components/playQuiz/Game";
 import { IGame } from "../../models/game";
 import { useGameStore } from "@utils/zustand/gameStore";
 import { socket } from "@utils/websocket/socket";
+import JoinForm from "@components/playQuiz/JoinForm";
 
 const PageWrapper = (props: { children: ReactNode }) => {
   return (
@@ -20,7 +21,7 @@ function Play() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [doesLobbyExist, setDoesLobbyExist] = useState(false);
-  const { gameStarted, setGameStarted } = useGameStore();
+  const { gameStarted, setGameStarted, user } = useGameStore();
 
   useEffect(() => {
     const onGameStarted = () => {
@@ -51,6 +52,10 @@ function Play() {
     }
   }, [router.query]);
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   if (isLoading) {
     return (
       <PageWrapper>
@@ -67,11 +72,15 @@ function Play() {
     );
   }
 
-  return (
-    <div className="mx-auto flex items-center justify-center text-white md:h-screen">
-      {gameStarted ? <Game /> : <Lobby />}
-    </div>
-  );
+  if (!user.name) {
+    return (
+      <PageWrapper>
+        <JoinForm />
+      </PageWrapper>
+    );
+  }
+
+  return <PageWrapper>{gameStarted ? <Game /> : <Lobby />}</PageWrapper>;
 }
 
 export default Play;

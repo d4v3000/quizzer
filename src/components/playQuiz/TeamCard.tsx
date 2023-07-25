@@ -12,22 +12,7 @@ interface IProps {
   index: string;
   isQuizMaster: boolean;
   players: IPlayer[];
-  user: {
-    id?: string;
-    name?: string;
-    team: string | null;
-  };
   name: string;
-  setUser: Dispatch<
-    SetStateAction<
-      | {
-          id?: string | undefined;
-          name?: string | undefined;
-          team: string | null;
-        }
-      | undefined
-    >
-  >;
 }
 
 const TeamCard: FC<IProps> = ({
@@ -35,15 +20,15 @@ const TeamCard: FC<IProps> = ({
   index,
   isQuizMaster,
   players,
-  user,
   name,
-  setUser,
 }) => {
   const router = useRouter();
   const [teamName, setTeamName] = useState(name);
   const [isEdit, setIsEdit] = useState(false);
 
+  const user = useGameStore((state) => state.user);
   const resetTeamMessages = useGameStore((state) => state.resetTeamMessages);
+  const setUser = useGameStore((state) => state.setUser);
 
   const editTeamName = (teamId: string) => {
     socket.emit("edit-team-name", {
@@ -60,14 +45,7 @@ const TeamCard: FC<IProps> = ({
       teamId: teamId,
       oldTeam: user?.team,
     });
-    setUser(
-      (
-        user: { id?: string; name?: string; team: string | null } | undefined
-      ) => ({
-        ...user,
-        team: teamId,
-      })
-    );
+    setUser({ team: teamId, name: user.name, id: user.id });
     resetTeamMessages();
   };
 

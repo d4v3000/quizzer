@@ -40,6 +40,7 @@ const CreateLobbyModal: FC<IProps> = ({
   const setQuizName = useGameStore((state) => state.setQuizName);
   const setNumOfQuestions = useGameStore((state) => state.setNumOfQuestions);
   const setNumOfTeams = useGameStore((state) => state.setNumOfTeams);
+  const setUser = useGameStore((state) => state.setUser);
 
   const createLobby = (data: IFormInputs) => {
     const quiz = JSON.parse(data.quiz);
@@ -49,6 +50,11 @@ const CreateLobbyModal: FC<IProps> = ({
     setQuizName(quiz!.title);
     setNumOfQuestions(quiz!.numOfQuestions);
     setNumOfTeams(data.numOfTeams);
+    setUser({
+      team: null,
+      id: socket.id,
+      name: data.userName,
+    });
     socket.emit(
       "create-lobby",
       {

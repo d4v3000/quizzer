@@ -1,17 +1,19 @@
-import { createFilething, type FileRouter } from "uploadthing/server";
-const f = createFilething();
+import { getServerSession } from "next-auth";
+import { createUploadthing, type FileRouter } from "uploadthing/next-legacy";
+import { authOptions } from "../pages/api/auth/[...nextauth]";
 
-// FileRouter for your app, can contain multiple FileRoutes
+const f = createUploadthing();
+
 export const imageFileRouter = {
-  // Define as many FileRoutes as you like, each with a unique routeSlug
-  imageUploader: f
-    // Set permissions and file types for this FileRoute
-    .fileTypes(["image"])
-    .maxSize("16MB")
-    .onUploadComplete(async ({ metadata }) => {
-      // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete");
-    }),
+  imageUploader: f({
+    image: { maxFileSize: "4MB", maxFileCount: 1 },
+  })
+    .middleware(async (opts) => {
+      const session = await getServerSession(opts.req, opts.res, authOptions);
+      if (!session) throw new Error("Unauthorized");
+      return { userId: session.user?.id };
+    })
+    .onUploadComplete(() => {}),
 } satisfies FileRouter;
 
 export type ImageFileRouter = typeof imageFileRouter;

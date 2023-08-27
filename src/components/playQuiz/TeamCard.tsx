@@ -1,8 +1,8 @@
 import { CheckIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { FC, useState } from "react";
 import PlayerBadge from "./PlayerBadge";
 import Button from "@ui/Button";
-import { IMessage, IPlayer } from "./Lobby";
+import { IPlayer } from "./Lobby";
 import { socket } from "@utils/websocket/socket";
 import { useRouter } from "next/router";
 import { useGameStore } from "@utils/zustand/gameStore";

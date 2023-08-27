@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import { GetServerSidePropsContext } from "next";
 import { authOptions } from "../api/auth/[...nextauth]";
 
-function SignUp({ providers }: any) {
+function SignUp() {
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-black bg-gradient-to-b from-zinc-800 to-zinc-900 pb-40 font-semibold text-zinc-300">
       <div className="flex flex-col gap-4">

@@ -2,7 +2,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import Chat from "./Chat";
 import { useRouter } from "next/router";
 import { IMessage } from "./Lobby";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { socket } from "@utils/websocket/socket";
 import { useGameStore } from "@utils/zustand/gameStore";
 

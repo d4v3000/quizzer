@@ -21,7 +21,7 @@ const AllQuizzesSelect = forwardRef<HTMLSelectElement>(({ ...props }, ref) => {
           ref={ref}
           {...props}
         >
-          {getQuizzes.data?.map((quiz, i) => (
+          {getQuizzes.data?.map((quiz) => (
             <option
               key={quiz.id}
               value={`{"id": "${quiz.id}","title": "${

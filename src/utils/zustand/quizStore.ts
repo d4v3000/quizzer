@@ -19,7 +19,7 @@ const initialState: State = {
   currentQuestion: -1,
 };
 
-export const useQuizStore = create<State & Actions>((set, get) => ({
+export const useQuizStore = create<State & Actions>((set) => ({
   ...initialState,
   setName: (name: string) => set({ name }),
   setQuestions: (questions: IQuestion[]) => set({ questions }),

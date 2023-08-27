@@ -6,7 +6,7 @@ import { FaceSmileIcon } from "@heroicons/react/24/outline";
 import PlayerBadge from "./PlayerBadge";
 import { UserIcon } from "@heroicons/react/24/solid";
 import { IPlayer } from "./Lobby";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { socket } from "@utils/websocket/socket";
 import { useRouter } from "next/router";
 import { useGameStore } from "@utils/zustand/gameStore";

@@ -1,9 +1,5 @@
-import {
-  ArrowPathRoundedSquareIcon,
-  UserGroupIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
 import Button from "@ui/Button";
-import { isUndefined } from "lodash";
 import Link from "next/link";
 import { FC, useState } from "react";
 import { Prisma } from "@prisma/client";

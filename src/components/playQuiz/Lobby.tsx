@@ -5,7 +5,6 @@ import { useGameStore } from "@utils/zustand/gameStore";
 import { socket } from "@utils/websocket/socket";
 import TeamCard from "./TeamCard";
 import NavBar from "./NavBar";
-import JoinForm from "./JoinForm";
 import InformationCard from "./InformationCard";
 import ChatCard from "./ChatCard";
 

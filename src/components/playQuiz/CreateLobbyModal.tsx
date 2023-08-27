@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import AllQuizzesSelect from "./AllQuizzesSelect";
-import { useQuizStore } from "@utils/zustand/quizStore";
 
 interface IFormInputs {
   quiz: string;

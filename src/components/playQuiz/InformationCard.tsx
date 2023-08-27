@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { socket } from "@utils/websocket/socket";
 import Button from "@ui/Button";
 import {

@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { FC, forwardRef, InputHTMLAttributes } from "react";
+import { forwardRef, InputHTMLAttributes } from "react";
 
 const input = cva("button", {
   variants: {

@@ -2,7 +2,6 @@ import Button from "@ui/Button";
 import Input from "@ui/Input";
 import Label from "@ui/Label";
 import { useQuizStore } from "@utils/zustand/quizStore";
-import { toNumber } from "lodash";
 import { useState } from "react";
 import DeleteQuizModal from "./DeleteQuizModal";
 import { useRouter } from "next/router";
